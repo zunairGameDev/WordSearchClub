@@ -242,7 +242,8 @@ namespace BBG.WordSearch
                 Image image = gameObject.AddComponent<Image>();
                 image.color = Color.clear;
             }
-
+            // Create a container that will hold the letter images whena highlight letter hint is used
+            highlighLetterContainer = CreateContainer("highligh_letter_container", typeof(RectTransform));
             // Create a GameObject to hold all the letters, set it as a child of CharacterGrid and set its anchors to expand to fill
             gridContainer = CreateContainer("grid_container", typeof(RectTransform), typeof(GridLayoutGroup), typeof(CanvasGroup));
 
@@ -258,8 +259,6 @@ namespace BBG.WordSearch
                 gridUnderlayContainer.SetAsFirstSibling();
             }
 
-            // Create a container that will hold the letter images whena highlight letter hint is used
-            highlighLetterContainer = CreateContainer("highligh_letter_container", typeof(RectTransform));
 
             // Create a CharacterGridItem that will be used as a template by the ObjectPool to create more instance
             CharacterGridItem templateCharacterGridItem = CreateCharacterGridItem();
@@ -277,8 +276,8 @@ namespace BBG.WordSearch
             templateCharacterGridItem.gameObject.SetActive(false);
             templateCharacterGridItem.transform.SetParent(transform, false);
 
-            characterPool = new ObjectPool(templateCharacterGridItem.gameObject, 25, characterPoolContainer.transform);
             highlightLetterPool = new ObjectPool(templateHighlightLetterImage.gameObject, 1, highlighLetterContainer);
+            characterPool = new ObjectPool(templateCharacterGridItem.gameObject, 25, characterPoolContainer.transform);
             characterItems = new List<List<CharacterGridItem>>();
             highlights = new List<Image>();
 
@@ -926,8 +925,9 @@ namespace BBG.WordSearch
             Image highlightLetterImage = highlightImageObj.AddComponent<Image>();
 
             highlightLetterImage.sprite = highlightLetterSprite;
-            highlightLetterImage.color = highlightLetterColor;
+            //highlightLetterImage.color = highlightLetterColor;
 
+            AssignHighlighColor(highlightLetterImage);
             highlightLetterImage.rectTransform.sizeDelta = new Vector2(highlightLetterSize, highlightLetterSize);
             highlightLetterImage.rectTransform.anchorMin = new Vector2(0f, 1f);
             highlightLetterImage.rectTransform.anchorMax = new Vector2(0f, 1f);
