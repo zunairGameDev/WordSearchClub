@@ -17,6 +17,7 @@ public class ButtonTextHandler : MonoBehaviour
         collectionText.gameObject.SetActive(false);
         challengeText.gameObject.SetActive(false);
         ShowPanel(0);
+        PanelAnimationShow(0);
     }
     public void ShowPanel(int value)
     {
@@ -26,11 +27,18 @@ public class ButtonTextHandler : MonoBehaviour
             mainPanelCanvas[i].interactable = false;
             mainPanelCanvas[i].blocksRaycasts = false;
         }
-        mainPanelCanvas[value].alpha = 0;
-        mainPanelCanvas[value].interactable = false;
-        mainPanelCanvas[value].blocksRaycasts = false;
+        mainPanelCanvas[value].alpha = 1;
+        mainPanelCanvas[value].interactable = true;
+        mainPanelCanvas[value].blocksRaycasts = true;
     }
-    
+    public void PanelAnimationShow(int value)
+    {
+        for (int i = 0; i < mainMenuButton.Count; i++)
+        {
+            mainMenuButton[i].SetTrigger("Normal");
+        }
+        mainMenuButton[value].SetTrigger("Selected");
+    }
     // Home button ka function
     public void OnHomeButtonClick()
     {
