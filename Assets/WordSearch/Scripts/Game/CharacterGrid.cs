@@ -248,7 +248,7 @@ namespace BBG.WordSearch
 
             // Create a GameObject that will be be used to place things overtop of the letter grid
             gridOverlayContainer = CreateContainer("grid_overlay_container", typeof(RectTransform));
-
+            GetComponent<ScaleAndRotate>().cellParent = gridContainer;
             // Only need an underlay container if the higlighs position is set to under the letters
             if (highlightPosition == HighlighPosition.BelowLetters)
             {
@@ -493,7 +493,7 @@ namespace BBG.WordSearch
 
         private void ShowWord(Cell wordStartPosition, Cell wordEndPosition, string word, bool useSelectedColor)
         {
-            
+
             CharacterGridItem startCharacter = characterItems[wordStartPosition.row][wordStartPosition.col];
             CharacterGridItem endCharacter = characterItems[wordEndPosition.row][wordEndPosition.col];
 

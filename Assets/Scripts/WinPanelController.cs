@@ -2,6 +2,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class WinPanelController : MonoBehaviour
 {
@@ -26,7 +27,9 @@ public class WinPanelController : MonoBehaviour
     {
         // Initially deactivate slider and next level button
         winSlider.gameObject.SetActive(false);
+        winSlider.transform.localScale = Vector3.zero;
         nextLevelButton.gameObject.SetActive(false);
+        nextLevelButton.transform.localScale = Vector3.zero;
         initialPosition = particleEffect.transform.position;
         OnLevelWin();
     }
@@ -62,7 +65,9 @@ public class WinPanelController : MonoBehaviour
         //CameraUI.SetActive(false);
         // Activate the slider and next level button
         winSlider.gameObject.SetActive(true);
+        winSlider.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
         nextLevelButton.gameObject.SetActive(true);
+        nextLevelButton.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
         CameraModeChange(RenderModeStates.overlay);
 
     }

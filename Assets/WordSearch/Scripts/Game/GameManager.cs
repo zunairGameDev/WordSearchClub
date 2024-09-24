@@ -34,6 +34,7 @@ namespace BBG.WordSearch
         [SerializeField] private List<DifficultyInfo> difficultyInfos = null;
         [SerializeField] private List<GridInfo> levelDetails = null;
         [SerializeField] private List<TextAsset> levelFiles;
+        [SerializeField] private List<char> hintLetters = new List<char>();
 
         [Header("Values")]
         [SerializeField] private int startingCoins = 0;
@@ -370,12 +371,12 @@ namespace BBG.WordSearch
             }
 
             // Check if the player has enough coins
-            if (Coins < coinCostWordHint)
-            {
-                // Show the not enough coins popup
-                PopupManager.Instance.Show("not_enough_coins");
-            }
-            else
+            //if (Coins < coinCostWordHint)
+            //{
+            //    // Show the not enough coins popup
+            //    PopupManager.Instance.Show("not_enough_coins");
+            //}
+            //else
             {
                 // Pick a random word to show
                 string wordToShow = nonFoundWords[Random.Range(0, nonFoundWords.Count)];
@@ -387,9 +388,16 @@ namespace BBG.WordSearch
                 characterGrid.ShowWordHint(wordToShow);
 
                 // Deduct the cost
-                Coins -= coinCostWordHint;
+                //Coins -= coinCostWordHint;
 
                 SoundManager.Instance.Play("hint-used");
+            }
+        }
+        public void ShowHintMultipleTimes()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                HintHighlightLetter();
             }
         }
 
@@ -398,17 +406,60 @@ namespace BBG.WordSearch
         /// </summary>
         public void HintHighlightLetter()
         {
-            // Check if the player has enough coins
-            if (Coins < coinCostLetterHint)
-            {
-                // Show the not enough coins popup
-                PopupManager.Instance.Show("not_enough_coins");
-            }
-            else
+            //// Check if the player has enough coins
+            //if (Coins < coinCostLetterHint)
+            //{
+            //    // Show the not enough coins popup
+            //    PopupManager.Instance.Show("not_enough_coins");
+            //}
+            //else
             {
                 // Show the popup where the user can select the letter to highlight on the board
-                PopupManager.Instance.Show("choose_highlight_letter", new object[] { ActiveBoard }, OnChooseHighlightLetterPopupClosed);
+                //PopupManager.Instance.Show("choose_highlight_letter", new object[] { ActiveBoard }, OnChooseHighlightLetterPopupClosed);
+                ShowingHintLetter();
             }
+        }
+        public void ToShowHintLetter()
+        {
+            // Loop through all words in ActiveBoard.words
+            for (int i = 0; i < ActiveBoard.words.Count; i++)
+            {
+                string currentWord = ActiveBoard.words[i]; // Get the current word
+
+                // Loop through each character in the current word
+                foreach (char letter in currentWord)
+                {
+                    // If the letter is not already in hintLetters, add it
+                    if (!hintLetters.Contains(letter))
+                    {
+                        hintLetters.Add(letter); // Assuming hintLetters is a list or similar collection
+                    }
+                }
+            }
+        }
+        public void ShowingHintLetter()
+        {
+            // Ensure there are letters in the hintLetters list
+            if (hintLetters.Count == 0)
+            {
+                Debug.LogWarning("No more hint letters available!");
+                return;
+            }
+
+            // Get a random index within the range of available hintLetters
+            int value = Random.Range(0, hintLetters.Count);
+
+            // Select the letter at the random index
+            char letter = hintLetters[value];
+
+            // Show the letter as a hint
+            characterGrid.ShowLetterHint(letter);
+
+            // Play the sound for using a hint
+            SoundManager.Instance.Play("hint-used");
+
+            // Remove the letter from the hintLetters to avoid repetition
+            hintLetters.RemoveAt(value);
         }
 
         /// <summary>
@@ -624,6 +675,7 @@ namespace BBG.WordSearch
             }
 
             ActiveGameState = GameState.BoardActive;
+            ToShowHintLetter();
         }
 
         /// <summary>
