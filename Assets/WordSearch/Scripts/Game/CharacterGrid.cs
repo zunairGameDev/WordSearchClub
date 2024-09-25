@@ -164,13 +164,13 @@ namespace BBG.WordSearch
 
                     // Get mouse position in world space
 
+                    UpdateSelectingHighlight(eventData.position);
+                    UpdateSelectedWord();
                     // Constrain the mouse position within the parent rect (background)
                     pointCheck = true;
                     Vector2 mousePosition = GetMousePosition(eventData.position);
                     Vector2 constrainedPosition = ConstrainToRect(mousePosition, background, lastValidPosition);
                     currentMousePosition = constrainedPosition;
-                    UpdateSelectingHighlight(eventData.position);
-                    UpdateSelectedWord();
 
                     // Update last valid position if the constrained position has changed
                     //if (constrainedPosition != lastValidPosition)
@@ -561,11 +561,13 @@ namespace BBG.WordSearch
                 Cell wordStartPosition = new Cell(startCharacter.Row, startCharacter.Col);
                 Cell wordEndPosition = new Cell(lastEndCharacter.Row, lastEndCharacter.Col);
 
-                selectedWord.SetSelectedWord(GetWord(wordStartPosition, wordEndPosition), selectingHighlight.color);
+                selectedWord.SetSelectedWord(GetWord(wordStartPosition, wordEndPosition), colorOpque);
+                Debug.Log("Color");
             }
             else
             {
                 selectedWord.Clear();
+                Debug.Log("Color Clear");
             }
         }
 
@@ -713,8 +715,8 @@ namespace BBG.WordSearch
 
 
             float tempDistance = Vector2.Distance(GetMousePosition(startMousePosition), currentMousePosition);
-            Debug.Log(GetMousePosition(startMousePosition) + "Start point");
-            Debug.Log(GetMousePosition(currentMousePosition) + "Start point");
+            //Debug.Log(GetMousePosition(startMousePosition) + "Start point");
+            //Debug.Log(GetMousePosition(currentMousePosition) + "Start point");
 
             colorTransperancy.a = 0f;
 

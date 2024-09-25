@@ -29,6 +29,7 @@ namespace BBG.WordSearch
         #region Inspector Variables
 
         [Header("Data")]
+        public List<CountryInfo> countryInfo;
         [SerializeField] private string characters = null;
         [SerializeField] private List<CategoryInfo> categoryInfos = null;
         [SerializeField] private List<DifficultyInfo> difficultyInfos = null;
@@ -100,7 +101,6 @@ namespace BBG.WordSearch
 
             characterGrid.Initialize();
             wordList.Initialize();
-
             InitSave();
 
 #if BBG_MY_IAP
@@ -111,6 +111,8 @@ namespace BBG.WordSearch
         #endregion
 
         #region Public Methods
+             
+       
 
         /// <summary>
         /// Starts the given level in the given category
@@ -629,7 +631,7 @@ namespace BBG.WordSearch
             boardConfig.randomCharacters = characters;
 
             ActiveGameState = GameState.GeneratingBoard;
-            loadingIndicator.SetActive(true);
+            //loadingIndicator.SetActive(true);
 
             // Start the creation of the board
             BoardCreator.CreateBoard(boardConfig, OnCasualBoardCreated);
@@ -719,11 +721,11 @@ namespace BBG.WordSearch
                     LastCompletedLevels[ActiveCategoryInfo.saveId] = ActiveLevelIndex;
                 }
 
-            int coinsAwarded = (numLevelsToAwardCoins == 0 || (ActiveLevelIndex + 1) % numLevelsToAwardCoins == 0 || awardCoinsEveryLevel) ? coinsToAward : 0;
-            int keysAwarded = (ActiveLevelIndex == ActiveCategoryInfo.levelFiles.Count - 1 || awardKeyEveryLevel) ? 1 : 0;
+                int coinsAwarded = (numLevelsToAwardCoins == 0 || (ActiveLevelIndex + 1) % numLevelsToAwardCoins == 0 || awardCoinsEveryLevel) ? coinsToAward : 0;
+                int keysAwarded = (ActiveLevelIndex == ActiveCategoryInfo.levelFiles.Count - 1 || awardKeyEveryLevel) ? 1 : 0;
 
-            Coins += coinsAwarded;
-            Keys += keysAwarded;
+                Coins += coinsAwarded;
+                Keys += keysAwarded;
 
                 // Show the level complete popup
             }

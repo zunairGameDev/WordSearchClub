@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class WinPanelController : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class WinPanelController : MonoBehaviour
     public RectTransform targetPosition; // Position near the main image
     public float moveDuration = 2f; // Time it takes for the particle to move
     public Canvas m_Canvas;
+    public TextMeshProUGUI wisdomPoint;
+    public TextMeshProUGUI winSlideText;
 
     [SerializeField] private enum RenderModeStates { camera, overlay, world };
     [SerializeField] private RenderModeStates m_RenderModeStates;
@@ -69,6 +72,7 @@ public class WinPanelController : MonoBehaviour
         nextLevelButton.gameObject.SetActive(true);
         nextLevelButton.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
         CameraModeChange(RenderModeStates.overlay);
+        FillAmount();
 
     }
     private void CameraModeChange(RenderModeStates m_RenderModeStates)
@@ -87,6 +91,19 @@ public class WinPanelController : MonoBehaviour
                 m_Canvas.renderMode = RenderMode.WorldSpace;
                 break;
         }
+    }
+    public void FillAmount()
+    {
+
+
+        float fillAmount = (float)MainMenuText.Instance.currentValue / MainMenuText.Instance.countryInfo.maxValue;
+        winSlider.value = fillAmount;
+        winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
+        PlayerPrefs.SetInt("CurrentValue", PlayerPrefs.GetInt("CurrentValue") + 1);
+        MainMenuText.Instance.currentValue = PlayerPrefs.GetInt("CurrentValue");
+        fillAmount = (float)MainMenuText.Instance.currentValue / MainMenuText.Instance.countryInfo.maxValue;
+        winSlider.value = fillAmount;
+        winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
     }
 
 }

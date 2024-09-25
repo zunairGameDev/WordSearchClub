@@ -21,8 +21,8 @@ public class UIManager : MonoBehaviour
     {
         HideLevelCompleteScreen();
         ShowMainMenuScreen();
-        AssignOnClickListeners();
-        ObserveEvents();
+        //AssignOnClickListeners();
+        //ObserveEvents();
     }
     public GridLayoutGroup GetGridLayoutGroup()
     {
@@ -40,30 +40,30 @@ public class UIManager : MonoBehaviour
     {
         mainMenuScreen.SetStartButtonText(startButtonText);
     }
-    private void ObserveEvents()
-    {
-        GameManager.Instance.onLevelCompleted += ShowLevelCompleteScreen;
-    }
-    private void AssignOnClickListeners()
-    {
-        mainMenuScreen.GetStartButton().onClick.RemoveAllListeners();
-        mainMenuScreen.GetStartButton().onClick.AddListener(
-            () =>
-            {
-                GameManager.Instance.StartGame();
-                mainMenuScreen.Hide();
-                gameplayScreen.Show();
-            }
-            );
+    //private void ObserveEvents()
+    //{
+    //    GameManager.Instance.onLevelCompleted += ShowLevelCompleteScreen;
+    //}
+    //private void AssignOnClickListeners()
+    //{
+    //    mainMenuScreen.GetStartButton().onClick.RemoveAllListeners();
+    //    mainMenuScreen.GetStartButton().onClick.AddListener(
+    //        () =>
+    //        {
+    //            GameManager.Instance.StartGame();
+    //            mainMenuScreen.Hide();
+    //            gameplayScreen.Show();
+    //        }
+    //        );
 
-        levelCompleteScreen.GetNextLevelButton().onClick.RemoveAllListeners();
-        levelCompleteScreen.GetNextLevelButton().onClick.AddListener(
-            () =>
-            {
-                GameManager.Instance.ReturnToMainMenu();
-            }
-            );
-    }
+    //    levelCompleteScreen.GetNextLevelButton().onClick.RemoveAllListeners();
+    //    levelCompleteScreen.GetNextLevelButton().onClick.AddListener(
+    //        () =>
+    //        {
+    //            GameManager.Instance.ReturnToMainMenu();
+    //        }
+    //        );
+    //}
     private void ShowMainMenuScreen()
     {
         mainMenuScreen.Show();

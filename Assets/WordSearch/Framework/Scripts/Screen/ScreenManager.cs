@@ -170,7 +170,7 @@ namespace BBG
 
 		private void Show(string screenId, bool back, bool immediate)
 		{
-			Debug.Log("[ScreenController] Showing screen " + screenId);
+			//Debug.Log("[ScreenController] Showing screen " + screenId);
 
 			// Get the screen we want to show
 			Screen screen = GetScreenById(screenId);

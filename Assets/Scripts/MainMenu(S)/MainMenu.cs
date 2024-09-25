@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;  // For handling UI elements
-using UnityEngine.SceneManagement;  // For scene management
+using UnityEngine.SceneManagement;
+using TMPro;  // For scene management
 
 public class MainMenu : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class MainMenu : MonoBehaviour
     [Header("UI Elements")]
     // UI Elements
     public InputField playerNameInputField;  
-    public Text sourceImageInputField; 
+    public TextMeshProUGUI sourceImageInputField; 
     public Text playerNameDisplayText;      
     public Image selectedImageDisplay;       
    

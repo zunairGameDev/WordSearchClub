@@ -353,7 +353,7 @@ public class GameplayController : MonoBehaviour
             wordCounter++;
             if (wordCounter == _totalWordsCount)
             {
-                GameManager.Instance.LevelCompleted();
+                //GameManager.Instance.LevelCompleted();
             }
             Debug.Log("<b>" + word.ToUpper() + "</b> was found!");
 

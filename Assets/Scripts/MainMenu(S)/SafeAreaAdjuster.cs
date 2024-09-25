@@ -23,11 +23,11 @@ public class SafeAreaAdjuster : MonoBehaviour
     void ApplySafeArea()
     {
         // Log some debugging info to see what's happening
-        Debug.Log("Applying safe area...");
+        //Debug.Log("Applying safe area...");
         Rect safeArea = Screen.safeArea;
 
         // Log safe area details
-        Debug.Log($"Safe area rect: {safeArea}");
+        //Debug.Log($"Safe area rect: {safeArea}");
 
         // Convert safe area to normalized anchor values
         Vector2 anchorMin = safeArea.position;
@@ -43,6 +43,6 @@ public class SafeAreaAdjuster : MonoBehaviour
         rectTransform.anchorMax = anchorMax;
 
         // Log after applying anchors
-        Debug.Log("Safe area applied.");
+        //Debug.Log("Safe area applied.");
     }
 }

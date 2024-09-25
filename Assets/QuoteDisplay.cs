@@ -53,6 +53,6 @@ public class QuoteDisplay : MonoBehaviour
     {
         SetChangeWithRestart(true);
         yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene("CustomLoadingScreen");
+        //SceneManager.LoadScene("CustomLoadingScreen");
     }
 }
