@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using System.Xml;
+using TMPro;
 //using System.Drawing;
 
 namespace BBG.WordSearch
@@ -22,9 +23,13 @@ namespace BBG.WordSearch
         public float lastDistance = 0;
         public GameObject permentLineChild;
         public bool pointCheck;
+        public GameObject awesomeAnim;
 
+        public List<float> playerStates;
         public List<CharacterGridItem> letterObject;
         public EdgeDeductor deductor;
+        public TextMeshProUGUI levelStatus;
+        public TextMeshProUGUI playerStateShow;
 
         #region Enums
 
@@ -213,6 +218,12 @@ namespace BBG.WordSearch
                 // If the word was a word that was suppose to be found then highligh the word and create the floating text
                 if (!string.IsNullOrEmpty(foundWord))
                 {
+                    if (GameManager.Instance.toPlayAnimation)
+                    {
+                        awesomeAnim.SetActive(true);
+                        GameManager.Instance.toPlayAnimation = false;
+                        GameManager.Instance.longestWord = null;
+                    }
                     ShowWord(wordStartPosition, wordEndPosition, foundWord, true);
 
                     SoundManager.Instance.Play("word-found");
@@ -236,6 +247,7 @@ namespace BBG.WordSearch
 
         public void Initialize()
         {
+
             // In order for the IPointer/IDrag handlers to work properly we need to put a graphic component this gameobject
             if (gameObject.GetComponent<Graphic>() == null)
             {
@@ -294,7 +306,13 @@ namespace BBG.WordSearch
         public void Setup(Board board)
         {
             Clear();
+            levelStatus.text = "Level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();
+            if (PlayerPrefs.GetInt("SelectJasonLevel") > 0)
+            {
+                playerStateShow.text = "Solved by " + playerStates[PlayerPrefs.GetInt("SelectJasonLevel")].ToString() + " % player";
+                playerStateShow.transform.parent.gameObject.SetActive(true);
 
+            }
             // We want to scale the CharacterItem so that the UI Text changes size
             currentCellSize = SetupGridContainer(board.rows, board.cols);
             currentScale = currentCellSize / maxCellSize;
@@ -562,12 +580,12 @@ namespace BBG.WordSearch
                 Cell wordEndPosition = new Cell(lastEndCharacter.Row, lastEndCharacter.Col);
 
                 selectedWord.SetSelectedWord(GetWord(wordStartPosition, wordEndPosition), colorOpque);
-                Debug.Log("Color");
+
             }
             else
             {
                 selectedWord.Clear();
-                Debug.Log("Color Clear");
+
             }
         }
 
@@ -576,7 +594,6 @@ namespace BBG.WordSearch
             if (isSelecting)
             {
                 CharacterGridItem endCharacter = GetCharacterItemAtPosition(screenPosition);
-
                 // If endCharacter is null then the mouse position must be off the grid container
                 if (endCharacter != null)
                 {
@@ -796,10 +813,13 @@ namespace BBG.WordSearch
                 CharacterGridItem characterGridItem = characterItems[start.Row + i * rowInc][start.Col + i * colInc];
                 AddLetterForDistance(characterGridItem);
                 characterGridItem.transform.GetComponent<EdgeDeductor>().CheckingDistance();
+
                 // If the character grid item is part of a word that is highlighed then it's color will always be set to the letterHighlightedColor
                 if (characterGridItem.IsHighlighted)
                 {
                     characterGridItem.characterText.color = letterHighlightedColor;
+                    characterGridItem.transform.GetComponent<EdgeDeductor>().ScalingText();
+
                 }
                 else
                 {
@@ -811,8 +831,19 @@ namespace BBG.WordSearch
 
                     // Set the text color to the color that was given
                     characterGridItem.characterText.color = color;
+                    if (characterGridItem.characterText.color == Color.white)
+                    {
+                        characterGridItem.transform.GetComponent<EdgeDeductor>().ScalingText();
+                    }
+                    else
+                    {
+                        characterGridItem.transform.GetComponent<EdgeDeductor>().DownScalingText();
+
+                    }
+
                 }
             }
+
         }
 
         private CharacterGridItem GetCharacterItemAtPosition(Vector2 screenPoint)

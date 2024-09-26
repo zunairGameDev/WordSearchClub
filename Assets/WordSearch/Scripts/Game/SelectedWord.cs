@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,7 +24,8 @@ namespace BBG.WordSearch
 			selectedWordContainer.SetActive(true);
 
 			selectedWordBkgImage.color = color;
-		}
+           
+        }
 
 		public void Clear()
 		{

@@ -1,4 +1,5 @@
 using BBG.WordSearch;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +7,19 @@ using UnityEngine;
 public class EdgeDeductor : MonoBehaviour
 {
     public CharacterGrid characterGrid;
+    public Transform textTransform;
     public bool isEdge;
+    public Vector3 originalScale;
+    public Vector3 targetScale;
+    public bool toIncreaseScale = true;
+    public bool toDecreaseScale = true;
 
+    private void OnEnable()
+    {
+        textTransform = transform.GetComponent<CharacterGridItem>().characterText.transform;
+        originalScale = transform.GetComponent<CharacterGridItem>().characterText.transform.localScale;
+        targetScale = originalScale * 1.2f;
+    }
     public void CheckingDistance()
     {
         if (isEdge)
@@ -41,7 +53,7 @@ public class EdgeDeductor : MonoBehaviour
                     }
                     else
                     {
-                        characterGrid.increaseDistanceAllowed = true;       
+                        characterGrid.increaseDistanceAllowed = true;
                     }
                 }
                 else
@@ -54,6 +66,27 @@ public class EdgeDeductor : MonoBehaviour
         else
         {
             characterGrid.increaseDistanceAllowed = true;
+        }
+    }
+    public void ScalingText()
+    {
+        if (toIncreaseScale)
+        {
+            // Scale up to target scale, then back to original scale (ping-pong effect)
+            textTransform.DOScale(targetScale, 0.5f).SetEase(Ease.Linear);
+            toIncreaseScale = false;
+            toDecreaseScale = true;
+        }
+
+
+    }
+    public void DownScalingText()
+    {
+        if (toDecreaseScale)
+        {
+            textTransform.DOScale(originalScale, 0.5f).SetEase(Ease.Linear);
+            toIncreaseScale = true;
+            toDecreaseScale = false;
         }
     }
 }

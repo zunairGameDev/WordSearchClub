@@ -85,6 +85,8 @@ namespace BBG.WordSearch
         public int NumLevelsTillAd { get; set; }
         public bool ToPlayNewMode;
         public bool ToPlayNewModeWithJsonData;
+        public string longestWord;
+        public bool toPlayAnimation;
 
         #endregion
 
@@ -111,8 +113,8 @@ namespace BBG.WordSearch
         #endregion
 
         #region Public Methods
-             
-       
+
+
 
         /// <summary>
         /// Starts the given level in the given category
@@ -327,6 +329,13 @@ namespace BBG.WordSearch
                 // Check if the word matches the selected word or the selected word reversed
                 if (selectedWord == wordNoSpaces || selectedWordReversed == wordNoSpaces)
                 {
+                    if (longestWord != null)
+                    {
+                        if (selectedWord == longestWord || selectedWordReversed == longestWord)
+                        {
+                            toPlayAnimation = true;
+                        }
+                    }
                     // Add the word to the hash set of found words for this board
                     ActiveBoard.foundWords.Add(word);
 
@@ -423,11 +432,17 @@ namespace BBG.WordSearch
         }
         public void ToShowHintLetter()
         {
+            int maxLength = 0;
             // Loop through all words in ActiveBoard.words
             for (int i = 0; i < ActiveBoard.words.Count; i++)
             {
                 string currentWord = ActiveBoard.words[i]; // Get the current word
-
+                                                           // Check if the current word is the longest
+                if (currentWord.Length > maxLength)
+                {
+                    maxLength = currentWord.Length;
+                    longestWord = currentWord.Replace(" ", "");  // Update the longest word
+                }
                 // Loop through each character in the current word
                 foreach (char letter in currentWord)
                 {
