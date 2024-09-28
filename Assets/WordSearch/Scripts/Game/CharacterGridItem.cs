@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 namespace BBG.WordSearch
 {
@@ -8,7 +9,7 @@ namespace BBG.WordSearch
 	{
 		#region Inspector Variables
 
-		public Text	characterText;
+		public TextMeshProUGUI	characterText;
 
 		#endregion
 

@@ -12,10 +12,17 @@ public class ProfileManager : MonoBehaviour
     public Image[] spriteImages;  // UI Images for displaying available sprites in the UI
     public Sprite[] availableSprites;  // Array of available sprites for profile pictures
     private Sprite currentProfileSprite;  // Track current profile sprite
+    public InputField playerNameInputField;
 
     private void Awake()
     {
         profile_Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        playerNameInputField.text = PlayerPrefs.GetString("PlayerName", "Evening, Guest_16dan1!");
+        profileImage.sprite = availableSprites[PlayerPrefs.GetInt("SpriteIndex")];
     }
     void Start()
     {
@@ -33,11 +40,12 @@ public class ProfileManager : MonoBehaviour
         // Get the clicked sprite
         Sprite clickedSprite = availableSprites[spriteIndex];
         // Swap current profile sprite with clicked sprite
-        Sprite temp = currentProfileSprite;
+
         currentProfileSprite = clickedSprite;
-        profileImage.sprite = currentProfileSprite;
+        profileImage.sprite = clickedSprite;
         // Update the sprite in the array and in the UI Image at the clicked index
-        availableSprites[spriteIndex] = temp;
-        spriteImages[spriteIndex].sprite = temp;
+        //availableSprites[spriteIndex] = temp;
+        //spriteImages[spriteIndex].sprite = temp;
+        PlayerPrefs.SetInt("SpriteIndex", spriteIndex);
     }
 }

@@ -1,9 +1,9 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using System.Collections.Generic;
 
 public class WinPanelController : MonoBehaviour
 {
@@ -15,6 +15,11 @@ public class WinPanelController : MonoBehaviour
     public Canvas m_Canvas;
     public TextMeshProUGUI wisdomPoint;
     public TextMeshProUGUI winSlideText;
+    public List<string> goodWord;
+    public GameObject appreciationObject;
+    public TextMeshProUGUI appreciationText;
+
+
 
     [SerializeField] private enum RenderModeStates { camera, overlay, world };
     [SerializeField] private RenderModeStates m_RenderModeStates;
@@ -25,6 +30,7 @@ public class WinPanelController : MonoBehaviour
     private void OnEnable()
     {
         CameraModeChange(RenderModeStates.camera);
+        ToShowCountryComplete();
     }
     void Start()
     {
@@ -35,6 +41,19 @@ public class WinPanelController : MonoBehaviour
         nextLevelButton.transform.localScale = Vector3.zero;
         initialPosition = particleEffect.transform.position;
         OnLevelWin();
+    }
+    public void ToShowCountryComplete()
+    {
+        if ((MainMenuText.Instance.currentValue + 1) == MainMenuText.Instance.countryInfo.maxValue)
+        {
+            appreciationText.text = "Country Complete";
+        }
+        else
+        {
+            appreciationText.text = goodWord[PlayerPrefs.GetInt("SelectJasonLevel")];
+
+        }
+        appreciationObject.SetActive(true);
     }
 
     public void OnLevelWin()

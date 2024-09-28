@@ -10,31 +10,35 @@ public class MainMenu : MonoBehaviour
     #endregion
     [Header("Panels")]
     // Panels
-    public GameObject homeScreenPanel;     
-    public GameObject playerProfilePanel;  
-    public GameObject sourceImagePanel;    
-    public GameObject settingsPanel;       
-    public GameObject dailyChallengePanel; 
-    public GameObject myCollectionPanel;   
-    public GameObject stampPanel;           
+    public GameObject homeScreenPanel;
+    public GameObject playerProfilePanel;
+    public GameObject sourceImagePanel;
+    public GameObject settingsPanel;
+    public GameObject dailyChallengePanel;
+    public GameObject myCollectionPanel;
+    public GameObject stampPanel;
     public GameObject quotePanel;
-    public GameObject rewardedPanel;        
-    public GameObject storePanel;           
-    public GameObject selectLanguagePanel;  
+    public GameObject rewardedPanel;
+    public GameObject storePanel;
+    public GameObject selectLanguagePanel;
 
 
     [Header("UI Elements")]
     // UI Elements
-    public InputField playerNameInputField;  
-    public TextMeshProUGUI sourceImageInputField; 
-    public Text playerNameDisplayText;      
-    public Image selectedImageDisplay;       
-   
-    public Image backgroundImage;        
-    public Sprite dailyChallengeBackground; // Sprite for the Daily Challenge background
-    public Sprite defaultBackground;    
-   
+    public InputField playerNameInputField;
+    public TextMeshProUGUI sourceImageInputField;
+    public Text playerNameDisplayText;
+    public Image selectedImageDisplay;
 
+    public Image backgroundImage;
+    public Sprite dailyChallengeBackground; // Sprite for the Daily Challenge background
+    public Sprite defaultBackground;
+
+    private void OnEnable()
+    {
+        sourceImageInputField.text = PlayerPrefs.GetString("PlayerName", "Evening, Guest_16dan1!");
+        selectedImageDisplay.sprite = playerProfilePanel.GetComponent<ProfileManager>().availableSprites[PlayerPrefs.GetInt("SpriteIndex")];
+    }
 
     // Scene management
     public void GamePlay()
@@ -47,28 +51,28 @@ public class MainMenu : MonoBehaviour
     {
         if (myCollectionPanel.activeSelf)
         {
-            myCollectionPanel.SetActive(false);  
-            homeScreenPanel.SetActive(true);     
+            myCollectionPanel.SetActive(false);
+            homeScreenPanel.SetActive(true);
         }
         else if (settingsPanel.activeSelf)
         {
-            settingsPanel.SetActive(false);       
-            homeScreenPanel.SetActive(true);     
+            settingsPanel.SetActive(false);
+            homeScreenPanel.SetActive(true);
         }
         else if (dailyChallengePanel.activeSelf)
         {
-            dailyChallengePanel.SetActive(false); 
-            homeScreenPanel.SetActive(true);     
+            dailyChallengePanel.SetActive(false);
+            homeScreenPanel.SetActive(true);
         }
         else if (rewardedPanel.activeSelf)
         {
-            rewardedPanel.SetActive(false);       
-            homeScreenPanel.SetActive(true);     
+            rewardedPanel.SetActive(false);
+            homeScreenPanel.SetActive(true);
         }
         else if (storePanel.activeSelf)
         {
-            storePanel.SetActive(false);         
-            homeScreenPanel.SetActive(true);     
+            storePanel.SetActive(false);
+            homeScreenPanel.SetActive(true);
         }
         else
         {
@@ -78,12 +82,12 @@ public class MainMenu : MonoBehaviour
 
     // Settings panel functions
     public void OpenSettings() => settingsPanel.SetActive(true);
-   
+
 
     // Daily challenge panel functions
     public void OpenDailyChallenge()
     {
-        dailyChallengePanel.SetActive(true);  
+        dailyChallengePanel.SetActive(true);
 
         // Change the background
         if (backgroundImage != null && dailyChallengeBackground != null)
@@ -99,14 +103,14 @@ public class MainMenu : MonoBehaviour
     // Open Select Language panel
     public void OpenSelectLanguagePanel()
     {
-        selectLanguagePanel.SetActive(true); 
-        settingsPanel.SetActive(false);       
+        selectLanguagePanel.SetActive(true);
+        settingsPanel.SetActive(false);
     }
 
     public void OnBackFromSelectLanguage()
     {
-        selectLanguagePanel.SetActive(false);  
-        homeScreenPanel.SetActive(true);       
+        selectLanguagePanel.SetActive(false);
+        homeScreenPanel.SetActive(true);
     }
 
 
@@ -124,11 +128,11 @@ public class MainMenu : MonoBehaviour
     }
 
     public void CloseStampPanel() => stampPanel.SetActive(false);
-    
+
     public void OpenRewardedPanel() => rewardedPanel.SetActive(true);
-   
+
     public void OpenStorePanel() => storePanel.SetActive(true);
-    
+
     public void OnCatImageClick()
     {
         playerProfilePanel.SetActive(true);
@@ -138,7 +142,7 @@ public class MainMenu : MonoBehaviour
     // Update the Source Image panel's input field with text from Player Profile panel's input field
     public void OnNameSubmit()
     {
-       
+
         string playerName = playerNameInputField.text;
 
         Debug.Log("Player Name Submitted: " + playerName);
@@ -148,15 +152,15 @@ public class MainMenu : MonoBehaviour
         {
             // Update the player name display text
             playerNameDisplayText.text = playerName;
-
+            PlayerPrefs.SetString("PlayerName", playerNameInputField.text);
             // Update the source image input field with the player's name
-            sourceImageInputField.text = playerName;
+            sourceImageInputField.text = PlayerPrefs.GetString("PlayerName");
 
-            // Close the player profile panel after saving the name
-            playerProfilePanel.SetActive(false);
+            //// Close the player profile panel after saving the name
+            //playerProfilePanel.SetActive(false);
 
-            // Optionally, you can re-enable the source image panel if needed
-            sourceImagePanel.SetActive(true); // Enable if needed or keep it off
+            //// Optionally, you can re-enable the source image panel if needed
+            //sourceImagePanel.SetActive(true); // Enable if needed or keep it off
         }
         else
         {
@@ -167,15 +171,16 @@ public class MainMenu : MonoBehaviour
 
     public void OnSaveButtonClick()
     {
+        PlayerPrefs.SetString("PlayerName", playerNameInputField.text);
         // Get the player's name from the input field
-        string playerName = playerNameInputField.text;
+        string playerName = PlayerPrefs.GetString("PlayerName");
 
         // Check if the name is not empty
         if (!string.IsNullOrEmpty(playerName))
         {
             // Save the player name (Display it or store it in player preferences)
             playerNameDisplayText.text = playerName;
-            selectedImageDisplay.sprite = ProfileManager.profile_Instance.profileImage.sprite;
+            selectedImageDisplay.sprite = ProfileManager.profile_Instance.availableSprites[PlayerPrefs.GetInt("SpriteIndex")];
             Debug.Log("Image change");
 
             // Hide the player profile panel

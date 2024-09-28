@@ -34,7 +34,7 @@ namespace BBG.WordSearch
         [SerializeField] private List<CategoryInfo> categoryInfos = null;
         [SerializeField] private List<DifficultyInfo> difficultyInfos = null;
         [SerializeField] private List<GridInfo> levelDetails = null;
-        [SerializeField] private List<TextAsset> levelFiles;
+        public List<TextAsset> levelFiles;
         [SerializeField] private List<char> hintLetters = new List<char>();
 
         [Header("Values")]

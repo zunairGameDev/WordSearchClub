@@ -28,6 +28,7 @@ namespace BBG.WordSearch
         public List<float> playerStates;
         public List<CharacterGridItem> letterObject;
         public EdgeDeductor deductor;
+        public TextMeshProUGUI levelName;
         public TextMeshProUGUI levelStatus;
         public TextMeshProUGUI playerStateShow;
 
@@ -47,6 +48,8 @@ namespace BBG.WordSearch
         [SerializeField] private SelectedWord selectedWord = null;
 
         [Header("Letter Settings")]
+        [SerializeField] TMP_FontAsset tMPUIFont;
+        [SerializeField] TextMeshPro tMPFont;
         [SerializeField] private Font letterFont = null;
         [SerializeField] private int letterFontSize = 0;
         [SerializeField] private Color letterColor = Color.white;
@@ -307,6 +310,7 @@ namespace BBG.WordSearch
         {
             Clear();
             levelStatus.text = "Level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();
+            levelName.text = MainMenuText.Instance.gameManager.GetComponent<GameManager>().levelFiles[PlayerPrefs.GetInt("SelectJasonLevel")].name;
             if (PlayerPrefs.GetInt("SelectJasonLevel") > 0)
             {
                 playerStateShow.text = "Solved by " + playerStates[PlayerPrefs.GetInt("SelectJasonLevel")].ToString() + " % player";
@@ -935,9 +939,10 @@ namespace BBG.WordSearch
             (textObject.transform as RectTransform).anchoredPosition = letterOffsetInCell;
 
             // Add the Text component for the item and set the font/fontSize
-            Text characterText = textObject.AddComponent<Text>();
-            characterText.font = letterFont;
+            TextMeshProUGUI characterText = textObject.AddComponent<TextMeshProUGUI>();
+            characterText.font = tMPUIFont;
             characterText.fontSize = letterFontSize;
+            characterText.fontStyle = FontStyles.UpperCase;
             characterText.color = letterColor;
 
             // Create a ContentSizeFitter for the text object so the size will always fit the letter in it
