@@ -49,15 +49,23 @@ namespace BBG.WordSearch
         }
         public void OnClickNextBtn()
         {
-            if (GameManager.Instance.ToPlayNewModeWithJsonData)
+            if (GameManager.Instance.toPlayDailyChallange)
             {
-                PlayerPrefs.SetInt("SelectJasonLevel", PlayerPrefs.GetInt("SelectJasonLevel") + 1);
+                GameManager.Instance.toPlayDailyChallange =false;
             }
             else
             {
-                PlayerPrefs.SetInt("SelectedLevel", PlayerPrefs.GetInt("SelectedLevel") + 1);
+                if (GameManager.Instance.ToPlayNewModeWithJsonData)
+                {
+                    PlayerPrefs.SetInt("SelectJasonLevel", PlayerPrefs.GetInt("SelectJasonLevel") + 1);
+                }
+                else
+                {
+                    PlayerPrefs.SetInt("SelectedLevel", PlayerPrefs.GetInt("SelectedLevel") + 1);
 
+                }
             }
+            
             GameManager.Instance.CreateNewLevelOnComplete();
         }
 

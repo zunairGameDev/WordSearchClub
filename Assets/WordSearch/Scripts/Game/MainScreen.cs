@@ -46,8 +46,9 @@ namespace BBG.WordSearch
 #endif
         }
 
-        public void OnClickPlayBtn()
+        public void OnClickPlayBtn(bool value)
         {
+            GameManager.Instance.toPlayDailyChallange = value;
             Button firstChildButton = categoryListContainer.GetChild(1).GetComponentInChildren<Button>();
             firstChildButton.onClick.Invoke();
         }

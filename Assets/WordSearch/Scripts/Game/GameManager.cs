@@ -35,6 +35,7 @@ namespace BBG.WordSearch
         [SerializeField] private List<DifficultyInfo> difficultyInfos = null;
         [SerializeField] private List<GridInfo> levelDetails = null;
         public List<TextAsset> levelFiles;
+        public List<TextAsset> dailyLevelfiles;
         [SerializeField] private List<char> hintLetters = new List<char>();
 
         [Header("Values")]
@@ -51,6 +52,7 @@ namespace BBG.WordSearch
         [Header("Components")]
         [SerializeField] private CharacterGrid characterGrid = null;
         [SerializeField] private WordList wordList = null;
+        [SerializeField] private DailyWordList dailyWordList = null;
         [SerializeField] private GameObject loadingIndicator = null;
 
         [Header("Debug / Testing")]
@@ -87,6 +89,8 @@ namespace BBG.WordSearch
         public bool ToPlayNewModeWithJsonData;
         public string longestWord;
         public bool toPlayAnimation;
+        public bool toPlayDailyChallange;
+        public GameObject dailyChallangeObject;
 
         #endregion
 
@@ -221,20 +225,31 @@ namespace BBG.WordSearch
             {
                 if (ToPlayNewModeWithJsonData)
                 {
-                    if (PlayerPrefs.GetInt("SelectJasonLevel") >= levelFiles.Count)
+                    if (toPlayDailyChallange)
                     {
-                        PlayerPrefs.DeleteKey("SelectJasonLevel");
+                        dailyChallangeObject.SetActive(true);
+                        ActiveDifficultyIndex = 1;
+                        DailyChallange();
+                        return;
                     }
+                    else
+                    {
+                        dailyChallangeObject.SetActive(false);
+                        if (PlayerPrefs.GetInt("SelectJasonLevel") >= levelFiles.Count)
+                        {
+                            PlayerPrefs.DeleteKey("SelectJasonLevel");
+                        }
 
-                    Board board = LoadLevelFile(levelFiles[PlayerPrefs.GetInt("SelectJasonLevel")]);
+                        Board board = LoadLevelFile(levelFiles[PlayerPrefs.GetInt("SelectJasonLevel")]);
 
 
-                    SetupGame(board);
+                        SetupGame(board);
 
-                    //SetBoardInProgress(board, categoryInfo, levelIndex);
+                        //SetBoardInProgress(board, categoryInfo, levelIndex);
 
-                    ShowGameScreen();
-                    return;
+                        ShowGameScreen();
+                        return;
+                    }
                 }
                 else
                 {
@@ -255,6 +270,13 @@ namespace BBG.WordSearch
             // Generate a new random board to use
             GenerateRandomBoard(difficultyInfos[difficultyIndex]);
 
+            ShowGameScreen();
+        }
+        public void DailyChallange()
+        {
+            DailyBoard board = LoadDailyFile(dailyLevelfiles[0/*PlayerPrefs.GetInt("SelectJasonLevel")*/]);
+            dailyWordList.Setup(board);
+            GenerateDailyBoard(board);
             ShowGameScreen();
         }
 
@@ -339,8 +361,17 @@ namespace BBG.WordSearch
                     // Add the word to the hash set of found words for this board
                     ActiveBoard.foundWords.Add(word);
 
-                    // Notify the word list a word has been found
-                    wordList.SetWordFound(word);
+                    if (toPlayDailyChallange)
+                    {
+                        dailyWordList.SetWordFound(word);
+                    }
+                    else
+                    {
+                        // Notify the word list a word has been found
+                        wordList.SetWordFound(word);
+                    }
+
+
 
                     if (ActiveBoard.foundWords.Count == ActiveBoard.words.Count)
                     {
@@ -615,6 +646,16 @@ namespace BBG.WordSearch
                 SoundManager.Instance.Play("hint-used");
             }
         }
+        public void GenerateDailyBoard(DailyBoard board)
+        {
+            BoardCreator.BoardConfig boardConfig = new BoardCreator.BoardConfig();
+            boardConfig.rows = board.rows;
+            boardConfig.cols = board.cols;
+            boardConfig.words = board.words;
+            boardConfig.randomCharacters = characters;
+            ActiveGameState = GameState.GeneratingBoard;
+            BoardCreator.CreateBoard(boardConfig, OnCasualBoardCreated);
+        }
 
         /// <summary>
         /// Generates a random board for the current active category and difficulty
@@ -661,9 +702,12 @@ namespace BBG.WordSearch
 
             SetupGame(board);
 
-            SetBoardInProgress(board, ActiveCategoryInfo);
+            if (!toPlayDailyChallange)
+            {
+                SetBoardInProgress(board, ActiveCategoryInfo);
+                loadingIndicator.SetActive(false);
+            }
 
-            loadingIndicator.SetActive(false);
         }
 
         /// <summary>
@@ -674,7 +718,10 @@ namespace BBG.WordSearch
             ActiveBoard = board;
 
             characterGrid.Setup(board);
-            wordList.Setup(board);
+            if (!toPlayDailyChallange)
+            {
+                wordList.Setup(board);
+            }
 
             Canvas.ForceUpdateCanvases();
 
@@ -810,6 +857,20 @@ namespace BBG.WordSearch
 
             return board;
         }
+
+        private DailyBoard LoadDailyFile(TextAsset levelFile)
+        {
+            string contents = levelFile.text;
+            JSONNode json = JSON.Parse(contents);
+
+            DailyBoard board = new DailyBoard();
+
+            board.FromJson(json);
+
+            return board;
+        }
+
+
         /// <summary>
         /// Update a DifficultyInfo from the contents of the given level file
         /// </summary>

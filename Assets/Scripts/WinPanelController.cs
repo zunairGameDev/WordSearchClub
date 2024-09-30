@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 using System.Collections.Generic;
+using BBG.WordSearch;
 
 public class WinPanelController : MonoBehaviour
 {
