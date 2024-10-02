@@ -20,6 +20,7 @@ namespace BBG.WordSearch
         [SerializeField] private GameObject keyRewardContainer = null;
         [SerializeField] private Text coinRewardAmountText = null;
         [SerializeField] private Text keyRewardAmountText = null;
+        public WinPanelController winPanel;
 
         #endregion
 
@@ -29,6 +30,7 @@ namespace BBG.WordSearch
         {
             base.OnShowing(inData);
 
+            winPanel.ToShowData();
             //bool progressLevelCompleted = (bool)inData[0];
             //int coinsAwarded = (int)inData[1];
             //int keyAwarded = (int)inData[2];

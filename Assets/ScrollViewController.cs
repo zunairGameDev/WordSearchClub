@@ -10,11 +10,13 @@ public class ScrollViewController : MonoBehaviour
     public GameObject[] imagesWithTexts;
     public GameObject[] prefabs;
     public Button actionButton;
-    private int currentIndex = 0;
+    public int currentIndex = 0;
     public Transform parentForInstantiateImages;
 
     public GameObject lockObject;
     public GameObject unlockObject;
+    public GameObject showText;
+    public GameObject stampDetailObject;
 
     // Stamps:
     public GameObject[] stamps_Panels;
@@ -34,34 +36,42 @@ public class ScrollViewController : MonoBehaviour
         //actionButton.onClick.AddListener(OnButtonPress);
 
     }
-    void OnButtonPress()
-    {
-        if (currentIndex < imagesWithTexts.Length)
-        {
 
-            Destroy(imagesWithTexts[currentIndex]);
-
-            GameObject newPrefab = Instantiate(prefabs[currentIndex], parentForInstantiateImages);
-            newPrefab.transform.SetSiblingIndex(currentIndex);
-            currentIndex++; // Move to the next image and prefab
-        }
-    }
 
     public void LockingAndUnlockingLabels()
     {
         currentIndex = PlayerPrefs.GetInt("SelectJasonLevel");
         for (int i = 0; i < labelInfos.Count; i++)
         {
-            if(currentIndex < labelInfos[i].unlockValue)
+            if (currentIndex < labelInfos[i].unlockValue)
             {
                 GameObject v = Instantiate(lockObject, parentForInstantiateImages);
                 v.GetComponent<LockObject>().ApplyingData(labelInfos[i].labelName, labelInfos[i].unlockValue);
             }
             else
             {
+                GameObject v = Instantiate(unlockObject, parentForInstantiateImages);
+                v.GetComponent<UnlockObject>().countryDetails = labelInfos[i].countryDetails;
+                v.GetComponent<UnlockObject>().ApplyingDataOnButton();
+
 
             }
         }
 
+    }
+    public void SearchStamp()
+    {
+        showText.GetComponent<TextShowInCollection>().textdetails.text = "Search for this Stamp in the next countries!";
+        showText.SetActive(true);
+    }
+
+    public void PlayToUnlockStamp(int value)
+    {
+        showText.GetComponent<TextShowInCollection>().textdetails.text = "Play " + value.ToString() + " more levels to collect this stamp!";
+        showText.SetActive(true);
+    }
+    public void StampDetails(Country_Data country_Data)
+    {
+        stampDetailObject.GetComponent<StampDetailsShow>().ApplyingData(country_Data);
     }
 }

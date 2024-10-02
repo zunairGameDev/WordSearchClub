@@ -25,7 +25,10 @@ namespace BBG.WordSearch
 			wordHintCostText.text = "x" + GameManager.Instance.CoinCostWordHint;
 			letterHintCostText.text = "x" + GameManager.Instance.CoinCostLetterHint;
 		}
-
+		public void OnBackClick()
+		{
+            ScreenManager.Instance.Show("main");
+        }
 		#endregion
 	}
 }

@@ -23,6 +23,12 @@ public class LabelInfo
 public class Country_Data
 {
     public string name;
+    public string title;
+    public string description;
     public Sprite unlocksprit;
     public Sprite lockSprit;
+    public Sprite toFindSprit;
+    public int onLockSpritApply;
+    public int onUnlockSpritApply;
+
 }
