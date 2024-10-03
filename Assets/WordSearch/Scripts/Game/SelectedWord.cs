@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ namespace BBG.WordSearch
 	{
 		#region Inspector Variables
 
-		[SerializeField] private Text		selectedWordText		= null;
+		[SerializeField] private TextMeshProUGUI selectedWordText		= null;
 		[SerializeField] private GameObject	selectedWordContainer	= null;
 		[SerializeField] private Image		selectedWordBkgImage	= null;
 

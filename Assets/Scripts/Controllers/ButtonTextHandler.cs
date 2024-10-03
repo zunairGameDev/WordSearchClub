@@ -1,9 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ButtonTextHandler : MonoBehaviour
 {
+    private bool isSwitchingPanel = false;
     public Text homeText;
     public Text collectionText;
     public Text challengeText;
@@ -21,16 +23,43 @@ public class ButtonTextHandler : MonoBehaviour
     }
     public void ShowPanel(int value)
     {
+        if (isSwitchingPanel)
+            return;  // Prevent switching if already switching
+
+        StartCoroutine(SwitchPanel(value));
+        //for (int i = 0; i < mainPanelCanvas.Count; i++)
+        //{
+        //    mainPanelCanvas[i].alpha = 0;
+        //    mainPanelCanvas[i].interactable = false;
+        //    mainPanelCanvas[i].blocksRaycasts = false;
+        //}
+        //mainPanelCanvas[value].alpha = 1;
+        //mainPanelCanvas[value].interactable = true;
+        //mainPanelCanvas[value].blocksRaycasts = true;
+    }
+    private IEnumerator SwitchPanel(int value)
+    {
+        isSwitchingPanel = true;
+
+        // First, hide all panels
         for (int i = 0; i < mainPanelCanvas.Count; i++)
         {
             mainPanelCanvas[i].alpha = 0;
             mainPanelCanvas[i].interactable = false;
             mainPanelCanvas[i].blocksRaycasts = false;
         }
+
+        // Wait a small amount of time if necessary to ensure there's no overlapping issues
+        
+
+        // Now, show the selected panel
         mainPanelCanvas[value].alpha = 1;
         mainPanelCanvas[value].interactable = true;
         mainPanelCanvas[value].blocksRaycasts = true;
+        yield return new WaitForEndOfFrame();
+        isSwitchingPanel = false; // Done switching
     }
+
     public void PanelAnimationShow(int value)
     {
         for (int i = 0; i < mainMenuButton.Count; i++)

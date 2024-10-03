@@ -529,14 +529,18 @@ namespace BBG.WordSearch
 
             Color toColor = new Color(floatingText.color.r, floatingText.color.g, floatingText.color.b, 0f);
 
-            UIAnimation anim;
+            UIAnimation animX;
+            UIAnimation animY;
 
-            anim = UIAnimation.PositionY(floatingText.rectTransform, center.y, center.y + 75f, 1f);
-            anim.Play();
+            animX = UIAnimation.PositionX(floatingText.rectTransform, center.y, center.y + 75f, 1f);
+            animY = UIAnimation.PositionY(floatingText.rectTransform, center.y, center.y + 75f, 1f);
 
-            anim = UIAnimation.Color(floatingText, toColor, 1f);
-            anim.OnAnimationFinished = (GameObject obj) => { GameObject.Destroy(obj); };
-            anim.Play();
+            animX.Play();
+            animY.Play();
+
+            animY = UIAnimation.Color(floatingText, toColor, 1f);
+            animY.OnAnimationFinished = (GameObject obj) => { GameObject.Destroy(obj); };
+            animY.Play();
         }
 
         public void ScaleGameObject(Transform image)
@@ -822,7 +826,7 @@ namespace BBG.WordSearch
                 if (characterGridItem.IsHighlighted)
                 {
                     characterGridItem.characterText.color = letterHighlightedColor;
-                    characterGridItem.transform.GetComponent<EdgeDeductor>().ScalingText();
+                    //characterGridItem.transform.GetComponent<EdgeDeductor>().ScalingText();
 
                 }
                 else

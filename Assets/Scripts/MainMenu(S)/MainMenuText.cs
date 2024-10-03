@@ -29,17 +29,14 @@ public class MainMenuText : MonoBehaviour
 
     }
 
-    public void UpdateLeveInfo() 
+    public void UpdateLeveInfo()
     {
         TextUpdating();
         countryInfo = gameManager.GetComponent<GameManager>().countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
         FillAmount();
 
     }
-    public void UpdateLeveInfo() 
-    {
-        
-    }
+
     private void TextUpdating()
     {
         mainMenuPlayButton.text = "Play Level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();

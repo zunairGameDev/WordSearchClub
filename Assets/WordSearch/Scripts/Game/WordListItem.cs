@@ -10,6 +10,7 @@ namespace BBG.WordSearch
 
 		[SerializeField] private Text		wordText		= null;
 		[SerializeField] private GameObject	foundIndicator	= null;
+		[SerializeField] private Color color;
 
 		#endregion
 
@@ -23,7 +24,8 @@ namespace BBG.WordSearch
 
 		public void SetWordFound()
 		{
-			foundIndicator.SetActive(true);
+			wordText.color = color;
+			//foundIndicator.SetActive(true);
 		}
 
 		#endregion

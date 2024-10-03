@@ -19,36 +19,17 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
     private int totalCoins;
     private int dayProgress;       // Current day in 7-day streak
 
-    public PanelController panelController;
+    private PanelController panelController;
 
     void Start()
     {
-        //    //panelController.ActivatePanel();
-        //    // Load total coins and next reward time
-        //    totalCoins = PlayerPrefs.GetInt("TotalCoins", 0);
-        //    dayProgress = PlayerPrefs.GetInt("DayProgress", 0);
-        //    UpdateCartText();
-
-        //    // Set slider value to the current day progress
-        //    dayProgressSlider.maxValue = 7;
-        //    dayProgressSlider.value = dayProgress;
-
-        //    if (PlayerPrefs.HasKey("NextRewardTime"))
-        //    {
-        //        nextRewardTime = DateTime.Parse(PlayerPrefs.GetString("NextRewardTime"));
-        //    }
-        //    else
-        //    {
-        //        nextRewardTime = DateTime.Now;
-        //    }
-
-        //    CheckRewardEligibility();
-        //}
-
+        //panelController.ActivatePanel();
+        // Load total coins and next reward time
         totalCoins = PlayerPrefs.GetInt("TotalCoins", 0);
         dayProgress = PlayerPrefs.GetInt("DayProgress", 0);
         UpdateCartText();
 
+        // Set slider value to the current day progress
         dayProgressSlider.maxValue = 7;
         dayProgressSlider.value = dayProgress;
 
@@ -59,13 +40,6 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
         else
         {
             nextRewardTime = DateTime.Now;
-        }
-
-        // Only add listeners once in Start
-        foreach (Button box in boxes)
-        {
-            box.onClick.RemoveAllListeners();  // Remove any old listeners
-            box.onClick.AddListener(() => SelectBox(box));  // Add listener once
         }
 
         CheckRewardEligibility();
@@ -95,11 +69,10 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
         foreach (Button box in boxes)
         {
             box.interactable = true;
-            box.onClick.RemoveAllListeners();
+            box.onClick.RemoveAllListeners();  // Remove any old listeners
             box.onClick.AddListener(() => SelectBox(box));
         }
     }
-
 
     void DisableBoxes()
     {
@@ -118,7 +91,6 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
 
         // Show reward on the selected box button
         selectedBox.transform.GetChild(0).GetComponent<Text>().text = "You got " + reward + " coins!";
-        Debug.Log("Text");
 
         // Add the reward to total coins and update the cart text
         totalCoins += reward;
@@ -197,8 +169,8 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
         gifts_panel.SetActive(false);
         yield return new WaitForSeconds(1f);
         //PanelController.Panelinstance.gameObject.SetActive(true);
-        //PanelController.Panelinstance.ActivatePanel();
-        //yield return new WaitForSeconds(3f);
-        //PanelController.Panelinstance.DeactivatePanel();
+        PanelController.Panelinstance.ActivatePanel();
+        yield return new WaitForSeconds(3f);
+        PanelController.Panelinstance.DeactivatePanel();
     }
 }

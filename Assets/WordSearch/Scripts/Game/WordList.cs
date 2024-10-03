@@ -39,8 +39,9 @@ namespace BBG.WordSearch
 			{
 				CreateWordListItem(board.words[i], wordListItemPool);
 			}
+			GetComponent<ContainerSetting>().SettingRows(board.words.Count);
 
-			UIAnimation anim = UIAnimation.Alpha(wordListCanvasGroup, 0f, 1f, 0.5f);
+            UIAnimation anim = UIAnimation.Alpha(wordListCanvasGroup, 0f, 1f, 0.5f);
 			anim.style = UIAnimation.Style.EaseOut;
 			anim.Play();
 		}
