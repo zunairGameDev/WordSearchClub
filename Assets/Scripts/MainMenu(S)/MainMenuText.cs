@@ -34,6 +34,11 @@ public class MainMenuText : MonoBehaviour
         TextUpdating();
         countryInfo = gameManager.GetComponent<GameManager>().countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
         FillAmount();
+
+    }
+    public void UpdateLeveInfo() 
+    {
+        
     }
     private void TextUpdating()
     {
