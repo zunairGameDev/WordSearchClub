@@ -48,6 +48,7 @@ namespace BBG.WordSearch
 
         public void OnClickPlayBtn(bool value)
         {
+            ScrollViewController.Instance.DestroyAllChildren();
             GameManager.Instance.toPlayDailyChallange = value;
             Button firstChildButton = categoryListContainer.GetChild(1).GetComponentInChildren<Button>();
             firstChildButton.onClick.Invoke();

@@ -28,19 +28,16 @@ public class WinPanelController : MonoBehaviour
     private bool isMoving = false;
     private Vector2 initialPosition;
 
-    private void OnEnable()
+    public void ToShowData()
     {
         CameraModeChange(RenderModeStates.camera);
-        ToShowCountryComplete();
-    }
-    void Start()
-    {
-        // Initially deactivate slider and next level button
+        appreciationObject.SetActive(false);
         winSlider.gameObject.SetActive(false);
         winSlider.transform.localScale = Vector3.zero;
         nextLevelButton.gameObject.SetActive(false);
         nextLevelButton.transform.localScale = Vector3.zero;
         initialPosition = particleEffect.transform.position;
+        ToShowCountryComplete();
         OnLevelWin();
     }
     public void ToShowCountryComplete()
@@ -51,7 +48,7 @@ public class WinPanelController : MonoBehaviour
         }
         else
         {
-            appreciationText.text = goodWord[PlayerPrefs.GetInt("SelectJasonLevel")];
+            appreciationText.text = goodWord[Random.Range(0, goodWord.Count - 1) /*PlayerPrefs.GetInt("SelectJasonLevel")*/];
 
         }
         appreciationObject.SetActive(true);
@@ -124,6 +121,7 @@ public class WinPanelController : MonoBehaviour
         fillAmount = (float)MainMenuText.Instance.currentValue / MainMenuText.Instance.countryInfo.maxValue;
         winSlider.value = fillAmount;
         winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
+        MainMenuText.Instance.FillAmount();
     }
 
 }

@@ -25,6 +25,12 @@ public class MainMenuText : MonoBehaviour
     }
     private void OnEnable()
     {
+        UpdateLeveInfo();
+
+    }
+
+    public void UpdateLeveInfo() 
+    {
         TextUpdating();
         countryInfo = gameManager.GetComponent<GameManager>().countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
         FillAmount();
@@ -40,6 +46,9 @@ public class MainMenuText : MonoBehaviour
     {
         if (currentValue >= countryInfo.maxValue)
         {
+            PlayerPrefs.SetInt("CountryInfoValue", PlayerPrefs.GetInt("CountryInfoValue") + 1);
+            TextUpdating();
+            countryInfo = gameManager.GetComponent<GameManager>().countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
             PlayerPrefs.SetInt("CurrentValue", 0);
         }
         currentValue = PlayerPrefs.GetInt("CurrentValue");
