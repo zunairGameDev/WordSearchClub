@@ -529,13 +529,10 @@ namespace BBG.WordSearch
 
             Color toColor = new Color(floatingText.color.r, floatingText.color.g, floatingText.color.b, 0f);
 
-            UIAnimation animX;
             UIAnimation animY;
 
-            animX = UIAnimation.PositionX(floatingText.rectTransform, center.y, center.y + 75f, 1f);
             animY = UIAnimation.PositionY(floatingText.rectTransform, center.y, center.y + 75f, 1f);
 
-            animX.Play();
             animY.Play();
 
             animY = UIAnimation.Color(floatingText, toColor, 1f);
@@ -917,6 +914,7 @@ namespace BBG.WordSearch
 
         private float SetupGridContainer(int rows, int columns)
         {
+
             // Add a GridLayoutGroup so make positioning letters much easier
             GridLayoutGroup gridLayoutGroup = gridContainer.GetComponent<GridLayoutGroup>();
 
@@ -925,7 +923,7 @@ namespace BBG.WordSearch
             float cellHeight = gridContainer.rect.height / (float)rows;
             float cellSize = Mathf.Min(cellWidth, cellHeight, maxCellSize);
 
-            gridLayoutGroup.cellSize = new Vector2(cellSize, cellSize);
+            gridLayoutGroup.cellSize = new Vector2(cellWidth, cellHeight);
             gridLayoutGroup.childAlignment = TextAnchor.MiddleCenter;
             gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             gridLayoutGroup.constraintCount = columns;

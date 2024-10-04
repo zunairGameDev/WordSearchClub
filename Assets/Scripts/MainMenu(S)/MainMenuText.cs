@@ -40,7 +40,7 @@ public class MainMenuText : MonoBehaviour
     private void TextUpdating()
     {
         mainMenuPlayButton.text = "Play Level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();
-        dailyPlayButton.text = "Back to level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();
+        //dailyPlayButton.text = "Back to level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();
         collectionPlayButton.text = "Back to level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();
     }
 
@@ -48,13 +48,16 @@ public class MainMenuText : MonoBehaviour
     {
         if (currentValue >= countryInfo.maxValue)
         {
+            PlayerPrefs.SetInt(countryInfo.countryName, currentValue);
             PlayerPrefs.SetInt("CountryInfoValue", PlayerPrefs.GetInt("CountryInfoValue") + 1);
             TextUpdating();
             countryInfo = gameManager.GetComponent<GameManager>().countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
             PlayerPrefs.SetInt("CurrentValue", 0);
         }
         currentValue = PlayerPrefs.GetInt("CurrentValue");
-        countryName.text = countryInfo.CountryName;
+        PlayerPrefs.SetInt(countryInfo.countryName, currentValue);
+        countryInfo.currentValue = currentValue;
+        countryName.text = countryInfo.countryName;
         float fillAmount = (float)currentValue / countryInfo.maxValue;
         sliderProgess.value = fillAmount;
         sliderText.text = currentValue.ToString() + " / " + countryInfo.maxValue.ToString();

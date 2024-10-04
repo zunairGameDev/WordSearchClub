@@ -19,6 +19,7 @@ namespace BBG.WordSearch
 		public void Setup(string word)
 		{
 			wordText.text = word;
+			wordText.color = Color.black;
 			foundIndicator.SetActive(false);
 		}
 

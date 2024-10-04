@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ButtonTextHandler : MonoBehaviour
 {
     private bool isSwitchingPanel = false;
-    public Text homeText;
-    public Text collectionText;
-    public Text challengeText;
+    public TextMeshProUGUI homeText;
+    public TextMeshProUGUI collectionText;
+    public TextMeshProUGUI challengeText;
     public List<CanvasGroup> mainPanelCanvas;
     public List<Animator> mainMenuButton;
 

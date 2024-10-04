@@ -42,7 +42,7 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
             nextRewardTime = DateTime.Now;
         }
 
-        CheckRewardEligibility();
+        //CheckRewardEligibility();
     }
 
     void Update()

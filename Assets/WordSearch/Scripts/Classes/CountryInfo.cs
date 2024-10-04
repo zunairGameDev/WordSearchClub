@@ -4,8 +4,13 @@ using UnityEngine;
 [System.Serializable]
 public class CountryInfo
 {
-    public string CountryName;
+    public string countryName;
+    public int currentValue;
     public int maxValue;
+    public int unlockAt;
+    public Sprite countryFlag;
+    public Sprite countryStamp;
+
 
 }
 

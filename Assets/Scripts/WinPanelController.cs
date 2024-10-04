@@ -8,8 +8,10 @@ using BBG.WordSearch;
 
 public class WinPanelController : MonoBehaviour
 {
+    public GameObject treeImage;
     public GameObject particleEffect; // Assign the particle effect GameObject
     public Slider winSlider; // Assign the slider
+    public Button collectButton;
     public Button nextLevelButton; // Assign the next level button
     public RectTransform targetPosition; // Position near the main image
     public float moveDuration = 2f; // Time it takes for the particle to move
@@ -19,8 +21,12 @@ public class WinPanelController : MonoBehaviour
     public List<string> goodWord;
     public GameObject appreciationObject;
     public TextMeshProUGUI appreciationText;
+    public bool toShowCollectButton;
+    public GameObject sliderReward;
+    public RectTransform jumpingReward;
+    public RectTransform reachPoint;
 
-
+    public GameObject countryStampPanel;
 
     [SerializeField] private enum RenderModeStates { camera, overlay, world };
     [SerializeField] private RenderModeStates m_RenderModeStates;
@@ -30,6 +36,9 @@ public class WinPanelController : MonoBehaviour
 
     public void ToShowData()
     {
+        treeImage.transform.localScale = Vector3.one;
+        sliderReward.SetActive(true);
+        jumpingReward.gameObject.SetActive(false);
         CameraModeChange(RenderModeStates.camera);
         appreciationObject.SetActive(false);
         winSlider.gameObject.SetActive(false);
@@ -45,10 +54,13 @@ public class WinPanelController : MonoBehaviour
         if ((MainMenuText.Instance.currentValue + 1) == MainMenuText.Instance.countryInfo.maxValue)
         {
             appreciationText.text = "Country Complete";
+            toShowCollectButton = true;
+
         }
         else
         {
             appreciationText.text = goodWord[Random.Range(0, goodWord.Count - 1) /*PlayerPrefs.GetInt("SelectJasonLevel")*/];
+            toShowCollectButton = false;
 
         }
         appreciationObject.SetActive(true);
@@ -86,10 +98,14 @@ public class WinPanelController : MonoBehaviour
         // Activate the slider and next level button
         winSlider.gameObject.SetActive(true);
         winSlider.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
-        nextLevelButton.gameObject.SetActive(true);
-        nextLevelButton.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
+        if (!toShowCollectButton)
+        {
+            nextLevelButton.gameObject.SetActive(true);
+            nextLevelButton.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
+        }
+
         CameraModeChange(RenderModeStates.overlay);
-        FillAmount();
+        StartCoroutine(FillAmount());
 
     }
     private void CameraModeChange(RenderModeStates m_RenderModeStates)
@@ -109,19 +125,39 @@ public class WinPanelController : MonoBehaviour
                 break;
         }
     }
-    public void FillAmount()
+    IEnumerator FillAmount()
     {
-
-
         float fillAmount = (float)MainMenuText.Instance.currentValue / MainMenuText.Instance.countryInfo.maxValue;
         winSlider.value = fillAmount;
         winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
+        yield return new WaitForSeconds(0.5F);
         PlayerPrefs.SetInt("CurrentValue", PlayerPrefs.GetInt("CurrentValue") + 1);
         MainMenuText.Instance.currentValue = PlayerPrefs.GetInt("CurrentValue");
         fillAmount = (float)MainMenuText.Instance.currentValue / MainMenuText.Instance.countryInfo.maxValue;
-        winSlider.value = fillAmount;
+        winSlider.DOValue(fillAmount, 0.5f).SetEase(Ease.Linear);
         winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
         MainMenuText.Instance.FillAmount();
+        if (toShowCollectButton)
+        {
+            StartCoroutine(ScalingDownTree());
+        }
+    }
+    IEnumerator ScalingDownTree()
+    {
+        jumpingReward.GetChild(0).localPosition = Vector3.zero;
+        sliderReward.SetActive(false);
+        jumpingReward.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        treeImage.transform.DOScale(Vector3.zero, 1.5f).SetEase(Ease.Linear);
+        winSlider.transform.DOScale(Vector3.zero, 1.5f).SetEase(Ease.Linear);
+        jumpingReward.GetChild(0).DOLocalMoveX(-120, 1f).SetEase(Ease.Linear);
+        jumpingReward.DOAnchorPosX(-310, 1f).SetEase(Ease.OutQuad);
+        jumpingReward.transform.DOScale(3.1f, 1f).SetEase(Ease.Linear);
+        jumpingReward.transform.DOPunchPosition(Vector3.up * 150f, 1f, 1, 0);
+        yield return new WaitForSeconds(1f);
+
+        countryStampPanel.GetComponent<CountryCompletePanel>().ApplyingData();
+
     }
 
 }
