@@ -113,6 +113,7 @@ namespace BBG.WordSearch
         #endregion
 
         public float currentAngle;
+        public bool gridRotates;
 
         #region Unity Methods
 
@@ -309,8 +310,18 @@ namespace BBG.WordSearch
         public void Setup(Board board)
         {
             Clear();
-            levelStatus.text = "Level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();
-            levelName.text = MainMenuText.Instance.gameManager.GetComponent<GameManager>().levelFiles[PlayerPrefs.GetInt("SelectJasonLevel")].name;
+            if (GameManager.Instance.GetComponent<GameManager>().toPlayDailyChallange)
+            {
+                levelStatus.gameObject.SetActive(false);
+                levelName.text = GameManager.Instance.GetComponent<GameManager>().dailyLevelfiles[0].name;
+            }
+            else
+            {
+                levelStatus.text = "Level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();
+                levelStatus.gameObject.SetActive(true);
+                levelName.text = GameManager.Instance.GetComponent<GameManager>().levelFiles[PlayerPrefs.GetInt("SelectJasonLevel")].name;
+            }
+
             if (PlayerPrefs.GetInt("SelectJasonLevel") > 0)
             {
                 playerStateShow.text = "Solved by " + playerStates[PlayerPrefs.GetInt("SelectJasonLevel")].ToString() + " % player";
@@ -529,15 +540,69 @@ namespace BBG.WordSearch
 
             Color toColor = new Color(floatingText.color.r, floatingText.color.g, floatingText.color.b, 0f);
 
-            UIAnimation animY;
+            if (GameManager.Instance.toPlayDailyChallange)
+            {
+                UIAnimation animY;
 
-            animY = UIAnimation.PositionY(floatingText.rectTransform, center.y, center.y + 75f, 1f);
+                animY = UIAnimation.PositionY(floatingText.rectTransform, center.y, center.y + 75f, 1f);
 
-            animY.Play();
+                animY.Play();
 
-            animY = UIAnimation.Color(floatingText, toColor, 1f);
-            animY.OnAnimationFinished = (GameObject obj) => { GameObject.Destroy(obj); };
-            animY.Play();
+                animY = UIAnimation.Color(floatingText, toColor, 1f);
+                animY.OnAnimationFinished = (GameObject obj) => { GameObject.Destroy(obj); };
+                animY.Play();
+            }
+            else
+            {
+                // Step 1: Get the world position of the target word in the grid
+                Vector3 targetWorldPosition = GameManager.Instance.wordFoundInWordGrid.transform.position;
+                RectTransform floatingTextParent = floatingText.rectTransform.parent as RectTransform;
+
+                // Step 2: Convert the world position to the local position relative to floatingText's parent
+                Vector3 localTargetPosition = floatingTextParent.InverseTransformPoint(targetWorldPosition);
+
+                // Step 3: Get the size of the target word to match floating text scale
+                RectTransform targetWordRect = GameManager.Instance.wordFoundInWordGrid;
+                Vector2 targetSize = targetWordRect.sizeDelta;
+
+                // Scale down the floating text to match the target word size
+                Vector2 floatingTextSize = floatingText.rectTransform.sizeDelta;
+                float scaleX = targetSize.x / floatingTextSize.x;
+                float scaleY = targetSize.y / floatingTextSize.y;
+                Vector3 targetScale = new Vector3(scaleX, scaleY, 1f);
+
+                // Step 4: Animate floating text movement and scaling simultaneously
+                floatingText.rectTransform.DOScale(new Vector3(0.36f, 0.35f, 1), 1f).SetEase(Ease.Linear); // Scale down the text
+                floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
+
+                //// Step 1: Get the world position of the target word in the grid
+                //Vector3 targetWorldPosition = GameManager.Instance.wordFoundInWordGrid.transform.position;
+                //Debug.Log($"Target World Position: {targetWorldPosition}");
+
+                //// Step 2: Convert the world position to the local position relative to floatingText's parent
+                //RectTransform floatingTextParent = floatingText.rectTransform.parent as RectTransform;
+
+                //Vector3 localTargetPosition = floatingTextParent.InverseTransformPoint(targetWorldPosition);
+                //Debug.Log($"Local Target Position: {localTargetPosition} (relative to {floatingTextParent.name})");
+
+                //// Step 3: Move the floating text to the local target position
+                //floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear);
+
+                //// Log to check floatingText position before and after the move
+                //Debug.Log($"Floating Text Initial Position: {floatingText.rectTransform.anchoredPosition}");
+                //floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear).OnComplete(() =>
+                //{
+                //    Debug.Log($"Floating Text Final Position: {floatingText.rectTransform.anchoredPosition}");
+                //});
+                //// Convert the position of `wordFoundInWordGrid` to the local space of `floatingText`'s parent
+                //Vector2 targetPosition = GameManager.Instance.wordFoundInWordGrid.anchoredPosition;
+                //RectTransform floatingTextParent = floatingText.rectTransform.parent as RectTransform;
+                //Vector2 localTargetPosition = floatingTextParent.InverseTransformPoint(GameManager.Instance.wordFoundInWordGrid.transform.TransformPoint(targetPosition));
+
+                //// Move the floating text to the converted target position
+                //floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear);
+            }
+
         }
 
         public void ScaleGameObject(Transform image)
@@ -713,6 +778,16 @@ namespace BBG.WordSearch
             if (startPosition.y > endPosition.y)
             {
                 angle = -angle;
+            }
+            currentAngle = angle;
+            // If grid rotates, calculate the opposite angle
+            if (gridRotates)
+            {
+                // Add 180 degrees to flip the angle if the grid rotates
+                angle = (angle + 180f) % 360f;
+
+                // Ensure the angle stays within the range [-180, 180]
+                if (angle > 180f) angle -= 360f;
             }
             currentAngle = angle;
             highlightRectT.eulerAngles = new Vector3(0f, 0f, angle);

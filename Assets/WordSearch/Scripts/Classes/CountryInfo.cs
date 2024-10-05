@@ -8,8 +8,10 @@ public class CountryInfo
     public int currentValue;
     public int maxValue;
     public int unlockAt;
+    public Sprite countryLogo;
     public Sprite countryFlag;
     public Sprite countryStamp;
+
 
 
 }

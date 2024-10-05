@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class MainMenuText : MonoBehaviour
 {
     public static MainMenuText Instance;
-    public GameObject gameManager;
+    //public GameObject gameManager;
     public CountryInfo countryInfo;
     public TextMeshProUGUI mainMenuPlayButton;
     public TextMeshProUGUI dailyPlayButton;
@@ -32,7 +32,7 @@ public class MainMenuText : MonoBehaviour
     public void UpdateLeveInfo()
     {
         TextUpdating();
-        countryInfo = gameManager.GetComponent<GameManager>().countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
+        countryInfo = /*gameManager.GetComponent<GameManager>()*/GameManager.Instance.countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
         FillAmount();
 
     }
@@ -51,7 +51,7 @@ public class MainMenuText : MonoBehaviour
             PlayerPrefs.SetInt(countryInfo.countryName, currentValue);
             PlayerPrefs.SetInt("CountryInfoValue", PlayerPrefs.GetInt("CountryInfoValue") + 1);
             TextUpdating();
-            countryInfo = gameManager.GetComponent<GameManager>().countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
+            countryInfo = GameManager.Instance.countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
             PlayerPrefs.SetInt("CurrentValue", 0);
         }
         currentValue = PlayerPrefs.GetInt("CurrentValue");

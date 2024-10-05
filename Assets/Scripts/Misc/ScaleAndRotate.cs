@@ -1,3 +1,4 @@
+using BBG.WordSearch;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,16 @@ public class ScaleAndRotate : MonoBehaviour
 
     public Transform cellParent;
     public void GridScaleRotateAndScale()
+
     {
+        if (GetComponent<CharacterGrid>().gridRotates)
+        {
+            GetComponent<CharacterGrid>().gridRotates = false;
+        }
+        else
+        {
+            GetComponent<CharacterGrid>().gridRotates = true;
+        }
         Transform gridRotation = transform;
         // Check the current rotation of the grid (parent object)
         float currentYRotation = Mathf.Round(gridRotation.localEulerAngles.z);

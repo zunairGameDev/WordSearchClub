@@ -91,6 +91,7 @@ namespace BBG.WordSearch
         public bool toPlayAnimation;
         public bool toPlayDailyChallange;
         public GameObject dailyChallangeObject;
+        public RectTransform wordFoundInWordGrid;
 
         #endregion
 
