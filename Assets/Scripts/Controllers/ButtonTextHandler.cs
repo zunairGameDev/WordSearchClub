@@ -8,17 +8,23 @@ public class ButtonTextHandler : MonoBehaviour
 {
     private bool isSwitchingPanel = false;
     public TextMeshProUGUI homeText;
+    public TextMeshProUGUI homeShadowText;
     public TextMeshProUGUI collectionText;
+    public TextMeshProUGUI collectionShadowText;
     public TextMeshProUGUI challengeText;
+    public TextMeshProUGUI challengeShadowText;
     public List<CanvasGroup> mainPanelCanvas;
     public List<Animator> mainMenuButton;
 
     // Start mein ensure karen ke text hidden ho
     void Start()
     {
-        homeText.gameObject.SetActive(false);
+        homeText.gameObject.SetActive(true);
+        homeShadowText.gameObject.SetActive(true);
         collectionText.gameObject.SetActive(false);
+        collectionShadowText.gameObject.SetActive(false);
         challengeText.gameObject.SetActive(false);
+        challengeShadowText.gameObject.SetActive(false);
         ShowPanel(0);
         PanelAnimationShow(0);
     }
@@ -73,23 +79,32 @@ public class ButtonTextHandler : MonoBehaviour
     public void OnHomeButtonClick()
     {
         homeText.gameObject.SetActive(true);
+        homeShadowText.gameObject.SetActive(true);
         collectionText.gameObject.SetActive(false);
+        collectionShadowText.gameObject.SetActive(false);
         challengeText.gameObject.SetActive(false);
+        challengeShadowText.gameObject.SetActive(false);
     }
 
     // Collection button ka function
     public void OnCollectionButtonClick()
     {
         homeText.gameObject.SetActive(false);
+        homeShadowText.gameObject.SetActive(false);
         collectionText.gameObject.SetActive(true);
+        collectionShadowText.gameObject.SetActive(true);
         challengeText.gameObject.SetActive(false);
+        challengeShadowText.gameObject.SetActive(false);
     }
 
     // Challenge button ka function
     public void OnChallengeButtonClick()
     {
         homeText.gameObject.SetActive(false);
+        homeShadowText.gameObject.SetActive(false);
         collectionText.gameObject.SetActive(false);
+        collectionShadowText.gameObject.SetActive(false);
         challengeText.gameObject.SetActive(true);
+        challengeShadowText.gameObject.SetActive(true);
     }
 }

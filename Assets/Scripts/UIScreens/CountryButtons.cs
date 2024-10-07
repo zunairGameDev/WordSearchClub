@@ -10,18 +10,21 @@ public class CountryButtons : MonoBehaviour
 
     public void ApplyDataOnButton()
     {
-        if (ScrollViewController.Instance.currentIndex < country_Data.onLockSpritApply)
-        {
-            countryImage.sprite = country_Data.toFindSprit;
-        }
-        else if (ScrollViewController.Instance.currentIndex == country_Data.onLockSpritApply)
-        {
-            countryImage.sprite = country_Data.lockSprit;
-        }
-        else
+        if (ScrollViewController.Instance.currentIndex >= country_Data.onUnlockSpritApply)
         {
             countryImage.sprite = country_Data.unlocksprit;
         }
+        else
+        if (ScrollViewController.Instance.currentIndex < country_Data.onLockSpritApply)
+        {
+
+            countryImage.sprite = country_Data.toFindSprit;
+        }
+        else
+        {
+            countryImage.sprite = country_Data.lockSprit;
+        }
+
     }
 
     public void OnclickThisButton()

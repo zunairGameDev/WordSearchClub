@@ -17,6 +17,7 @@ public class ScrollViewController : MonoBehaviour
 
     public TextMeshProUGUI stampText;
     public TextMeshProUGUI qouteText;
+    public Color onClickColor;
 
     // Stamps:
     public GameObject[] stamps_Panels;
@@ -87,11 +88,11 @@ public class ScrollViewController : MonoBehaviour
         if (value)
         {
             stampText.color = Color.black;
-            qouteText.color = Color.white;
+            qouteText.color = onClickColor;
         }
         else
         {
-            stampText.color = Color.white;
+            stampText.color = onClickColor;
             qouteText.color = Color.black;
         }
     }

@@ -575,32 +575,7 @@ namespace BBG.WordSearch
                 floatingText.rectTransform.DOScale(new Vector3(0.36f, 0.35f, 1), 1f).SetEase(Ease.Linear); // Scale down the text
                 floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
 
-                //// Step 1: Get the world position of the target word in the grid
-                //Vector3 targetWorldPosition = GameManager.Instance.wordFoundInWordGrid.transform.position;
-                //Debug.Log($"Target World Position: {targetWorldPosition}");
 
-                //// Step 2: Convert the world position to the local position relative to floatingText's parent
-                //RectTransform floatingTextParent = floatingText.rectTransform.parent as RectTransform;
-
-                //Vector3 localTargetPosition = floatingTextParent.InverseTransformPoint(targetWorldPosition);
-                //Debug.Log($"Local Target Position: {localTargetPosition} (relative to {floatingTextParent.name})");
-
-                //// Step 3: Move the floating text to the local target position
-                //floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear);
-
-                //// Log to check floatingText position before and after the move
-                //Debug.Log($"Floating Text Initial Position: {floatingText.rectTransform.anchoredPosition}");
-                //floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear).OnComplete(() =>
-                //{
-                //    Debug.Log($"Floating Text Final Position: {floatingText.rectTransform.anchoredPosition}");
-                //});
-                //// Convert the position of `wordFoundInWordGrid` to the local space of `floatingText`'s parent
-                //Vector2 targetPosition = GameManager.Instance.wordFoundInWordGrid.anchoredPosition;
-                //RectTransform floatingTextParent = floatingText.rectTransform.parent as RectTransform;
-                //Vector2 localTargetPosition = floatingTextParent.InverseTransformPoint(GameManager.Instance.wordFoundInWordGrid.transform.TransformPoint(targetPosition));
-
-                //// Move the floating text to the converted target position
-                //floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear);
             }
 
         }

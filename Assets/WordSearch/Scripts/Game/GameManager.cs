@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BBG.WordSearch
 {
@@ -30,6 +31,7 @@ namespace BBG.WordSearch
 
         [Header("Data")]
         public List<CountryInfo> countryInfo;
+        public List<WordsPerLevelShow> wordsPerLevelShow;
         [SerializeField] private string characters = null;
         [SerializeField] private List<CategoryInfo> categoryInfos = null;
         [SerializeField] private List<DifficultyInfo> difficultyInfos = null;
@@ -37,6 +39,7 @@ namespace BBG.WordSearch
         public List<TextAsset> levelFiles;
         public List<TextAsset> dailyLevelfiles;
         [SerializeField] private List<char> hintLetters = new List<char>();
+
 
         [Header("Values")]
         [SerializeField] private int startingCoins = 0;
@@ -51,7 +54,7 @@ namespace BBG.WordSearch
 
         [Header("Components")]
         [SerializeField] private CharacterGrid characterGrid = null;
-        [SerializeField] private WordList wordList = null;
+        public WordList wordList = null;
         [SerializeField] private DailyWordList dailyWordList = null;
         [SerializeField] private GameObject loadingIndicator = null;
 
@@ -92,6 +95,7 @@ namespace BBG.WordSearch
         public bool toPlayDailyChallange;
         public GameObject dailyChallangeObject;
         public RectTransform wordFoundInWordGrid;
+        public Image BackGroundImage;
 
         #endregion
 

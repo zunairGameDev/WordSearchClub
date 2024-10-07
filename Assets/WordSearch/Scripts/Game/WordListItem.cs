@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 namespace BBG.WordSearch
 {
@@ -21,6 +22,7 @@ namespace BBG.WordSearch
             wordText.text = word;
             wordText.color = Color.black;
             foundIndicator.SetActive(false);
+            AdjustRectTransformWidth();
         }
 
         public void SetWordFound()
@@ -28,6 +30,20 @@ namespace BBG.WordSearch
             GameManager.Instance.GetComponent<GameManager>().wordFoundInWordGrid = this.GetComponent<RectTransform>();
             wordText.color = color;
             //foundIndicator.SetActive(true);
+        }
+        private void AdjustRectTransformWidth()
+        {
+            // Force update the layout to get the correct preferredWidth after setting the text
+            Canvas.ForceUpdateCanvases();
+
+            // Get the preferred width based on the text content
+            float preferredWidth = wordText.preferredWidth;
+
+            // Optionally, add some padding (if needed)
+            float padding = 30f; // Adjust padding according to your UI requirements
+
+            // Set the width of the RectTransform to the preferred width plus padding
+            GetComponent<RectTransform>().sizeDelta = new Vector2(preferredWidth + padding, GetComponent<RectTransform>().sizeDelta.y);
         }
 
         #endregion

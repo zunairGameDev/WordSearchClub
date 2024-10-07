@@ -21,6 +21,7 @@ public class WinPanelController : MonoBehaviour
     public List<string> goodWord;
     public GameObject appreciationObject;
     public TextMeshProUGUI appreciationText;
+    public TextMeshProUGUI appreciationShadowText;
     public bool toShowCollectButton;
     public GameObject sliderReward;
     public RectTransform jumpingReward;
@@ -60,6 +61,7 @@ public class WinPanelController : MonoBehaviour
         else
         {
             appreciationText.text = goodWord[Random.Range(0, goodWord.Count - 1) /*PlayerPrefs.GetInt("SelectJasonLevel")*/];
+            appreciationShadowText.text = appreciationText.text;
             toShowCollectButton = false;
 
         }
