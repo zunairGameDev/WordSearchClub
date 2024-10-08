@@ -9,6 +9,7 @@ using BBG.WordSearch;
 public class WinPanelController : MonoBehaviour
 {
     public GameObject treeImage;
+    public Image countryLogo;
     public GameObject particleEffect; // Assign the particle effect GameObject
     public Slider winSlider; // Assign the slider
     public Button collectButton;
@@ -55,6 +56,7 @@ public class WinPanelController : MonoBehaviour
         if ((MainMenuText.Instance.currentValue + 1) == MainMenuText.Instance.countryInfo.maxValue)
         {
             appreciationText.text = "Country Complete";
+            appreciationShadowText.text = appreciationText.text;
             toShowCollectButton = true;
 
         }
@@ -90,7 +92,7 @@ public class WinPanelController : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
+        //particleEffect.transform.DOMove(targetPosition.position,1f);
         // Ensure the particle reaches the target position
         particleEffect.transform.position = targetPosition.position;
 
@@ -98,6 +100,7 @@ public class WinPanelController : MonoBehaviour
         particleEffect.SetActive(false);
         //CameraUI.SetActive(false);
         // Activate the slider and next level button
+        countryLogo.sprite = MainMenuText.Instance.countryInfo.countryLogo;
         winSlider.gameObject.SetActive(true);
         winSlider.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
         if (!toShowCollectButton)

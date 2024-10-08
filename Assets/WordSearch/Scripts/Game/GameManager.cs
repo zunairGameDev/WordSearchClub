@@ -96,6 +96,7 @@ namespace BBG.WordSearch
         public GameObject dailyChallangeObject;
         public RectTransform wordFoundInWordGrid;
         public Image BackGroundImage;
+        public int starterCount = 2;
 
         #endregion
 
@@ -109,7 +110,7 @@ namespace BBG.WordSearch
             LastCompletedLevels = new Dictionary<string, int>();
             SavedBoards = new Dictionary<string, JSONNode>();
             UnlockedCategories = new HashSet<string>();
-
+            characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
             characterGrid.Initialize();
             wordList.Initialize();
             InitSave();
@@ -444,7 +445,7 @@ namespace BBG.WordSearch
         {
             for (int i = 0; i < 3; i++)
             {
-                HintHighlightLetter();
+                ShowingHintLetter();
             }
         }
 
@@ -453,18 +454,25 @@ namespace BBG.WordSearch
         /// </summary>
         public void HintHighlightLetter()
         {
-            //// Check if the player has enough coins
-            //if (Coins < coinCostLetterHint)
-            //{
-            //    // Show the not enough coins popup
-            //    PopupManager.Instance.Show("not_enough_coins");
-            //}
-            //else
+            if (PlayerPrefs.GetInt("StarterCounts", 2) > 0)
             {
-                // Show the popup where the user can select the letter to highlight on the board
-                //PopupManager.Instance.Show("choose_highlight_letter", new object[] { ActiveBoard }, OnChooseHighlightLetterPopupClosed);
                 ShowingHintLetter();
+                PlayerPrefs.SetInt("StarterCounts", PlayerPrefs.GetInt("StarterCounts", 2) - 1);
+
             }
+            else
+            if (GlobalData.CoinCount >= 100)
+            {
+                ShowingHintLetter();
+                GlobalData.CoinCount = GlobalData.CoinCount - 100;
+                MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+            }
+            else
+            {
+                ShowingHintLetter();
+                // open Shop 
+            }
+            characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
         }
         public void ToShowHintLetter()
         {
@@ -479,15 +487,18 @@ namespace BBG.WordSearch
                     maxLength = currentWord.Length;
                     longestWord = currentWord.Replace(" ", "");  // Update the longest word
                 }
-                // Loop through each character in the current word
-                foreach (char letter in currentWord)
-                {
-                    // If the letter is not already in hintLetters, add it
-                    if (!hintLetters.Contains(letter))
-                    {
-                        hintLetters.Add(letter); // Assuming hintLetters is a list or similar collection
-                    }
-                }
+                char firstLetter = currentWord[0];
+                hintLetters.Add(firstLetter);
+
+                //// Loop through each character in the current word
+                //foreach (char letter in currentWord)
+                //{
+                //    // If the letter is not already in hintLetters, add it
+                //    if (!hintLetters.Contains(letter))
+                //    {
+                //        hintLetters.Add(letter); // Assuming hintLetters is a list or similar collection
+                //    }
+                //}
             }
         }
         public void ShowingHintLetter()

@@ -7,8 +7,9 @@ using UnityEngine.UI;
 
 public class MainMenuText : MonoBehaviour
 {
+
     public static MainMenuText Instance;
-    //public GameObject gameManager;
+    public TextMeshProUGUI coinsText;
     public CountryInfo countryInfo;
     public TextMeshProUGUI mainMenuPlayButton;
     public TextMeshProUGUI mainMenuShadowPlayButton;
@@ -34,6 +35,7 @@ public class MainMenuText : MonoBehaviour
 
     public void UpdateLeveInfo()
     {
+        coinsText.text = GlobalData.CoinCount.ToString();
         TextUpdating();
         countryInfo = /*gameManager.GetComponent<GameManager>()*/GameManager.Instance.countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
         FillAmount();

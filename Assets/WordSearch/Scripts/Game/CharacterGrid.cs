@@ -492,13 +492,19 @@ namespace BBG.WordSearch
                     {
                         CharacterGridItem characterGridItem = characterItems[row][col];
 
-                        Vector2 position = (characterGridItem.transform as RectTransform).anchoredPosition;
+                        if(!characterGridItem.isVisible)
+                        {
+                            Vector2 position = (characterGridItem.transform as RectTransform).anchoredPosition;
 
-                        RectTransform highlightLetter = highlightLetterPool.GetObject<RectTransform>();
+                            RectTransform highlightLetter = highlightLetterPool.GetObject<RectTransform>();
 
-                        highlightLetter.sizeDelta = new Vector2(ScaledHightlightLetterSize, ScaledHightlightLetterSize);
+                            highlightLetter.sizeDelta = new Vector2(ScaledHightlightLetterSize, ScaledHightlightLetterSize);
 
-                        highlightLetter.anchoredPosition = position;
+                            highlightLetter.anchoredPosition = position;
+                            characterGridItem.isVisible = true;
+                            return;
+                        }
+                        
                     }
                 }
             }

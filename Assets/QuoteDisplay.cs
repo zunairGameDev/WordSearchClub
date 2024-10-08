@@ -7,6 +7,7 @@ using TMPro;
 public class QuoteDisplay : MonoBehaviour
 {
     public TextMeshProUGUI quoteText;
+    public TextMeshProUGUI quoteShadowText;
     public TextMeshProUGUI authorText; // For displaying the author's name
 
     public string[] quotes;
@@ -24,13 +25,15 @@ public class QuoteDisplay : MonoBehaviour
         {
             int randomIndex = Random.Range(0, quotes.Length);
             quoteText.text = quotes[randomIndex];
-            authorText.text = " " + authors[randomIndex]; // Display the author
+            quoteShadowText.text = quoteText.text;
+            authorText.text = "\"" + "-" + authors[randomIndex] + "\""; // Display the author
         }
         else
         {
             // If false, display the first quote (or a fixed one)
             quoteText.text = quotes[0];
-            authorText.text = " " + authors[0]; // Display the author
+            quoteShadowText.text = quoteText.text;
+            authorText.text = "-" + authors[0]; // Display the author
         }
 
         // Reset the ChangeWithRestart flag for the next game start
