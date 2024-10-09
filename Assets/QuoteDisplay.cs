@@ -9,6 +9,7 @@ public class QuoteDisplay : MonoBehaviour
     public TextMeshProUGUI quoteText;
     public TextMeshProUGUI quoteShadowText;
     public TextMeshProUGUI authorText; // For displaying the author's name
+    public TextMeshProUGUI authorShadowText; // For displaying the author's name
 
     public string[] quotes;
     public string[] authors; // Array to store authors corresponding to each quote
@@ -27,6 +28,7 @@ public class QuoteDisplay : MonoBehaviour
             quoteText.text = quotes[randomIndex];
             quoteShadowText.text = quoteText.text;
             authorText.text = "\"" + "-" + authors[randomIndex] + "\""; // Display the author
+            authorShadowText.text = authorText.text;
         }
         else
         {
@@ -34,6 +36,7 @@ public class QuoteDisplay : MonoBehaviour
             quoteText.text = quotes[0];
             quoteShadowText.text = quoteText.text;
             authorText.text = "-" + authors[0]; // Display the author
+            authorShadowText.text = authorText.text;
         }
 
         // Reset the ChangeWithRestart flag for the next game start

@@ -44,7 +44,7 @@ namespace BBG.WordSearch
 
         public void Setup(Board board)
         {
-           
+
             Clear();
 
             // Add all the words to the word list container
@@ -74,6 +74,7 @@ namespace BBG.WordSearch
 
         public void Clear()
         {
+            
             wordListItemPool.ReturnAllObjectsToPool();
             wordListItems.Clear();
 
@@ -81,6 +82,10 @@ namespace BBG.WordSearch
             wordListCanvasGroup.alpha = 0f;
         }
 
+        public void OnClickBackButton()
+        {
+            wordListCanvasGroup1.GetComponent<WordGenerating>().OnClickBackButton(wordListCanvasGroup.transform);
+        }
         #endregion
 
         #region Private Methods
@@ -107,4 +112,5 @@ namespace BBG.WordSearch
 
         #endregion
     }
+
 }

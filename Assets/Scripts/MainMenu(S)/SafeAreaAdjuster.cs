@@ -4,7 +4,7 @@ public class SafeAreaAdjuster : MonoBehaviour
 {
     private RectTransform rectTransform;
 
-    void Start()
+    private void Update()
     {
         // Try to get the RectTransform from the attached GameObject
         rectTransform = GetComponent<RectTransform>();

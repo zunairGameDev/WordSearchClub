@@ -11,22 +11,26 @@ public class WordGenerating : MonoBehaviour
     public Transform content;
     public GameObject horizontalTabs;
     public GameObject words;
+    public Transform replica;
+    public RectTransform wordGridImage;
 
     public void GenerateHorizontalTab(WordsPerLevelShow value, Transform otherContent)
     {
 
-        for (int i = 0; i < transform.childCount; i++)
+        while (transform.childCount != 0)
         {
-            for (int j = 0; j < transform.GetChild(i).childCount; j++)
+            while (transform.GetChild(0).childCount != 0)
             {
-                transform.GetChild(i).GetChild(j).SetParent(otherContent.GetComponent<RectTransform>());
+                transform.GetChild(0).GetChild(0).SetParent(otherContent);
             }
-        }
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Destroy(transform.GetChild(i).gameObject);
+            DestroyImmediate(transform.GetChild(0).gameObject);
         }
         numberOfTabsToShow = value;
+        // Adjust spacing based on the number of words in the current tab
+        int horizontalTabCount = numberOfTabsToShow.numberOfWords.Count;
+
+        wordGridImage.sizeDelta = new Vector2(wordGridImage.sizeDelta.x, WordGridImage(horizontalTabCount));
+
         for (int i = 0; i < numberOfTabsToShow.numberOfWords.Count; i++)
         {
             GameObject horizonatal_Tab = Instantiate(horizontalTabs, transform);
@@ -40,7 +44,7 @@ public class WordGenerating : MonoBehaviour
                 int wordsCount = numberOfTabsToShow.numberOfWords[i].wordsCount;
 
                 // Calculate spacing (you can tweak this formula based on design requirements)
-                layoutGroup.spacing = CalculateSpacing(wordsCount);
+                layoutGroup.spacing = HorizontalTab(wordsCount);
             }
 
             for (int j = 0; j < numberOfTabsToShow.numberOfWords[i].wordsCount; j++)
@@ -72,5 +76,41 @@ public class WordGenerating : MonoBehaviour
         float spacing = Mathf.Lerp(baseSpacing, maxSpacing, (float)(wordsCount - 1) / (maxWordsCount - 1));
 
         return spacing;
+    }
+
+    public void OnClickBackButton(Transform otherContent)
+    {
+        //int i = 0;
+        while (transform.childCount != 0)
+        {
+            while (transform.GetChild(0).childCount != 0)
+            {
+                transform.GetChild(0).GetChild(0).SetParent(otherContent);
+            }
+            DestroyImmediate(transform.GetChild(0).gameObject);
+        }
+    }
+
+    public int WordGridImage(int value)
+    {
+        switch (value)
+        {
+            case 1: return 208;
+            case 2: return 289;
+            case 3: return 349;
+            default: return 0;
+        }
+    }
+    public int HorizontalTab(int value)
+    {
+        switch (value)
+        {
+            case 2: return -350;
+            case 3: return -132;
+            case 4: return -51;
+            case 5: return 4;
+            default:
+                return 0;
+        }
     }
 }

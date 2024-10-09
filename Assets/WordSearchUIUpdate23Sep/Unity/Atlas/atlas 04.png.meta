@@ -148,7 +148,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 632
-        y: 399
+        y: 383
         width: 1416
         height: 1649
       alignment: 0
@@ -294,10 +294,10 @@ TextureImporter:
       name: atlas 04_8
       rect:
         serializedVersion: 2
-        x: 5
-        y: 509
-        width: 107
-        height: 107
+        x: 60
+        y: 656
+        width: 459
+        height: 162
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -374,6 +374,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: atlas 04_12
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 509
+        width: 107
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a8cbb623a82aa84da88b626afd9d9b1
+      internalID: 1265365419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -389,6 +410,7 @@ TextureImporter:
       atlas 04_1: -1429915080
       atlas 04_10: 1174876658
       atlas 04_11: -1431289521
+      atlas 04_12: 1265365419
       atlas 04_2: 121501047
       atlas 04_3: -1821400784
       atlas 04_4: 1035209485

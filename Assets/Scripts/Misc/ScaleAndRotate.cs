@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class ScaleAndRotate : MonoBehaviour
 {
+    public Transform gridRotation;
+    public Transform grid_Underlay_Container;
     [SerializeField] private float rotationDuration = 1f; // Duration of the rotation animation
     [SerializeField] private float scaleDuration = 0.5f; // Duration of the scaling animations
     [SerializeField] private float waitDuration = 0.5f; // Time to wait between step 2 and step 3
@@ -26,7 +28,7 @@ public class ScaleAndRotate : MonoBehaviour
         {
             GetComponent<CharacterGrid>().gridRotates = true;
         }
-        Transform gridRotation = transform;
+        //Transform gridRotation = transform;
         // Check the current rotation of the grid (parent object)
         float currentYRotation = Mathf.Round(gridRotation.localEulerAngles.z);
 
@@ -43,14 +45,16 @@ public class ScaleAndRotate : MonoBehaviour
         // Step 1: Scale the parent down to 0.8
         sequence.Append(gridRotation.DOScale(initialScale, scaleDuration)
                             .SetEase(Ease.OutQuad)); // Optional: Set easing for the scaling
-
+         sequence.Join(grid_Underlay_Container.DOScale(initialScale, scaleDuration)
+                        .SetEase(Ease.OutQuad));
         // Step 2: Simultaneously rotate parent clockwise and children anti-clockwise
         sequence.AppendCallback(() =>
         {
             // Rotate parent clockwise
             gridRotation.DOLocalRotate(currentRotation, rotationDuration, RotateMode.FastBeyond360)
                      .SetEase(Ease.InOutQuad); // Set the easing for rotation
-
+            grid_Underlay_Container.DOLocalRotate(currentRotation, rotationDuration, RotateMode.FastBeyond360)
+                     .SetEase(Ease.InOutQuad);
             // Rotate each child anti-clockwise
             foreach (Transform child in cellParent)
             {
@@ -65,6 +69,8 @@ public class ScaleAndRotate : MonoBehaviour
         // Step 3: Scale the parent back to 1 after rotation completes
         sequence.Append(gridRotation.DOScale(finalScale, scaleDuration)
                             .SetEase(Ease.OutBounce)); // Optional: Set easing for scaling back
+        sequence.Join(grid_Underlay_Container.DOScale(finalScale, scaleDuration)
+                        .SetEase(Ease.OutBounce));
 
         // Start the sequence
         sequence.Play();

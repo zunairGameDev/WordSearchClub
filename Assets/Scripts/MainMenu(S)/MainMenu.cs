@@ -36,7 +36,7 @@ public class MainMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        sourceImageInputField.text = PlayerPrefs.GetString("PlayerName", "Guest_16dan1!");
+        sourceImageInputField.text = " " + PlayerPrefs.GetString("PlayerName", "Guest_16dan1!");
         selectedImageDisplay.sprite = playerProfilePanel.GetComponent<ProfileManager>().availableSprites[PlayerPrefs.GetInt("SpriteIndex")];
     }
 

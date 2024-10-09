@@ -21,7 +21,7 @@ public class ProfileManager : MonoBehaviour
 
     private void OnEnable()
     {
-        playerNameInputField.text = PlayerPrefs.GetString("PlayerName", "Guest_16dan1!");
+        playerNameInputField.text = " " + PlayerPrefs.GetString("PlayerName", "Guest_16dan1!");
         profileImage.sprite = availableSprites[PlayerPrefs.GetInt("SpriteIndex")];
     }
     void Start()

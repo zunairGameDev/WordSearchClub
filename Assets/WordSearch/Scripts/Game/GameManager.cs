@@ -445,7 +445,12 @@ namespace BBG.WordSearch
         {
             for (int i = 0; i < 3; i++)
             {
-                ShowingHintLetter();
+                if (GlobalData.CoinCount >= 200)
+                {
+                    ShowingHintLetter();
+                    GlobalData.CoinCount = GlobalData.CoinCount - 200;
+                    MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                }
             }
         }
 
@@ -469,13 +474,14 @@ namespace BBG.WordSearch
             }
             else
             {
-                ShowingHintLetter();
+                //ShowingHintLetter();
                 // open Shop 
             }
             characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
         }
         public void ToShowHintLetter()
         {
+            hintLetters.Clear();
             int maxLength = 0;
             // Loop through all words in ActiveBoard.words
             for (int i = 0; i < ActiveBoard.words.Count; i++)

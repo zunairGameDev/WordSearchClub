@@ -29,6 +29,7 @@ namespace BBG.WordSearch
 		{
 			MainMenuText.Instance.UpdateLeveInfo();
 			ScrollViewController.Instance.LockingAndUnlockingLabels();
+			GameManager.Instance.wordList.OnClickBackButton();
             ScreenManager.Instance.Show("main");
         }
 		#endregion

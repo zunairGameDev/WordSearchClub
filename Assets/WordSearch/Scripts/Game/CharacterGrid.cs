@@ -262,7 +262,9 @@ namespace BBG.WordSearch
             highlighLetterContainer = CreateContainer("highligh_letter_container", typeof(RectTransform));
             // Create a GameObject to hold all the letters, set it as a child of CharacterGrid and set its anchors to expand to fill
             gridContainer = CreateContainer("grid_container", typeof(RectTransform), typeof(GridLayoutGroup), typeof(CanvasGroup));
-
+            gridContainer.offsetMin = new Vector2(gridContainer.offsetMin.x, -14);   // Bottom 50 units from parent
+            gridContainer.offsetMax = new Vector2(gridContainer.offsetMax.x, -14); // Top 100 units from parent
+            GetComponent<ScaleAndRotate>().gridRotation = gridContainer;
             // Create a GameObject that will be be used to place things overtop of the letter grid
             gridOverlayContainer = CreateContainer("grid_overlay_container", typeof(RectTransform));
             GetComponent<ScaleAndRotate>().cellParent = gridContainer;
@@ -271,11 +273,10 @@ namespace BBG.WordSearch
             {
                 // Create a GameObject that will be be used to place things under the letter grid
                 gridUnderlayContainer = CreateContainer("grid_underlay_container", typeof(RectTransform));
-
                 gridUnderlayContainer.SetAsFirstSibling();
             }
 
-
+            GetComponent<ScaleAndRotate>().grid_Underlay_Container= gridUnderlayContainer;
             // Create a CharacterGridItem that will be used as a template by the ObjectPool to create more instance
             CharacterGridItem templateCharacterGridItem = CreateCharacterGridItem();
             templateCharacterGridItem.name = "template_character_grid_item";
@@ -492,7 +493,7 @@ namespace BBG.WordSearch
                     {
                         CharacterGridItem characterGridItem = characterItems[row][col];
 
-                        if(!characterGridItem.isVisible)
+                        if (!characterGridItem.isVisible)
                         {
                             Vector2 position = (characterGridItem.transform as RectTransform).anchoredPosition;
 
@@ -504,7 +505,7 @@ namespace BBG.WordSearch
                             characterGridItem.isVisible = true;
                             return;
                         }
-                        
+
                     }
                 }
             }
@@ -532,6 +533,8 @@ namespace BBG.WordSearch
         private void ShowWord(Cell wordStartPosition, Cell wordEndPosition, string word, bool useSelectedColor)
         {
 
+            GlobalData.CoinCount = GlobalData.CoinCount + (1 * CountLetters(word));
+            MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
             CharacterGridItem startCharacter = characterItems[wordStartPosition.row][wordStartPosition.col];
             CharacterGridItem endCharacter = characterItems[wordEndPosition.row][wordEndPosition.col];
 
@@ -584,6 +587,20 @@ namespace BBG.WordSearch
 
             }
 
+        }
+        public static int CountLetters(string str)
+        {
+            int count = 0;
+
+            foreach (char c in str)
+            {
+                if (char.IsLetter(c))
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         public void ScaleGameObject(Transform image)
