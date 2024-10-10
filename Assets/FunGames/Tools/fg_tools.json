@@ -1,0 +1,16 @@
+{
+    "Id": "fg_tools",
+    "Name": "Tools",
+    "Version": "3.3.0.1",
+    "LogColor": "FFFFFF",
+    "PackageUrl": "https://gitlab.com/fungames-sdk/tools/fg_tools/-/raw/3.3.0.1/fg_tools-3.3.0.1.unitypackage",
+    "HasIssue": false,
+    "IsDeprecated": false,
+    "IsBeta": false,
+    "Dependencies": [
+        "fg_core-3.3.0.0",
+        "fg_remote_config-3.3.0.0",
+        "fg_analytics-3.3.0.0",
+        "fg_user_consent-3.3.0.0"
+    ]
+}

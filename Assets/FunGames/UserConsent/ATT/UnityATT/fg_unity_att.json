@@ -1,0 +1,14 @@
+{
+    "Id": "fg_unity_att",
+    "Name": "Unity ATT",
+    "Version": "3.3.0.0",
+    "LogColor": "#E7AB7B",
+    "PackageUrl": "https://gitlab.com/fungames-sdk/userconsent/att/fg_unity_att/-/raw/3.3.0.0/fg_unity_att-3.3.0.0.unitypackage",
+    "HasIssue": false,
+    "IsDeprecated": false,
+    "IsBeta": false,
+    "Dependencies": [
+        "fg_core-3.3.0.0",
+        "fg_att-3.3.0.0"
+    ]
+}

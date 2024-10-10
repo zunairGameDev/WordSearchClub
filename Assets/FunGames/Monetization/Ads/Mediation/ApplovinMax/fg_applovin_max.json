@@ -1,0 +1,19 @@
+{
+    "Id": "fg_applovin_max",
+    "Name": "Applovin Max",
+    "Version": "3.3.0.1",
+    "LogColor": "#E0FF8D",
+    "PackageUrl": "https://gitlab.com/fungames-sdk/monetization/ads/mediation/fg_applovin_max/-/raw/3.3.0.1/fg_applovin_max-3.3.0.1.unitypackage",
+    "HasIssue": false,
+    "IsDeprecated": false,
+    "IsBeta": false,
+    "Dependencies": [
+        "fg_core-3.3.0.0",
+        "fg_mediation-3.3.0.0",
+        "fg_firebase-3.3.0.0",
+        "fg_analytics-3.3.0.0",
+        "fg_user_consent-3.3.0.0",
+        "fg_remote_config-3.3.0.0",
+        "fg_tools-3.3.0.0"
+    ]
+}

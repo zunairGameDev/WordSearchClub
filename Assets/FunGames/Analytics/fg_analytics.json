@@ -1,0 +1,15 @@
+{
+    "Id": "fg_analytics",
+    "Name": "Analytics",
+    "Version": "3.3.0.0",
+    "LogColor": "#3987E5",
+    "PackageUrl": "https://gitlab.com/fungames-sdk/analytics/fg_analytics/-/raw/3.3.0.0/fg_analytics-3.3.0.0.unitypackage",
+    "HasIssue": false,
+    "IsDeprecated": false,
+    "IsBeta": false,
+    "Dependencies": [
+        "fg_core-3.3.0.0",
+        "fg_user_consent-3.3.0.0",
+        "fg_tools-3.3.0.0"
+    ]
+}

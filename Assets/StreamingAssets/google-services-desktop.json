@@ -1,0 +1,36 @@
+{
+  "project_info": {
+    "project_number": "917241887922",
+    "project_id": "testsdkv3-cfd64",
+    "storage_bucket": "testsdkv3-cfd64.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917241887922:ios:84d46c56f64019fc209dab",
+        "android_client_info": {
+          "package_name": "com.TapNation.SDKv3"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfTA-js5yg-RiGpC3kcigL2Fu6p76sRiM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 0
+        },
+        "appinvite_service": {
+          "status": 1
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917241887922-6kvb6kug18p1gte5s2t40a1kg2lmmd0o.apps.googleusercontent.com"
+        }
+      ]
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,17 @@
+{
+    "Id": "fg_custom_gdpr",
+    "Name": "Custom GDPR",
+    "Version": "3.3.0.1",
+    "LogColor": "#E7AB7B",
+    "PackageUrl": "https://gitlab.com/fungames-sdk/userconsent/gdpr/fg_custom_gdpr/-/raw/3.3.0.1/fg_custom_gdpr-3.3.0.1.unitypackage",
+    "HasIssue": false,
+    "IsDeprecated": false,
+    "IsBeta": false,
+    "Dependencies": [
+        "fg_core-3.3.0.0",
+        "fg_gdpr-3.3.0.0",
+        "fg_user_consent-3.3.0.0",
+        "fg_remote_config-3.3.0.0",
+        "fg_tools-3.3.0.0"
+    ]
+}

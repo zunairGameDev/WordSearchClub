@@ -1,0 +1,15 @@
+{
+    "Id": "fg_core",
+    "Name": "FunGames SDK",
+    "Version": "3.3.0.1",
+    "LogColor": "#000000",
+    "PackageUrl": "https://gitlab.com/fungames-sdk/core/fg_core/-/raw/3.3.0.1/fg_core-3.3.0.1.unitypackage",
+    "HasIssue": false,
+    "IsDeprecated": false,
+    "IsBeta": false,
+    "Dependencies": [
+        "fg_tools-3.3.0.0",
+        "fg_analytics-3.3.0.0",
+        "fg_remote_config-3.3.0.0"
+    ]
+}
