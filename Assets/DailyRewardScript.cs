@@ -5,6 +5,12 @@ using System.Collections;
 
 public class DailyRewardSystemWithSlider : MonoBehaviour
 {
+    public GameObject pingPongGift;
+    public GameObject rewardBoxParent;
+    public GameObject[] rewardBoxes;
+    public Text[] rewardText;
+
+
     public Button[] boxes;         // 3 Boxes for selection
     public Text cartText;          // To show the total coins in the cart
     public Text timerText;         // To show the time left for the next reward
@@ -21,13 +27,20 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
 
     private PanelController panelController;
 
+    public int current_Index;
+
+
+
+
+
+
     void Start()
     {
         //panelController.ActivatePanel();
         // Load total coins and next reward time
         totalCoins = PlayerPrefs.GetInt("TotalCoins", 0);
         dayProgress = PlayerPrefs.GetInt("DayProgress", 0);
-        UpdateCartText();
+        UpdateCartText(current_Index);
 
         // Set slider value to the current day progress
         dayProgressSlider.maxValue = 7;
@@ -42,7 +55,7 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
             nextRewardTime = DateTime.Now;
         }
 
-        //CheckRewardEligibility();
+        CheckRewardEligibility();
     }
 
     void Update()
@@ -65,37 +78,28 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
 
     void EnableBoxes()
     {
-        gifts_panel.SetActive(true);
-        foreach (Button box in boxes)
-        {
-            box.interactable = true;
-            box.onClick.RemoveAllListeners();  // Remove any old listeners
-            box.onClick.AddListener(() => SelectBox(box));
-        }
+        pingPongGift.SetActive(true);
     }
 
     void DisableBoxes()
     {
-        foreach (Button box in boxes)
-        {
-            box.interactable = false;
-        }
-        StartCoroutine(GiftPanel());
+        pingPongGift.SetActive(false);
+
     }
 
-    void SelectBox(Button selectedBox)
+    public void SelectBox(int val)
     {
         // Generate a random reward
         int randomIndex = UnityEngine.Random.Range(0, coinRewards.Length);
         int reward = coinRewards[randomIndex];
-
+        current_Index = val;
         // Show reward on the selected box button
-        selectedBox.transform.GetChild(0).GetComponent<Text>().text = "You got " + reward + " coins!";
+        //selectedBox.transform.GetChild(0).GetComponent<Text>().text = "You got " + reward + " coins!";
 
         // Add the reward to total coins and update the cart text
         totalCoins += reward;
         PlayerPrefs.SetInt("TotalCoins", totalCoins);
-        UpdateCartText();
+        UpdateCartText(val);
 
         // Update the slider progress for 7-day rewards
         dayProgress++;
@@ -111,22 +115,25 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
         PlayerPrefs.SetString("NextRewardTime", nextRewardTime.ToString());
 
         // Start coroutine to hide text after 3 seconds
-        StartCoroutine(HideTextAfterDelay(selectedBox));
+        StartCoroutine(HideTextAfterDelay(val));
 
         // Start coroutine to show reward panel after 1 minute
         StartCoroutine(ShowRewardAfterOneMinute());
     }
 
-    IEnumerator HideTextAfterDelay(Button selectedBox)
+    IEnumerator HideTextAfterDelay(int val)
     {
         // Wait for 3 seconds
         yield return new WaitForSeconds(3f);
+        pingPongGift.SetActive(false);
+        for (int i = 0; i < rewardBoxes.Length; i++)
+        {
+            rewardBoxes[i].SetActive(false);
 
-        // Hide the text on the selected box
-        selectedBox.GetComponentInChildren<Text>().text = "";
+        }
+        rewardBoxes[val].SetActive(true);
+        rewardBoxParent.SetActive(true);
 
-        // Hide the gifts panel if needed
-        gifts_panel.SetActive(false);
     }
 
     IEnumerator ShowRewardAfterOneMinute()
@@ -138,8 +145,9 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
         rewardPanel.SetActive(true);
     }
 
-    void UpdateCartText()
+    void UpdateCartText(int val)
     {
+        rewardText[val].text = "+" + totalCoins;
         // Update the total coins in the cart
         cartText.text = "+" + totalCoins;
         coinImg.gameObject.SetActive(true);

@@ -8,6 +8,7 @@ public class ScaleAndRotate : MonoBehaviour
 {
     public Transform gridRotation;
     public Transform grid_Underlay_Container;
+    public Transform grid_overlay_container;
     [SerializeField] private float rotationDuration = 1f; // Duration of the rotation animation
     [SerializeField] private float scaleDuration = 0.5f; // Duration of the scaling animations
     [SerializeField] private float waitDuration = 0.5f; // Time to wait between step 2 and step 3
@@ -18,7 +19,6 @@ public class ScaleAndRotate : MonoBehaviour
 
     public Transform cellParent;
     public void GridScaleRotateAndScale()
-
     {
         if (GetComponent<CharacterGrid>().gridRotates)
         {
@@ -45,8 +45,9 @@ public class ScaleAndRotate : MonoBehaviour
         // Step 1: Scale the parent down to 0.8
         sequence.Append(gridRotation.DOScale(initialScale, scaleDuration)
                             .SetEase(Ease.OutQuad)); // Optional: Set easing for the scaling
-         sequence.Join(grid_Underlay_Container.DOScale(initialScale, scaleDuration)
-                        .SetEase(Ease.OutQuad));
+        sequence.Join(grid_Underlay_Container.DOScale(initialScale, scaleDuration)
+                       .SetEase(Ease.OutQuad));
+
         // Step 2: Simultaneously rotate parent clockwise and children anti-clockwise
         sequence.AppendCallback(() =>
         {
@@ -54,6 +55,8 @@ public class ScaleAndRotate : MonoBehaviour
             gridRotation.DOLocalRotate(currentRotation, rotationDuration, RotateMode.FastBeyond360)
                      .SetEase(Ease.InOutQuad); // Set the easing for rotation
             grid_Underlay_Container.DOLocalRotate(currentRotation, rotationDuration, RotateMode.FastBeyond360)
+                     .SetEase(Ease.InOutQuad);
+            grid_overlay_container.DOLocalRotate(currentRotation, rotationDuration, RotateMode.FastBeyond360)
                      .SetEase(Ease.InOutQuad);
             // Rotate each child anti-clockwise
             foreach (Transform child in cellParent)

@@ -115,6 +115,7 @@ namespace BBG.WordSearch
         public float currentAngle;
         public bool gridRotates;
 
+
         #region Unity Methods
 
         public void OnPointerDown(PointerEventData eventData)
@@ -267,6 +268,7 @@ namespace BBG.WordSearch
             GetComponent<ScaleAndRotate>().gridRotation = gridContainer;
             // Create a GameObject that will be be used to place things overtop of the letter grid
             gridOverlayContainer = CreateContainer("grid_overlay_container", typeof(RectTransform));
+            GetComponent<ScaleAndRotate>().grid_overlay_container = gridOverlayContainer;
             GetComponent<ScaleAndRotate>().cellParent = gridContainer;
             // Only need an underlay container if the higlighs position is set to under the letters
             if (highlightPosition == HighlighPosition.BelowLetters)
@@ -276,7 +278,7 @@ namespace BBG.WordSearch
                 gridUnderlayContainer.SetAsFirstSibling();
             }
 
-            GetComponent<ScaleAndRotate>().grid_Underlay_Container= gridUnderlayContainer;
+            GetComponent<ScaleAndRotate>().grid_Underlay_Container = gridUnderlayContainer;
             // Create a CharacterGridItem that will be used as a template by the ObjectPool to create more instance
             CharacterGridItem templateCharacterGridItem = CreateCharacterGridItem();
             templateCharacterGridItem.name = "template_character_grid_item";
@@ -532,6 +534,8 @@ namespace BBG.WordSearch
 
         private void ShowWord(Cell wordStartPosition, Cell wordEndPosition, string word, bool useSelectedColor)
         {
+            List<CharacterGridItem> floatingLetter = letterObject;
+
 
             GlobalData.CoinCount = GlobalData.CoinCount + (1 * CountLetters(word));
             MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
@@ -545,12 +549,14 @@ namespace BBG.WordSearch
             Vector2 endPosition = (endCharacter.transform as RectTransform).anchoredPosition;
             Vector2 center = endPosition + (startPosition - endPosition) / 2f;
 
-            Text floatingText = CreateFloatingText(word, highlight.color, center);
 
-            Color toColor = new Color(floatingText.color.r, floatingText.color.g, floatingText.color.b, 0f);
+
+
 
             if (GameManager.Instance.toPlayDailyChallange)
             {
+                Text floatingText = CreateFloatingText(word, highlight.color, center);
+                Color toColor = new Color(floatingText.color.r, floatingText.color.g, floatingText.color.b, 0f);
                 UIAnimation animY;
 
                 animY = UIAnimation.PositionY(floatingText.rectTransform, center.y, center.y + 75f, 1f);
@@ -563,30 +569,68 @@ namespace BBG.WordSearch
             }
             else
             {
-                // Step 1: Get the world position of the target word in the grid
-                Vector3 targetWorldPosition = GameManager.Instance.wordFoundInWordGrid.transform.position;
-                RectTransform floatingTextParent = floatingText.rectTransform.parent as RectTransform;
+                Text targetWordText = GameManager.Instance.wordFoundInWordGrid.GetComponentInChildren<Text>();
 
-                // Step 2: Convert the world position to the local position relative to floatingText's parent
-                Vector3 localTargetPosition = floatingTextParent.InverseTransformPoint(targetWorldPosition);
+                for (int i = 0; i < floatingLetter.Count; i++)
+                {
+                    Vector2 position = (floatingLetter[i].transform as RectTransform).anchoredPosition;
+                    Text floatingText = CreateFloatingText(floatingLetter[i].characterText.text, highlight.color, position);
 
-                // Step 3: Get the size of the target word to match floating text scale
-                RectTransform targetWordRect = GameManager.Instance.wordFoundInWordGrid;
-                Vector2 targetSize = targetWordRect.sizeDelta;
+                    // Step 1: Get the world position of the target word in the grid
+                    Vector3 targetWorldPosition = GetCharacterPositionInText(targetWordText, i);
+                    RectTransform floatingTextParent = floatingText.rectTransform.parent as RectTransform;
 
-                // Scale down the floating text to match the target word size
-                Vector2 floatingTextSize = floatingText.rectTransform.sizeDelta;
-                float scaleX = targetSize.x / floatingTextSize.x;
-                float scaleY = targetSize.y / floatingTextSize.y;
-                Vector3 targetScale = new Vector3(scaleX, scaleY, 1f);
+                    // Step 2: Convert the world position to the local position relative to floatingText's parent
+                    Vector3 localTargetPosition = floatingTextParent.InverseTransformPoint(targetWorldPosition);
 
-                // Step 4: Animate floating text movement and scaling simultaneously
-                floatingText.rectTransform.DOScale(new Vector3(0.36f, 0.35f, 1), 1f).SetEase(Ease.Linear); // Scale down the text
-                floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
+                    // Step 3: Get the size of the target word to match floating text scale
+                    RectTransform targetWordRect = GameManager.Instance.wordFoundInWordGrid;
+                    Vector2 targetSize = targetWordRect.sizeDelta;
+
+                    // Scale down the floating text to match the target word size
+                    Vector2 floatingTextSize = floatingText.rectTransform.sizeDelta;
+                    float scaleX = targetSize.x / floatingTextSize.x;
+                    float scaleY = targetSize.y / floatingTextSize.y;
+                    Vector3 targetScale = new Vector3(scaleX, scaleY, 1f);
 
 
+
+                    // Step 4: Animate floating text movement and scaling simultaneously
+                    floatingText.rectTransform.DOScale(new Vector3(0.36f, 0.35f, 1), 1f).SetEase(Ease.Linear); // Scale down the text
+                    floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
+                    if (gridRotates)
+                    {
+
+                        // If isRotated is true, rotate by 180 degrees on the Z axis (locally for UI elements)
+                        floatingText.rectTransform.DOLocalRotate(new Vector3(0, 0, 180), 0.1f).SetEase(Ease.InOutSine);
+                    }
+                    else
+                    {
+                        // If isRotated is false, no rotation (rotate to 0 degrees)
+                        floatingText.rectTransform.DOLocalRotate(Vector3.zero, 0.1f).SetEase(Ease.InOutSine);
+                    }
+                }
             }
 
+        }
+        private Vector3 GetCharacterPositionInText(Text targetText, int characterIndex)
+        {
+            // Create a TextGenerator to generate the vertices for the text
+            TextGenerator textGen = new TextGenerator();
+            TextGenerationSettings settings = targetText.GetGenerationSettings(targetText.rectTransform.rect.size);
+            textGen.Populate(targetText.text, settings);
+
+            // Get the vertex information for each character in the text
+            IList<UIVertex> vertices = textGen.verts;
+
+            // Calculate the midpoint of the character (we get 4 vertices for each character)
+            int charVertexIndex = characterIndex * 4; // Each character has 4 vertices
+            Vector3 charMidPoint = (vertices[charVertexIndex].position + vertices[charVertexIndex + 2].position) / 2;
+
+            // Convert this midpoint into world space using the RectTransform
+            Vector3 worldPosition = targetText.rectTransform.TransformPoint(charMidPoint);
+
+            return worldPosition;
         }
         public static int CountLetters(string str)
         {
