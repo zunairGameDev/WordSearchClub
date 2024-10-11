@@ -818,7 +818,8 @@ namespace BBG.WordSearch
             if (ToPlayNewMode)
             {
 
-                PopupManager.Instance.Show("level_completed1", levelCompletedPopupData);
+                StartCoroutine(ShowWinPlaneAfterRotate(levelCompletedPopupData));
+                //PopupManager.Instance.Show("level_completed1", levelCompletedPopupData);
             }
             else
             {
@@ -827,6 +828,12 @@ namespace BBG.WordSearch
             }
 
             SoundManager.Instance.Play("level-complete");
+        }
+        IEnumerator ShowWinPlaneAfterRotate(object[] levelCompletedPopupData)
+        {
+            characterGrid.GetComponent<ScaleAndRotate>().StartOnLevelComplete();
+            yield return new WaitForSeconds(3f);
+            PopupManager.Instance.Show("level_completed1", levelCompletedPopupData);
         }
         private bool CheckingActiveLevelIndex()
         {

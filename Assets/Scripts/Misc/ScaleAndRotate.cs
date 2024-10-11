@@ -9,6 +9,13 @@ public class ScaleAndRotate : MonoBehaviour
     public Transform gridRotation;
     public Transform grid_Underlay_Container;
     public Transform grid_overlay_container;
+    public GameObject littleProfile;
+    public GameObject wordListContainer;
+    public GameObject characterGridBackGround;
+    public GameObject upperBar;
+    public GameObject gameSceneBackButton;
+    public GameObject alignment;
+
     [SerializeField] private float rotationDuration = 1f; // Duration of the rotation animation
     [SerializeField] private float scaleDuration = 0.5f; // Duration of the scaling animations
     [SerializeField] private float waitDuration = 0.5f; // Time to wait between step 2 and step 3
@@ -77,53 +84,55 @@ public class ScaleAndRotate : MonoBehaviour
 
         // Start the sequence
         sequence.Play();
+    }
 
-        //    Transform gridRotation = transform;
-        //    // Check the current rotation of the grid (parent object)
-        //    float currentYRotation = Mathf.Round(gridRotation.localEulerAngles.z);
+    public void ResetPanel()
+    {
+        GetComponent<CharacterGrid>().gridRotates = false;
+        littleProfile.SetActive(true); wordListContainer.SetActive(true);
+        characterGridBackGround.SetActive(true); upperBar.SetActive(true);
+        gameSceneBackButton.SetActive(true);alignment.SetActive(true);
+        gridRotation.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
+                     .SetEase(Ease.InOutQuad); // Set the easing for rotation
+        grid_Underlay_Container.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
+                 .SetEase(Ease.InOutQuad);
+        grid_overlay_container.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
+                 .SetEase(Ease.InOutQuad);
+        foreach (Transform child in cellParent)
+        {
+            child.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
+                 .SetEase(Ease.InOutQuad); // Set the easing for rotation
+            child.GetChild(0).gameObject.SetActive(true);
+        }
+        transform.DOLocalRotate(new Vector3(0, 0, 0), 0.1f, RotateMode.FastBeyond360)
+                 .SetEase(Ease.InOutQuad); // Set the easing for rotation
+        transform.DOScale(new Vector3(1, 1, 1), 0.1f)
+                            .SetEase(Ease.OutQuad);
+    }
+    public void StartOnLevelComplete()
+    {
+        StartCoroutine(OnLevelComplete());
+    }
+    IEnumerator OnLevelComplete()
+    {
+        yield return new WaitForSeconds(1f);
+        littleProfile.SetActive(false); wordListContainer.SetActive(false);
+        characterGridBackGround.SetActive(false); upperBar.SetActive(false);
+        gameSceneBackButton.SetActive(false);alignment.SetActive(false);
 
-        //    // Determine the next rotation based on the current rotation state
-        //    float rotationAngle = (currentYRotation == 0f) ? -180f : 0f;
 
-        //    // Calculate the new target rotation for the parent and its children
-        //    currentRotation = new Vector3(0, 0, rotationAngle); // Update current rotation
-        //    currentChildRotation = new Vector3(0, 0, -rotationAngle); // Update current rotation
-        //    // Create a sequence to chain animations
-        //    Sequence sequence = DOTween.Sequence();
+        foreach (Transform child in cellParent)
+        {
+            if (!child.GetComponent<CharacterGridItem>().IsHighlighted)
+            {
+                child.GetChild(0).gameObject.SetActive(false);
+            }
 
-        //    // Step 1: Scale the parent down to 0.8
-        //    sequence.Append(gridRotation.DOScale(initialScale, scaleDuration)
-        //                        .SetEase(Ease.OutQuad)); // Optional: Set easing for the scaling
-
-        //    // Step 2: Simultaneously rotate parent and children
-        //    sequence.AppendCallback(() =>
-        //    {
-        //        // Rotate parent locally
-        //        gridRotation.DOLocalRotate(currentRotation, rotationDuration, RotateMode.FastBeyond360)
-        //                 .SetEase(Ease.InOutQuad); // Set the easing for rotation
-
-        //        // Rotate each child locally
-        //        foreach (Transform child in cellParent)
-        //        {
-        //            //if (child.gameObject.CompareTag("LineRenderer"))
-        //            //{
-        //            //    // Skip the current child if it has the tag "LineRender"
-        //            //    continue;
-        //            //}
-        //            child.DOLocalRotate(currentChildRotation, rotationDuration, RotateMode.FastBeyond360)
-        //                 .SetEase(Ease.InOutQuad); // Set the easing for rotation
-        //        }
-        //    });
-
-        //    // Step 2.5: Add a delay before Step 3
-        //    sequence.AppendInterval(waitDuration);
-
-        //    // Step 3: Scale the parent back to 1 after rotation completes
-        //    sequence.Append(gridRotation.DOScale(finalScale, scaleDuration)
-        //                        .SetEase(Ease.OutBounce)); // Optional: Set easing for scaling back
-
-        //    // Start the sequence
-        //    sequence.Play();
-        //}
+        }
+        yield return new WaitForSeconds(1);
+        transform.DOLocalRotate(new Vector3(0, 0, -90f), 1f, RotateMode.FastBeyond360)
+                 .SetEase(Ease.InOutQuad); // Set the easing for rotation
+        transform.DOScale(new Vector3(0, 0, 0f), 1f)
+                            .SetEase(Ease.OutQuad);
     }
 }

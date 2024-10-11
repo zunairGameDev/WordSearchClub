@@ -12,20 +12,24 @@ public class CountryCompletePanel : MonoBehaviour
     public TextMeshProUGUI countryName;
     public Image countryStamp;
     public TextMeshProUGUI coinsText;
+    public Button nextButton;
 
     public void ApplyingData()
     {
-        countryInfo = GameManager.Instance.countryInfo[PlayerPrefs.GetInt("CountryStamp",0)];
-        countryName.text = countryInfo.countryName;
-        countryFlagImage.sprite = countryInfo.countryFlag;
+        countryInfo = GameManager.Instance.countryInfo[PlayerPrefs.GetInt("CountryStamp", 0)];
+        //countryName.text = countryInfo.countryName;
+        //countryFlagImage.sprite = countryInfo.countryFlag;
         countryStamp.sprite = countryInfo.countryStamp;
         // Coins Update
-        //coinsText.text = coinsText.text;
+        coinsText.text = "+25";
         this.gameObject.SetActive(true);
     }
     public void OnClickClosePane()
     {
+        GlobalData.CoinCount = GlobalData.CoinCount + 25;
+        MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
         PlayerPrefs.SetInt("CountryStamp", PlayerPrefs.GetInt("CountryStamp") + 1);
+        nextButton.onClick.Invoke();
         this.gameObject.SetActive(false);
     }
 

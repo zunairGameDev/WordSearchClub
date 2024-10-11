@@ -375,7 +375,7 @@ namespace BBG.WordSearch
             }
 
             currentBoard = board;
-
+            GetComponent<ScaleAndRotate>().ResetPanel();
             UIAnimation anim = UIAnimation.Alpha(gridContainer.GetComponent<CanvasGroup>(), 0f, 1f, .5f);
             anim.style = UIAnimation.Style.EaseOut;
             anim.Play();

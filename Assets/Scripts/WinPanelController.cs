@@ -25,10 +25,10 @@ public class WinPanelController : MonoBehaviour
     public TextMeshProUGUI appreciationShadowText;
     public bool toShowCollectButton;
     public GameObject sliderReward;
-    public RectTransform jumpingReward;
+    public GameObject ticketPanel;
     public RectTransform reachPoint;
 
-    public GameObject countryStampPanel;
+    //public GameObject countryStampPanel;
 
     [SerializeField] private enum RenderModeStates { camera, overlay, world };
     [SerializeField] private RenderModeStates m_RenderModeStates;
@@ -40,7 +40,7 @@ public class WinPanelController : MonoBehaviour
     {
         treeImage.transform.localScale = Vector3.one;
         sliderReward.SetActive(true);
-        jumpingReward.gameObject.SetActive(false);
+        ticketPanel.gameObject.SetActive(false);
         CameraModeChange(RenderModeStates.camera);
         appreciationObject.SetActive(false);
         winSlider.gameObject.SetActive(false);
@@ -149,19 +149,16 @@ public class WinPanelController : MonoBehaviour
     }
     IEnumerator ScalingDownTree()
     {
-        jumpingReward.GetChild(0).localPosition = Vector3.zero;
-        sliderReward.SetActive(false);
-        jumpingReward.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        treeImage.transform.DOScale(Vector3.zero, 1.5f).SetEase(Ease.Linear);
-        winSlider.transform.DOScale(Vector3.zero, 1.5f).SetEase(Ease.Linear);
-        jumpingReward.GetChild(0).DOLocalMoveX(-120, 1f).SetEase(Ease.Linear);
-        jumpingReward.DOAnchorPosX(-310, 1f).SetEase(Ease.OutQuad);
-        jumpingReward.transform.DOScale(3.1f, 1f).SetEase(Ease.Linear);
-        jumpingReward.transform.DOPunchPosition(Vector3.up * 150f, 1f, 1, 0);
-        yield return new WaitForSeconds(1f);
+        
 
-        countryStampPanel.GetComponent<CountryCompletePanel>().ApplyingData();
+        //yield return new WaitForSeconds(1f);
+        
+        yield return new WaitForSeconds(1f);
+        ticketPanel.GetComponent<CountryCompletePanel>().ApplyingData();
+        ticketPanel.GetComponent<CountryCompletePanel>().nextButton = nextLevelButton;
+        ticketPanel.SetActive(true); sliderReward.SetActive(false);
+        treeImage.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.Linear);
+        winSlider.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.Linear);
 
     }
 
