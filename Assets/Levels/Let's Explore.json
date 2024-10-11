@@ -1,1 +1,1 @@
-{"rows":4,"cols":4,"words":["WIN","JOY","PLAY"],"boardCharacters":[["a","e","N","J"],["h","I","f","O"],["W","r","c","Y"],["P","L","A","Y"]],"wordPlacements":[{"word":"WIN","row":2,"col":0,"h":0,"v":1},{"word":"JOY","row":0,"col":3,"h":0,"v":-1},{"word":"PLAY","row":3,"col":0,"h":0,"v":0}]}
+{"rows":4,"cols":4,"words":["WIN","JOY","PLAY"],"boardCharacters":[["a","e","n","J"],["h","i","f","o"],["W","r","c","y"],["P","l","a","y"]],"wordPlacements":[{"word":"WIN","row":2,"col":0,"h":0,"v":1},{"word":"JOY","row":0,"col":3,"h":0,"v":-1},{"word":"PLAY","row":3,"col":0,"h":0,"v":0}]}

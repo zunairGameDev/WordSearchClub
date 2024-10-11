@@ -45,7 +45,7 @@ namespace BBG.WordSearch
         #region Inspector Variables
 
         [SerializeField] private float maxCellSize = 0;
-        [SerializeField] private SelectedWord selectedWord = null;
+        public SelectedWord selectedWord = null;
 
         [Header("Letter Settings")]
         [SerializeField] TMP_FontAsset tMPUIFont;
@@ -216,19 +216,22 @@ namespace BBG.WordSearch
                 Cell wordEndPosition = new Cell(lastEndCharacter.Row, lastEndCharacter.Col);
 
                 string highlightedWord = GetWord(wordStartPosition, wordEndPosition);
-
+                Debug.Log(highlightedWord + "highlightedWord");
                 // Call OnWordSelected to notify the WordSearchController that a word has been selected
                 string foundWord = GameManager.Instance.OnWordSelected(highlightedWord);
                 pointCheck = false;
+                Debug.Log(foundWord + "a");
                 // If the word was a word that was suppose to be found then highligh the word and create the floating text
                 if (!string.IsNullOrEmpty(foundWord))
                 {
+                    Debug.Log("b");
                     if (GameManager.Instance.toPlayAnimation)
                     {
                         awesomeAnim.SetActive(true);
                         GameManager.Instance.toPlayAnimation = false;
                         GameManager.Instance.longestWord = null;
                     }
+                    Debug.Log(foundWord);
                     ShowWord(wordStartPosition, wordEndPosition, foundWord, true);
 
                     SoundManager.Instance.Play("word-found");
@@ -574,7 +577,7 @@ namespace BBG.WordSearch
                 for (int i = 0; i < floatingLetter.Count; i++)
                 {
                     Vector2 position = (floatingLetter[i].transform as RectTransform).anchoredPosition;
-                    Text floatingText = CreateFloatingText(floatingLetter[i].characterText.text, highlight.color, position);
+                    Text floatingText = CreateFloatingText(floatingLetter[i].characterText.text.ToUpper(), highlight.color, position);
 
                     // Step 1: Get the world position of the target word in the grid
                     Vector3 targetWorldPosition = GetCharacterPositionInText(targetWordText, i);

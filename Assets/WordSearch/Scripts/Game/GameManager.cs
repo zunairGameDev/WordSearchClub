@@ -328,7 +328,9 @@ namespace BBG.WordSearch
         /// <summary>
         /// Called when a word on the board is selected, checks if that word is a word that needs to be found.
         /// </summary>
-        public string OnWordSelected(string selectedWord)
+        /// 
+
+        public string OnWordForHintSelected(string selectedWord)
         {
             string selectedWordReversed = "";
 
@@ -340,6 +342,83 @@ namespace BBG.WordSearch
                 selectedWordReversed = character + selectedWordReversed;
             }
 
+            // Check if the selected word equals any of the hidden words
+            for (int i = 0; i < ActiveBoard.words.Count; i++)
+            {
+                // Get the word and the word with no spaces without spaces
+                string word = ActiveBoard.words[i];
+
+                // Check if the word we has already been found
+                if (ActiveBoard.foundWords.Contains(word))
+                {
+                    continue;
+                }
+
+                // Spaces are removed from the word before being places on the board so we need to compare the word without any spaces in it
+                string wordNoSpaces = word.Replace(" ", "");
+
+                // Check if the word matches the selected word or the selected word reversed
+                if (selectedWord == wordNoSpaces || selectedWordReversed == wordNoSpaces)
+                {
+                    if (longestWord != null)
+                    {
+                        if (selectedWord == longestWord || selectedWordReversed == longestWord)
+                        {
+                            toPlayAnimation = true;
+                        }
+                    }
+                    // Add the word to the hash set of found words for this board
+                    ActiveBoard.foundWords.Add(word);
+
+                    if (toPlayDailyChallange)
+                    {
+                        dailyWordList.SetWordFound(word);
+                    }
+                    else
+                    {
+                        // Notify the word list a word has been found
+                        wordList.SetWordFound(word);
+                    }
+
+
+
+                    if (ActiveBoard.foundWords.Count == ActiveBoard.words.Count)
+                    {
+                        BoardCompleted();
+                    }
+
+                    // Return the word with the spaces
+                    return word;
+                }
+            }
+
+            return null;
+        }
+
+        public string OnWordSelected(string selectedWord)
+        {
+            string selectedWordReversed = "";
+            string uppercaseSelectedWord = "";
+            // Get the reverse version of the word
+            for (int i = 0; i < selectedWord.Length; i++)
+            {
+                if (GameManager.Instance.toPlayDailyChallange)
+                {
+                    char character = char.ToLower(selectedWord[i]);
+                    Debug.Log(character);
+                    uppercaseSelectedWord = uppercaseSelectedWord + character;
+                    selectedWordReversed = character + selectedWordReversed;
+                }
+                else
+                {
+                    char character = char.ToUpper(selectedWord[i]);
+                    Debug.Log(character);
+                    uppercaseSelectedWord = uppercaseSelectedWord + character;
+                    selectedWordReversed = character + selectedWordReversed;
+                }
+                
+            }
+            selectedWord = uppercaseSelectedWord;
             // Check if the selected word equals any of the hidden words
             for (int i = 0; i < ActiveBoard.words.Count; i++)
             {
@@ -431,7 +510,7 @@ namespace BBG.WordSearch
                 string wordToShow = nonFoundWords[Random.Range(0, nonFoundWords.Count)];
 
                 // Set it as selected
-                OnWordSelected(wordToShow);
+                OnWordForHintSelected(wordToShow);
 
                 // Highlight the word
                 characterGrid.ShowWordHint(wordToShow);
