@@ -15,6 +15,7 @@ public class WinPanelController : MonoBehaviour
     public Slider winSlider; // Assign the slider
     public Button collectButton;
     public Button nextLevelButton; // Assign the next level button
+    public Button dailyChallengeButton; // Assign the next level button
     public RectTransform targetPosition; // Position near the main image
     public float moveDuration = 2f; // Time it takes for the particle to move
     public Canvas m_Canvas;
@@ -52,6 +53,8 @@ public class WinPanelController : MonoBehaviour
         winSlider.transform.localScale = Vector3.zero;
         nextLevelButton.gameObject.SetActive(false);
         nextLevelButton.transform.localScale = Vector3.zero;
+        dailyChallengeButton.gameObject.SetActive(false);
+        dailyChallengeButton.transform.localScale = Vector3.zero;
         initialPosition = particleEffect.transform.position;
         ToShowCountryComplete();
         OnLevelWin();
@@ -110,8 +113,16 @@ public class WinPanelController : MonoBehaviour
         winSlider.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
         if (!toShowCollectButton)
         {
-            nextLevelButton.gameObject.SetActive(true);
-            nextLevelButton.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
+            if (GameManager.Instance.toPlayDailyChallange)
+            {
+                dailyChallengeButton.gameObject.SetActive(true);
+                dailyChallengeButton.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
+            }
+            else
+            {
+                nextLevelButton.gameObject.SetActive(true);
+                nextLevelButton.transform.DOScale(1, 0.5f).SetEase(Ease.Linear);
+            }
         }
 
         CameraModeChange(RenderModeStates.overlay);
@@ -141,16 +152,20 @@ public class WinPanelController : MonoBehaviour
         winSlider.value = fillAmount;
         winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
         yield return new WaitForSeconds(0.5F);
-        PlayerPrefs.SetInt("CurrentValue", PlayerPrefs.GetInt("CurrentValue") + 1);
-        MainMenuText.Instance.currentValue = PlayerPrefs.GetInt("CurrentValue");
-        fillAmount = (float)MainMenuText.Instance.currentValue / MainMenuText.Instance.countryInfo.maxValue;
-        winSlider.DOValue(fillAmount, 0.5f).SetEase(Ease.Linear);
-        winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
-        MainMenuText.Instance.FillAmount();
-        if (toShowCollectButton)
+        if (!GameManager.Instance.toPlayDailyChallange)
         {
-            StartCoroutine(ScalingDownTree());
+            PlayerPrefs.SetInt("CurrentValue", PlayerPrefs.GetInt("CurrentValue") + 1);
+            MainMenuText.Instance.currentValue = PlayerPrefs.GetInt("CurrentValue");
+            fillAmount = (float)MainMenuText.Instance.currentValue / MainMenuText.Instance.countryInfo.maxValue;
+            winSlider.DOValue(fillAmount, 0.5f).SetEase(Ease.Linear);
+            winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
+            MainMenuText.Instance.FillAmount();
+            if (toShowCollectButton)
+            {
+                StartCoroutine(ScalingDownTree());
+            }
         }
+
     }
     IEnumerator ScalingDownTree()
     {
