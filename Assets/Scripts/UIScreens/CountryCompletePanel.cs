@@ -12,7 +12,7 @@ public class CountryCompletePanel : MonoBehaviour
     public TextMeshProUGUI countryName;
     public Image countryStamp;
     public TextMeshProUGUI coinsText;
-    public Button nextButton;
+    
 
     public void ApplyingData()
     {
@@ -28,8 +28,9 @@ public class CountryCompletePanel : MonoBehaviour
     {
         GlobalData.CoinCount = GlobalData.CoinCount + 25;
         MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
-        PlayerPrefs.SetInt("CountryStamp", PlayerPrefs.GetInt("CountryStamp") + 1);
-        nextButton.onClick.Invoke();
+        WinPanelController.Instance.NewDestinationPanel.GetComponent<NewDestinationPanel>().ApplyNextCountryData();
+        WinPanelController.Instance.NewDestinationPanel.SetActive(true);
+        PlayerPrefs.SetInt("CountryStamp", PlayerPrefs.GetInt("CountryStamp") + 1);        
         this.gameObject.SetActive(false);
     }
 

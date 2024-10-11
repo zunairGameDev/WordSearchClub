@@ -8,6 +8,7 @@ using BBG.WordSearch;
 
 public class WinPanelController : MonoBehaviour
 {
+    public static WinPanelController Instance;
     public GameObject treeImage;
     public Image countryLogo;
     public GameObject particleEffect; // Assign the particle effect GameObject
@@ -26,6 +27,7 @@ public class WinPanelController : MonoBehaviour
     public bool toShowCollectButton;
     public GameObject sliderReward;
     public GameObject ticketPanel;
+    public GameObject NewDestinationPanel;
     public RectTransform reachPoint;
 
     //public GameObject countryStampPanel;
@@ -35,7 +37,10 @@ public class WinPanelController : MonoBehaviour
 
     private bool isMoving = false;
     private Vector2 initialPosition;
-
+    private void Awake()
+    {
+        Instance = this;
+    }
     public void ToShowData()
     {
         treeImage.transform.localScale = Vector3.one;
@@ -149,13 +154,13 @@ public class WinPanelController : MonoBehaviour
     }
     IEnumerator ScalingDownTree()
     {
-        
+
 
         //yield return new WaitForSeconds(1f);
-        
+
         yield return new WaitForSeconds(1f);
         ticketPanel.GetComponent<CountryCompletePanel>().ApplyingData();
-        ticketPanel.GetComponent<CountryCompletePanel>().nextButton = nextLevelButton;
+        //ticketPanel.GetComponent<CountryCompletePanel>().nextButton = nextLevelButton;
         ticketPanel.SetActive(true); sliderReward.SetActive(false);
         treeImage.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.Linear);
         winSlider.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.Linear);

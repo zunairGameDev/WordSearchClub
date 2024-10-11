@@ -283,6 +283,7 @@ namespace BBG.WordSearch
             DailyBoard board = LoadDailyFile(dailyLevelfiles[0/*PlayerPrefs.GetInt("SelectJasonLevel")*/]);
             dailyWordList.Setup(board);
             GenerateDailyBoard(board);
+            wordList.wordListCanvasGroup1.GetComponent<WordGenerating>().wordGridImage.sizeDelta = new Vector2(wordList.wordListCanvasGroup1.GetComponent<WordGenerating>().wordGridImage.sizeDelta.x, 308f);
             ShowGameScreen();
         }
 

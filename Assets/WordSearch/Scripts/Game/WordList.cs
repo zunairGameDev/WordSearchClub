@@ -11,7 +11,7 @@ namespace BBG.WordSearch
         [SerializeField] private RectTransform wordListContainer = null;
         [SerializeField] private WordListItem wordListItemPrefab = null;
         [SerializeField] private CanvasGroup wordListCanvasGroup = null;
-        [SerializeField] private CanvasGroup wordListCanvasGroup1 = null;
+        public CanvasGroup wordListCanvasGroup1 = null;
 
 
         #endregion
@@ -52,7 +52,10 @@ namespace BBG.WordSearch
             {
                 CreateWordListItem(board.words[i], wordListItemPool);
             }
+
+
             wordListCanvasGroup1.GetComponent<WordGenerating>().GenerateHorizontalTab(GameManager.Instance.wordsPerLevelShow[PlayerPrefs.GetInt("SelectJasonLevel")], wordListCanvasGroup.transform);
+
             GetComponent<ContainerSetting>().SettingRows(board.words.Count);
 
             UIAnimation anim = UIAnimation.Alpha(wordListCanvasGroup, 0f, 1f, 0.5f);
@@ -74,7 +77,7 @@ namespace BBG.WordSearch
 
         public void Clear()
         {
-            
+
             wordListItemPool.ReturnAllObjectsToPool();
             wordListItems.Clear();
 
