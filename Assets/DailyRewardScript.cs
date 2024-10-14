@@ -123,6 +123,7 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
 
     IEnumerator HideTextAfterDelay(int val)
     {
+
         // Wait for 3 seconds
         yield return new WaitForSeconds(3f);
         pingPongGift.SetActive(false);

@@ -71,4 +71,10 @@ public class MainMenuText : MonoBehaviour
         sliderText.text = currentValue.ToString() + " / " + countryInfo.maxValue.ToString();
 
     }
+    public void MainToPlay()
+    {
+
+        GetComponent<MainScreen>().MainToPlay();
+    }
+    
 }

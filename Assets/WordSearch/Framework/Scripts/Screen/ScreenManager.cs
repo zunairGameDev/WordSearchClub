@@ -72,7 +72,7 @@ namespace BBG
 				screen.gameObject.SetActive(true);
 				screen.Hide(false, true);
 			}
-
+            screens[0].GetComponent<MainMenuText>().MainToPlay();
 			// Show the home screen when the app starts up
 			Show(homeScreenId, false, true);
 		}

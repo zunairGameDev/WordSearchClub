@@ -14,6 +14,9 @@ namespace BBG.WordSearch
         [SerializeField] private CategoryListItem categoryListItemPrefab = null;
         [SerializeField] private RectTransform categoryListContainer = null;
         [SerializeField] private ScrollRect categoryListScrollRect = null;
+        [SerializeField] private GameObject paragraphContent;
+        [SerializeField] private GameObject viewPort;
+        [SerializeField] private ChangingHeaderButton upperBar;
 
         #endregion
 
@@ -50,10 +53,28 @@ namespace BBG.WordSearch
         {
             ScrollViewController.Instance.DestroyAllChildren();
             GameManager.Instance.toPlayDailyChallange = value;
+
+            StartCoroutine(WaitToFillCatagory());
+            //Button firstChildButton = categoryListContainer.GetChild(1).GetComponentInChildren<Button>();
+            //firstChildButton.onClick.Invoke();
+        }
+        IEnumerator WaitToFillCatagory()
+        {
+            while (categoryListHandler == null)
+            {
+                yield return new WaitForSeconds(0.3f);
+            }
             Button firstChildButton = categoryListContainer.GetChild(1).GetComponentInChildren<Button>();
             firstChildButton.onClick.Invoke();
         }
 
+        public void MainToPlay()
+        {
+            OnClickPlayBtn(false);
+            paragraphContent.SetActive(false);
+            viewPort.SetActive(true);
+            upperBar.MainToPlay();
+        }
         #endregion
 
         #region Private Methods

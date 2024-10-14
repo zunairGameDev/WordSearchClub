@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 public class LoadingScreen : MonoBehaviour
 {
+    public GameObject loadingPanel;
     public Slider loadingSlider;   // Reference to the UI Slider
     public Text loadingText;       // Reference to the UI Text (optional)
     public float waitTime = 5f;    // Time in seconds to wait before loading next scene
@@ -28,6 +29,6 @@ public class LoadingScreen : MonoBehaviour
             yield return null; // Wait for next frame
         }
         // After loading is complete, load the main menu scene
-        SceneManager.LoadScene("Main");
+        loadingPanel.SetActive(false);
     }
 }

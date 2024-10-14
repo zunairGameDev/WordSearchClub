@@ -20,6 +20,7 @@ namespace BBG.WordSearch
         public void Setup(string word)
         {
             wordText.text = word;
+            wordText.fontSize = GetFontSize(GameManager.Instance.ActiveBoard.words.Count);
             wordText.color = Color.black;
             foundIndicator.SetActive(false);
             AdjustRectTransformWidth();
@@ -45,7 +46,18 @@ namespace BBG.WordSearch
             // Set the width of the RectTransform to the preferred width plus padding
             GetComponent<RectTransform>().sizeDelta = new Vector2(preferredWidth + padding, GetComponent<RectTransform>().sizeDelta.y);
         }
+        public int GetFontSize(int value)
+        {
+            if (value <= 8)
+            {
+                return 55;
+            }
+            else
+            {
+                return 46;
+            }
 
+        }
         #endregion
     }
 }

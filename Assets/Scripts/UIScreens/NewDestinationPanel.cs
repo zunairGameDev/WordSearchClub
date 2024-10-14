@@ -10,7 +10,7 @@ public class NewDestinationPanel : MonoBehaviour
     public Button nextButton;
     public Image newDestination;
     public Image countryFlag;
-    public TextMeshProUGUI countryName;
+    public Text countryName;
 
     private void OnDisable()
     {
@@ -26,7 +26,7 @@ public class NewDestinationPanel : MonoBehaviour
         nextButton = WinPanelController.Instance.nextLevelButton;
         countryFlag.sprite = MainMenuText.Instance.countryInfo.countryFlag;
         newDestination.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
-
+        countryName.text = MainMenuText.Instance.countryInfo.countryName;
     }
 
     IEnumerator PlayNextLevel()
