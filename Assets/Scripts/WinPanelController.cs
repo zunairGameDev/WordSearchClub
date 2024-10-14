@@ -6,6 +6,7 @@ using TMPro;
 using System.Collections.Generic;
 using BBG.WordSearch;
 
+
 public class WinPanelController : MonoBehaviour
 {
     public static WinPanelController Instance;
@@ -30,6 +31,7 @@ public class WinPanelController : MonoBehaviour
     public GameObject ticketPanel;
     public GameObject NewDestinationPanel;
     public RectTransform reachPoint;
+    public Image backGround;
 
     //public GameObject countryStampPanel;
 
@@ -82,7 +84,7 @@ public class WinPanelController : MonoBehaviour
     {
         // Start particle effect
         particleEffect.SetActive(true);
-
+        backGround.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
         // Begin moving the particle to the target
         isMoving = true;
         StartCoroutine(MoveParticle());

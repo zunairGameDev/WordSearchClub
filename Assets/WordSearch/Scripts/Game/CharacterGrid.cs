@@ -24,7 +24,10 @@ namespace BBG.WordSearch
         public GameObject permentLineChild;
         public bool pointCheck;
         public GameObject awesomeAnim;
-
+        public Image awesomeBackGround;
+        public List<Sprite> awesomeSprite;
+        public Text awesomeText;
+        public List<string> goodWord;
         public List<float> playerStates;
         public List<CharacterGridItem> letterObject;
         public EdgeDeductor deductor;
@@ -227,6 +230,8 @@ namespace BBG.WordSearch
                     Debug.Log("b");
                     if (GameManager.Instance.toPlayAnimation)
                     {
+                        awesomeBackGround.sprite = awesomeSprite[Random.Range(0, awesomeSprite.Count - 1)];
+                        awesomeText.text = goodWord[Random.Range(0, goodWord.Count - 1)];
                         awesomeAnim.SetActive(true);
                         GameManager.Instance.toPlayAnimation = false;
                         GameManager.Instance.longestWord = null;
@@ -538,7 +543,7 @@ namespace BBG.WordSearch
         private void ShowWord(Cell wordStartPosition, Cell wordEndPosition, string word, bool useSelectedColor)
         {
             List<CharacterGridItem> floatingLetter = letterObject;
-
+            RemoveFirstLetterfromHintList(letterObject[0]);
 
             GlobalData.CoinCount = GlobalData.CoinCount + (1 * CountLetters(word));
             MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
@@ -600,7 +605,7 @@ namespace BBG.WordSearch
 
                     // Step 4: Animate floating text movement and scaling simultaneously
                     floatingText.rectTransform.DOScale(new Vector3(0.36f, 0.35f, 1), 1f).SetEase(Ease.Linear); // Scale down the text
-                    floatingText.rectTransform.DOLocalMove(localTargetPosition, 1f).SetEase(Ease.Linear).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
+                    floatingText.rectTransform.DOLocalMove(localTargetPosition, 0.5f).SetEase(Ease.InOutBounce).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
                     if (gridRotates)
                     {
 
@@ -615,6 +620,14 @@ namespace BBG.WordSearch
                 }
             }
 
+        }
+        private void RemoveFirstLetterfromHintList(CharacterGridItem letterObject)
+        {
+            letterObject.isVisible = true;
+            string text = letterObject.characterText.GetComponent<TextMeshProUGUI>().text .ToUpper();
+            char letter = text[0];
+            GameManager.Instance.hintLetters.Remove(letter);
+            
         }
         private Vector3 GetCharacterPositionInText(Text targetText, int characterIndex)
         {

@@ -32,7 +32,7 @@ public class NewDestinationPanel : MonoBehaviour
     IEnumerator PlayNextLevel()
     {
         Debug.Log("A");
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(4f);
         nextButton.onClick.Invoke();
         Debug.Log("B");
         this.gameObject.SetActive(false);

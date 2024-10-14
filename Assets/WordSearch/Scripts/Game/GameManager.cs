@@ -38,7 +38,7 @@ namespace BBG.WordSearch
         [SerializeField] private List<GridInfo> levelDetails = null;
         public List<TextAsset> levelFiles;
         public List<TextAsset> dailyLevelfiles;
-        [SerializeField] private List<char> hintLetters = new List<char>();
+        public List<char> hintLetters = new List<char>();
 
 
         [Header("Values")]
