@@ -34,6 +34,7 @@ namespace BBG.WordSearch
         public TextMeshProUGUI levelName;
         public TextMeshProUGUI levelStatus;
         public TextMeshProUGUI playerStateShow;
+        public Transform foundParticles;
 
         #region Enums
 
@@ -588,6 +589,7 @@ namespace BBG.WordSearch
             }
             else
             {
+                foundParticles.position = GameManager.Instance.wordFoundInWordGrid.transform.position;
                 Text targetWordText = GameManager.Instance.wordFoundInWordGrid.GetComponentInChildren<Text>();
                 Vector3 targetWorldPosition;
                 for (int i = 0; i < floatingLetter.Count; i++)
@@ -636,8 +638,17 @@ namespace BBG.WordSearch
                         floatingText.rectTransform.DOLocalRotate(Vector3.zero, 0.1f).SetEase(Ease.InOutSine);
                     }
                 }
+                StartCoroutine(FoundParticlesStart());
             }
 
+        }
+
+        IEnumerator FoundParticlesStart()
+        {
+            yield return new WaitForSeconds(0.7f);
+            foundParticles.gameObject.SetActive(true);
+            yield return new WaitForSeconds(1.06f);
+            foundParticles.gameObject.SetActive(false);
         }
         private void RemoveFirstLetterfromHintList(CharacterGridItem letterObject, string word)
         {
