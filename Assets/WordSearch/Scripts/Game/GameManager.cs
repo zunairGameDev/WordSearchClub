@@ -416,7 +416,7 @@ namespace BBG.WordSearch
                     uppercaseSelectedWord = uppercaseSelectedWord + character;
                     selectedWordReversed = character + selectedWordReversed;
                 }
-                
+
             }
             selectedWord = uppercaseSelectedWord;
             // Check if the selected word equals any of the hidden words
@@ -525,7 +525,7 @@ namespace BBG.WordSearch
         {
             for (int i = 0; i < 3; i++)
             {
-                if (GlobalData.CoinCount >= 200)
+                if (GlobalData.CoinCount >= 200 && hintLetters != null)
                 {
                     ShowingHintLetter();
                     GlobalData.CoinCount = GlobalData.CoinCount - 200;
@@ -546,7 +546,7 @@ namespace BBG.WordSearch
 
             }
             else
-            if (GlobalData.CoinCount >= 100)
+            if (GlobalData.CoinCount >= 100 && hintLetters != null)
             {
                 ShowingHintLetter();
                 GlobalData.CoinCount = GlobalData.CoinCount - 100;

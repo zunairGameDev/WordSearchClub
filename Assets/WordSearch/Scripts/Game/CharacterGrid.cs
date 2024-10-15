@@ -117,6 +117,7 @@ namespace BBG.WordSearch
 
         public float currentAngle;
         public bool gridRotates;
+        public bool reverseCheck;
 
 
         #region Unity Methods
@@ -543,7 +544,17 @@ namespace BBG.WordSearch
         private void ShowWord(Cell wordStartPosition, Cell wordEndPosition, string word, bool useSelectedColor)
         {
             List<CharacterGridItem> floatingLetter = letterObject;
-            RemoveFirstLetterfromHintList(letterObject[0]);
+            if (letterObject[0].characterText.GetComponent<TextMeshProUGUI>().text[0] == word[0])
+            {
+                reverseCheck = false;
+                RemoveFirstLetterfromHintList(letterObject[0], word);
+            }
+            else
+            {
+                reverseCheck = true;
+                RemoveFirstLetterfromHintList(letterObject[letterObject.Count - 1], word);
+            }
+
 
             GlobalData.CoinCount = GlobalData.CoinCount + (1 * CountLetters(word));
             MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
@@ -578,14 +589,21 @@ namespace BBG.WordSearch
             else
             {
                 Text targetWordText = GameManager.Instance.wordFoundInWordGrid.GetComponentInChildren<Text>();
-
+                Vector3 targetWorldPosition;
                 for (int i = 0; i < floatingLetter.Count; i++)
                 {
                     Vector2 position = (floatingLetter[i].transform as RectTransform).anchoredPosition;
                     Text floatingText = CreateFloatingText(floatingLetter[i].characterText.text.ToUpper(), highlight.color, position);
 
                     // Step 1: Get the world position of the target word in the grid
-                    Vector3 targetWorldPosition = GetCharacterPositionInText(targetWordText, i);
+                    if (reverseCheck)
+                    {
+                        targetWorldPosition = GetCharacterPositionInText(targetWordText, floatingLetter.Count - (1 + i));
+                    }
+                    else
+                    {
+                        targetWorldPosition = GetCharacterPositionInText(targetWordText, i);
+                    }
                     RectTransform floatingTextParent = floatingText.rectTransform.parent as RectTransform;
 
                     // Step 2: Convert the world position to the local position relative to floatingText's parent
@@ -605,7 +623,7 @@ namespace BBG.WordSearch
 
                     // Step 4: Animate floating text movement and scaling simultaneously
                     floatingText.rectTransform.DOScale(new Vector3(0.36f, 0.35f, 1), 1f).SetEase(Ease.Linear); // Scale down the text
-                    floatingText.rectTransform.DOLocalMove(localTargetPosition, 0.5f).SetEase(Ease.InOutBounce).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
+                    floatingText.rectTransform.DOLocalMove(localTargetPosition, 0.7f).SetEase(Ease.InOutSine).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
                     if (gridRotates)
                     {
 
@@ -621,13 +639,14 @@ namespace BBG.WordSearch
             }
 
         }
-        private void RemoveFirstLetterfromHintList(CharacterGridItem letterObject)
+        private void RemoveFirstLetterfromHintList(CharacterGridItem letterObject, string word)
         {
+
             letterObject.isVisible = true;
-            string text = letterObject.characterText.GetComponent<TextMeshProUGUI>().text .ToUpper();
+            string text = letterObject.characterText.GetComponent<TextMeshProUGUI>().text.ToUpper();
             char letter = text[0];
             GameManager.Instance.hintLetters.Remove(letter);
-            
+
         }
         private Vector3 GetCharacterPositionInText(Text targetText, int characterIndex)
         {

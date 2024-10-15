@@ -12,7 +12,7 @@ public class WinPanelController : MonoBehaviour
     public static WinPanelController Instance;
     public GameObject treeImage;
     public Image countryLogo;
-    public GameObject particleEffect; // Assign the particle effect GameObject
+    //public GameObject particleEffect; // Assign the particle effect GameObject
     public Slider winSlider; // Assign the slider
     public Button collectButton;
     public Button nextLevelButton; // Assign the next level button
@@ -32,7 +32,7 @@ public class WinPanelController : MonoBehaviour
     public GameObject NewDestinationPanel;
     public RectTransform reachPoint;
     public Image backGround;
-
+    public GameObject light;
     //public GameObject countryStampPanel;
 
     [SerializeField] private enum RenderModeStates { camera, overlay, world };
@@ -57,7 +57,8 @@ public class WinPanelController : MonoBehaviour
         nextLevelButton.transform.localScale = Vector3.zero;
         dailyChallengeButton.gameObject.SetActive(false);
         dailyChallengeButton.transform.localScale = Vector3.zero;
-        initialPosition = particleEffect.transform.position;
+        //initialPosition = particleEffect.transform.position;
+        wisdomPoint.text = PlayerPrefs.GetInt("WisdomPoints", 0).ToString();
         ToShowCountryComplete();
         OnLevelWin();
     }
@@ -83,7 +84,7 @@ public class WinPanelController : MonoBehaviour
     public void OnLevelWin()
     {
         // Start particle effect
-        particleEffect.SetActive(true);
+        //particleEffect.SetActive(true);
         backGround.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
         // Begin moving the particle to the target
         isMoving = true;
@@ -93,21 +94,22 @@ public class WinPanelController : MonoBehaviour
     IEnumerator MoveParticle()
     {
         float elapsedTime = 0f;
-        Vector2 startPosition = particleEffect.transform.position;
-
+        //Vector2 startPosition = particleEffect.transform.position;
+        StartCoroutine(IncreasingWisedomPoint());
         while (elapsedTime < moveDuration)
         {
             // Move the particle towards the target position
-            particleEffect.transform.position = Vector3.Lerp(startPosition, targetPosition.position, (elapsedTime / moveDuration));
+            //particleEffect.transform.position = Vector3.Lerp(startPosition, targetPosition.position, (elapsedTime / moveDuration));
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         //particleEffect.transform.DOMove(targetPosition.position,1f);
         // Ensure the particle reaches the target position
-        particleEffect.transform.position = targetPosition.position;
+        //particleEffect.transform.position = targetPosition.position;
+        
 
-        // Deactivate the particle effect
-        particleEffect.SetActive(false);
+        //// Deactivate the particle effect
+        //particleEffect.SetActive(false);
         //CameraUI.SetActive(false);
         // Activate the slider and next level button
         countryLogo.sprite = MainMenuText.Instance.countryInfo.countryLogo;
@@ -147,6 +149,29 @@ public class WinPanelController : MonoBehaviour
                 m_Canvas.renderMode = RenderMode.WorldSpace;
                 break;
         }
+    }
+    IEnumerator IncreasingWisedomPoint()
+    {
+        
+            yield return new WaitForSeconds(0.5f);
+        
+        float currentValue = PlayerPrefs.GetInt("WisdomPoints", 0);
+        float duration = 1;
+        float endValue = PlayerPrefs.GetInt("WisdomPoints", 0) + GameManager.Instance.ActiveBoard.words.Count;
+        float increment = (endValue - currentValue) / duration;
+        float elapsedTime = 0;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            currentValue += increment * Time.deltaTime;
+            wisdomPoint.text = Mathf.FloorToInt(currentValue).ToString();
+            yield return null;
+        }
+
+        // Ensure the final value is set
+        currentValue = endValue;
+        PlayerPrefs.SetInt("WisdomPoints", (int)endValue);
+        wisdomPoint.text = Mathf.FloorToInt(currentValue).ToString();
     }
     IEnumerator FillAmount()
     {
