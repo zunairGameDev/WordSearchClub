@@ -8,6 +8,9 @@ namespace BBG.WordSearch
 {
     public class GameManager : SaveableManager<GameManager>
     {
+
+
+        public static GameManager gameManager;
         #region Enums
 
         public enum GameMode
@@ -556,6 +559,8 @@ namespace BBG.WordSearch
             {
                 //ShowingHintLetter();
                 // open Shop 
+
+                Applovin_Manager.instance.ShowRewardedAd();
             }
             characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
         }
@@ -589,6 +594,7 @@ namespace BBG.WordSearch
         }
         public void ShowingHintLetter()
         {
+            print("ShowingHintLetter");
             // Ensure there are letters in the hintLetters list
             if (hintLetters.Count == 0)
             {

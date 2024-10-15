@@ -17,4 +17,9 @@ public class SplashScreen : MonoBehaviour
         loadingPanel.SetActive(true);
         this.gameObject.SetActive(false);
     }
+
+    //private void OnDisable()
+    //{
+    //    Applovin_Manager.instance.ToggleBannerVisibility();
+    //}
 }

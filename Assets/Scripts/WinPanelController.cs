@@ -84,6 +84,12 @@ public class WinPanelController : MonoBehaviour
 
     public void OnLevelWin()
     {
+        print("OnLevelWin "+ PlayerPrefs.GetInt("WisdomPoints"));
+        if (PlayerPrefs.GetInt("WisdomPoints") >= 3)
+        {
+            Applovin_Manager.instance.ShowRewardedAd();
+        }
+       
         // Start particle effect
         //particleEffect.SetActive(true);
         backGround.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
