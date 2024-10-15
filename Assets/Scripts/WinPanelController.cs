@@ -57,6 +57,7 @@ public class WinPanelController : MonoBehaviour
         nextLevelButton.transform.localScale = Vector3.zero;
         dailyChallengeButton.gameObject.SetActive(false);
         dailyChallengeButton.transform.localScale = Vector3.zero;
+        NewDestinationPanel.SetActive(false);
         //initialPosition = particleEffect.transform.position;
         wisdomPoint.text = PlayerPrefs.GetInt("WisdomPoints", 0).ToString();
         ToShowCountryComplete();

@@ -124,7 +124,7 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
         dayProgressSlider.value = dayProgress;
         PlayerPrefs.SetInt("DayProgress", dayProgress);
         // Set the next reward time to 1 minute later for testing (change to 24 hours later in actual use)
-        nextRewardTime = DateTime.Now.AddMinutes(1);
+        nextRewardTime = DateTime.Now.AddMinutes(24);
         PlayerPrefs.SetString("NextRewardTime", nextRewardTime.ToString());
         pingPongGift.SetActive(true);
         // Start coroutine to hide text after 3 seconds

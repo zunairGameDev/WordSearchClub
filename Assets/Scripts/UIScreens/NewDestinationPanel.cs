@@ -1,3 +1,4 @@
+using BBG.WordSearch;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,12 +15,13 @@ public class NewDestinationPanel : MonoBehaviour
 
     private void OnDisable()
     {
-        
+
     }
     private void OnEnable()
     {
         Debug.Log("C");
         StartCoroutine(PlayNextLevel());
+        StartCoroutine(WaitToChangeBG());
     }
     public void ApplyNextCountryData()
     {
@@ -27,6 +29,7 @@ public class NewDestinationPanel : MonoBehaviour
         countryFlag.sprite = MainMenuText.Instance.countryInfo.countryFlag;
         newDestination.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
         countryName.text = MainMenuText.Instance.countryInfo.countryName;
+        
     }
 
     IEnumerator PlayNextLevel()
@@ -35,6 +38,11 @@ public class NewDestinationPanel : MonoBehaviour
         yield return new WaitForSeconds(4f);
         nextButton.onClick.Invoke();
         Debug.Log("B");
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
+    }
+    IEnumerator WaitToChangeBG()
+    {
+        yield return new WaitForSeconds(3.05f);
+        GameManager.Instance.BackGroundImage.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
     }
 }

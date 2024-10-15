@@ -30,7 +30,7 @@ public class MainMenuText : MonoBehaviour
     private void OnEnable()
     {
         UpdateLeveInfo();
-
+        GameManager.Instance.BackGroundImage.sprite = GameManager.Instance.countryInfo[PlayerPrefs.GetInt("CountryInfoValue")].BackGroundImage;
     }
 
     public void UpdateLeveInfo()
@@ -38,6 +38,7 @@ public class MainMenuText : MonoBehaviour
         coinsText.text = GlobalData.CoinCount.ToString();
         TextUpdating();
         countryInfo = /*gameManager.GetComponent<GameManager>()*/GameManager.Instance.countryInfo[PlayerPrefs.GetInt("CountryInfoValue")];
+        //GameManager.Instance.BackGroundImage.sprite = countryInfo.BackGroundImage;
         FillAmount();
 
     }
@@ -65,7 +66,6 @@ public class MainMenuText : MonoBehaviour
         PlayerPrefs.SetInt(countryInfo.countryName, currentValue);
         countryInfo.currentValue = currentValue;
         countryName.text = countryInfo.countryName;
-        GameManager.Instance.BackGroundImage.sprite = countryInfo.BackGroundImage;
         float fillAmount = (float)currentValue / countryInfo.maxValue;
         sliderProgess.value = fillAmount;
         sliderText.text = currentValue.ToString() + " / " + countryInfo.maxValue.ToString();
@@ -76,5 +76,5 @@ public class MainMenuText : MonoBehaviour
 
         GetComponent<MainScreen>().MainToPlay();
     }
-    
+
 }
