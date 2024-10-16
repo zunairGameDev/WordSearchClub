@@ -41,7 +41,7 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
         dayProgress = PlayerPrefs.GetInt("DayProgress", 0);
         UpdateCartText(current_Index);
         // Set slider value to the current day progress
-        dayProgressSlider.maxValue = 7;
+        dayProgressSlider.maxValue = 6;
         dayProgressSlider.value = dayProgress;
         // Initialize the originalPositions array with the same length as boxesToMove
         originalPositions = new Vector2[boxesToMove.Length];
@@ -106,25 +106,25 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
     {
         PlayerPrefs.SetInt("LastRewardValue", val);
         // Generate a random reward
-        int randomIndex = UnityEngine.Random.Range(0, coinRewards.Length);
-        int reward = coinRewards[randomIndex];
+
         current_Index = val;
+        int reward = UnityEngine.Random.Range(0, 100);
         // Show reward on the selected box button
         //selectedBox.transform.GetChild(0).GetComponent<Text>().text = "You got " + reward + " coins!";
         // Add the reward to total coins and update the cart text
-        totalCoins += reward;
+        totalCoins = reward;
         PlayerPrefs.SetInt("TotalCoins", totalCoins);
         UpdateCartText(val);
         // Update the slider progress for 7-day rewards
         dayProgress++;
-        if (dayProgress > 7)
+        if (dayProgress >= 7)
         {
-            dayProgress = 1;  // Reset to 1 after 7 days
+            dayProgress = 0;  // Reset to 1 after 7 days
         }
         dayProgressSlider.value = dayProgress;
         PlayerPrefs.SetInt("DayProgress", dayProgress);
         // Set the next reward time to 1 minute later for testing (change to 24 hours later in actual use)
-        nextRewardTime = DateTime.Now.AddMinutes(24);
+        nextRewardTime = DateTime.Now.AddHours(24);
         PlayerPrefs.SetString("NextRewardTime", nextRewardTime.ToString());
         pingPongGift.SetActive(true);
         // Start coroutine to hide text after 3 seconds
@@ -187,8 +187,8 @@ public class DailyRewardSystemWithSlider : MonoBehaviour
     {
         rewardText[val].text = "+" + totalCoins;
         // Update the total coins in the cart
-        cartText.text = "+" + totalCoins;
-        coinImg.gameObject.SetActive(true);
+        //cartText.text = "+" + totalCoins;
+        //coinImg.gameObject.SetActive(true);
     }
     void UpdateTimerUI()
     {
