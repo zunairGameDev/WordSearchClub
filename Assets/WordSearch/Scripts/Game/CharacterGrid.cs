@@ -271,6 +271,7 @@ namespace BBG.WordSearch
             }
             // Create a container that will hold the letter images whena highlight letter hint is used
             highlighLetterContainer = CreateContainer("highligh_letter_container", typeof(RectTransform));
+            GetComponent<ScaleAndRotate>().highligh_letter_container = highlighLetterContainer;
             // Create a GameObject to hold all the letters, set it as a child of CharacterGrid and set its anchors to expand to fill
             gridContainer = CreateContainer("grid_container", typeof(RectTransform), typeof(GridLayoutGroup), typeof(CanvasGroup));
             gridContainer.offsetMin = new Vector2(gridContainer.offsetMin.x, -14);   // Bottom 50 units from parent

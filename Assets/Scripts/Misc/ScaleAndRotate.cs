@@ -9,6 +9,7 @@ public class ScaleAndRotate : MonoBehaviour
     public Transform gridRotation;
     public Transform grid_Underlay_Container;
     public Transform grid_overlay_container;
+    public Transform highligh_letter_container;
     public GameObject littleProfile;
     public GameObject wordListContainer;
     public GameObject characterGridBackGround;
@@ -54,6 +55,8 @@ public class ScaleAndRotate : MonoBehaviour
                             .SetEase(Ease.OutQuad)); // Optional: Set easing for the scaling
         sequence.Join(grid_Underlay_Container.DOScale(initialScale, scaleDuration)
                        .SetEase(Ease.OutQuad));
+        sequence.Join(highligh_letter_container.DOScale(initialScale, scaleDuration)
+                       .SetEase(Ease.OutQuad));
 
         // Step 2: Simultaneously rotate parent clockwise and children anti-clockwise
         sequence.AppendCallback(() =>
@@ -64,6 +67,8 @@ public class ScaleAndRotate : MonoBehaviour
             grid_Underlay_Container.DOLocalRotate(currentRotation, rotationDuration, RotateMode.FastBeyond360)
                      .SetEase(Ease.InOutQuad);
             grid_overlay_container.DOLocalRotate(currentRotation, rotationDuration, RotateMode.FastBeyond360)
+                     .SetEase(Ease.InOutQuad);
+            highligh_letter_container.DOLocalRotate(currentRotation, rotationDuration, RotateMode.FastBeyond360)
                      .SetEase(Ease.InOutQuad);
             // Rotate each child anti-clockwise
             foreach (Transform child in cellParent)
@@ -81,6 +86,8 @@ public class ScaleAndRotate : MonoBehaviour
                             .SetEase(Ease.OutBounce)); // Optional: Set easing for scaling back
         sequence.Join(grid_Underlay_Container.DOScale(finalScale, scaleDuration)
                         .SetEase(Ease.OutBounce));
+        sequence.Join(highligh_letter_container.DOScale(finalScale, scaleDuration)
+                        .SetEase(Ease.OutBounce));
 
         // Start the sequence
         sequence.Play();
@@ -97,6 +104,8 @@ public class ScaleAndRotate : MonoBehaviour
         grid_Underlay_Container.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
                  .SetEase(Ease.InOutQuad);
         grid_overlay_container.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
+                 .SetEase(Ease.InOutQuad);
+        highligh_letter_container.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
                  .SetEase(Ease.InOutQuad);
         foreach (Transform child in cellParent)
         {

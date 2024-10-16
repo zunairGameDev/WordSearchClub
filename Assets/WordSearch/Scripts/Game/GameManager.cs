@@ -97,6 +97,9 @@ namespace BBG.WordSearch
         public RectTransform wordFoundInWordGrid;
         public Image BackGroundImage;
         public int starterCount = 2;
+        public float cooldownTime = 0.5f; // Cooldown duration in seconds
+
+        private float lastClickTime;
 
         #endregion
 
@@ -523,13 +526,21 @@ namespace BBG.WordSearch
         }
         public void ShowHintMultipleTimes()
         {
-            for (int i = 0; i < 3; i++)
+            if (Time.time >= lastClickTime + cooldownTime)
             {
-                if (GlobalData.CoinCount >= 200 && hintLetters != null)
+                // Perform your action here
+                Debug.Log("Action executed!");
+
+                // Update the last click time
+                lastClickTime = Time.time;
+                for (int i = 0; i < 3; i++)
                 {
-                    ShowingHintLetter();
-                    GlobalData.CoinCount = GlobalData.CoinCount - 200;
-                    MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                    if (GlobalData.CoinCount >= 200 && hintLetters.Count >= 1)
+                    {
+                        ShowingHintLetter();
+                        GlobalData.CoinCount = GlobalData.CoinCount - 200;
+                        MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                    }
                 }
             }
         }
@@ -539,25 +550,34 @@ namespace BBG.WordSearch
         /// </summary>
         public void HintHighlightLetter()
         {
-            if (PlayerPrefs.GetInt("StarterCounts", 2) > 0)
+            if (Time.time >= lastClickTime + cooldownTime)
             {
-                ShowingHintLetter();
-                PlayerPrefs.SetInt("StarterCounts", PlayerPrefs.GetInt("StarterCounts", 2) - 1);
+                // Perform your action here
+                Debug.Log("Action executed!");
 
+                // Update the last click time
+                lastClickTime = Time.time;
+
+                if (PlayerPrefs.GetInt("StarterCounts", 2) > 0 && hintLetters.Count >= 1)
+                {
+                    ShowingHintLetter();
+                    PlayerPrefs.SetInt("StarterCounts", PlayerPrefs.GetInt("StarterCounts", 2) - 1);
+
+                }
+                else
+            if (GlobalData.CoinCount >= 100 && hintLetters.Count >= 1)
+                {
+                    ShowingHintLetter();
+                    GlobalData.CoinCount = GlobalData.CoinCount - 100;
+                    MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                }
+                else
+                {
+                    //ShowingHintLetter();
+                    // open Shop 
+                }
+                characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
             }
-            else
-            if (GlobalData.CoinCount >= 100 && hintLetters != null)
-            {
-                ShowingHintLetter();
-                GlobalData.CoinCount = GlobalData.CoinCount - 100;
-                MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
-            }
-            else
-            {
-                //ShowingHintLetter();
-                // open Shop 
-            }
-            characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
         }
         public void ToShowHintLetter()
         {
