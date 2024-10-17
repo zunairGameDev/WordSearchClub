@@ -84,6 +84,11 @@ public class WinPanelController : MonoBehaviour
 
     public void OnLevelWin()
     {
+
+        if (PlayerPrefs.GetInt("SelectJasonLevel") >= 2)
+        {
+            Applovin_Manager.instance.ShowInterstitial();
+        }
         // Start particle effect
         //particleEffect.SetActive(true);
         backGround.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
@@ -107,7 +112,7 @@ public class WinPanelController : MonoBehaviour
         //particleEffect.transform.DOMove(targetPosition.position,1f);
         // Ensure the particle reaches the target position
         //particleEffect.transform.position = targetPosition.position;
-        
+
 
         //// Deactivate the particle effect
         //particleEffect.SetActive(false);
@@ -153,9 +158,9 @@ public class WinPanelController : MonoBehaviour
     }
     IEnumerator IncreasingWisedomPoint()
     {
-        
-            yield return new WaitForSeconds(0.5f);
-        
+
+        yield return new WaitForSeconds(0.5f);
+
         float currentValue = PlayerPrefs.GetInt("WisdomPoints", 0);
         float duration = 1;
         float endValue = PlayerPrefs.GetInt("WisdomPoints", 0) + GameManager.Instance.ActiveBoard.words.Count;

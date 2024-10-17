@@ -528,19 +528,19 @@ namespace BBG.WordSearch
         {
             if (Time.time >= lastClickTime + cooldownTime)
             {
-                // Perform your action here
-                Debug.Log("Action executed!");
-
-                // Update the last click time
-                lastClickTime = Time.time;
-                for (int i = 0; i < 3; i++)
+                if (GlobalData.CoinCount >= 200 && hintLetters != null)
                 {
-                    if (GlobalData.CoinCount >= 200 && hintLetters.Count >= 1)
+                    GlobalData.CoinCount = GlobalData.CoinCount - 200;
+                    MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                    for (int i = 0; i < 3; i++)
                     {
                         ShowingHintLetter();
-                        GlobalData.CoinCount = GlobalData.CoinCount - 200;
-                        MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
                     }
+                }
+                else if (hintLetters.Count >= 1)
+                {
+                    PlayerPrefs.SetInt("DoubleReward", 1);
+                    Applovin_Manager.instance.ShowRewardedAd();
                 }
             }
         }
@@ -571,9 +571,11 @@ namespace BBG.WordSearch
                     GlobalData.CoinCount = GlobalData.CoinCount - 100;
                     MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
                 }
-                else
+                else if(hintLetters.Count >= 1)
                 {
                     //ShowingHintLetter();
+                    PlayerPrefs.SetInt("DoubleReward", 0);
+                    Applovin_Manager.instance.ShowRewardedAd();
                     // open Shop 
                 }
                 characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
@@ -617,7 +619,7 @@ namespace BBG.WordSearch
             }
 
             // Get a random index within the range of available hintLetters
-            int value = Random.Range(0, hintLetters.Count);
+            int value = Random.Range(0, hintLetters.Count - 1);
 
             // Select the letter at the random index
             char letter = hintLetters[value];

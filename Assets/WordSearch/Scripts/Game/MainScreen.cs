@@ -86,6 +86,7 @@ namespace BBG.WordSearch
                 yield return new WaitForSeconds(0.4f);
             }
             Applovin_Manager.instance.ShowBanner();
+            firstTimeBannerToWait = true;
         }
 
 

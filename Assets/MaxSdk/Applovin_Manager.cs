@@ -119,7 +119,7 @@ public class Applovin_Manager : MonoBehaviour
         MaxSdk.LoadInterstitial(InterstitialAdUnitId);
     }
 
-    void ShowInterstitial()
+   public void ShowInterstitial()
     {
         if (MaxSdk.IsInterstitialReady(InterstitialAdUnitId))
         {
@@ -275,7 +275,16 @@ public class Applovin_Manager : MonoBehaviour
         // Rewarded ad was displayed and user should receive the reward
         Debug.Log("Rewarded ad received reward");
 
-        
+        if (PlayerPrefs.GetInt("DoubleReward") == 0) 
+        {
+            GlobalData.CoinCount += 100;
+            MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+        }
+        else
+        {
+            GlobalData.CoinCount += 200;
+            MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+        }
         //GameManager.gameManager.ShowingHintLetter();
     }
 
