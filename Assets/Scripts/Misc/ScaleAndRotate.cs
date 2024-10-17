@@ -98,7 +98,7 @@ public class ScaleAndRotate : MonoBehaviour
         GetComponent<CharacterGrid>().gridRotates = false;
         littleProfile.SetActive(true); wordListContainer.SetActive(true);
         characterGridBackGround.SetActive(true); upperBar.SetActive(true);
-        gameSceneBackButton.SetActive(true);alignment.SetActive(true);
+        gameSceneBackButton.SetActive(true); alignment.SetActive(true);
         gridRotation.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
                      .SetEase(Ease.InOutQuad); // Set the easing for rotation
         grid_Underlay_Container.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
@@ -112,6 +112,7 @@ public class ScaleAndRotate : MonoBehaviour
             child.DOLocalRotate(Vector3.zero, 0.1f, RotateMode.FastBeyond360)
                  .SetEase(Ease.InOutQuad); // Set the easing for rotation
             child.GetChild(0).gameObject.SetActive(true);
+            child.GetComponent<CharacterGridItem>().isVisible = false;
         }
         transform.DOLocalRotate(new Vector3(0, 0, 0), 0.1f, RotateMode.FastBeyond360)
                  .SetEase(Ease.InOutQuad); // Set the easing for rotation
@@ -127,7 +128,7 @@ public class ScaleAndRotate : MonoBehaviour
         yield return new WaitForSeconds(1f);
         littleProfile.SetActive(false); wordListContainer.SetActive(false);
         characterGridBackGround.SetActive(false); upperBar.SetActive(false);
-        gameSceneBackButton.SetActive(false);alignment.SetActive(false);
+        gameSceneBackButton.SetActive(false); alignment.SetActive(false);
 
 
         foreach (Transform child in cellParent)

@@ -84,11 +84,10 @@ public class WinPanelController : MonoBehaviour
 
     public void OnLevelWin()
     {
-
-        if (PlayerPrefs.GetInt("SelectJasonLevel") >= 2)
-        {
-            Applovin_Manager.instance.ShowInterstitial();
-        }
+        //if (PlayerPrefs.GetInt("SelectJasonLevel") >= 2)
+        //{
+            Applovin_Manager.instance.ShowInterstitial();   
+        //}
         // Start particle effect
         //particleEffect.SetActive(true);
         backGround.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
@@ -96,6 +95,8 @@ public class WinPanelController : MonoBehaviour
         isMoving = true;
         StartCoroutine(MoveParticle());
     }
+
+      
 
     IEnumerator MoveParticle()
     {
