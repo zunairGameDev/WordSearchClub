@@ -30,5 +30,7 @@ public class LoadingScreen : MonoBehaviour
         }
         // After loading is complete, load the main menu scene
         loadingPanel.SetActive(false);
+
+         Applovin_Manager.instance.HideBanner();
     }
 }

@@ -16,6 +16,8 @@ namespace BBG.WordSearch
         [SerializeField] private ScrollRect categoryListScrollRect = null;
         [SerializeField] private GameObject paragraphContent;
         [SerializeField] private GameObject viewPort;
+        [SerializeField] private GameObject loadingPanel;
+        [SerializeField] private bool firstTimeBannerToWait;
         [SerializeField] private ChangingHeaderButton upperBar;
 
         #endregion
@@ -66,7 +68,26 @@ namespace BBG.WordSearch
             }
             Button firstChildButton = categoryListContainer.GetChild(1).GetComponentInChildren<Button>();
             firstChildButton.onClick.Invoke();
+            if (!firstTimeBannerToWait)
+            {
+                StartCoroutine(ShowBanner());
+            }
+            else
+            {
+                Applovin_Manager.instance.ShowBanner();
+
+            }
         }
+        IEnumerator ShowBanner()
+        {
+            yield return new WaitForSeconds(1f);
+            while (loadingPanel.activeInHierarchy)
+            {
+                yield return new WaitForSeconds(0.4f);
+            }
+            Applovin_Manager.instance.ShowBanner();
+        }
+
 
         public void MainToPlay()
         {

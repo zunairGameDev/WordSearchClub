@@ -9,6 +9,7 @@ public class SplashScreen : MonoBehaviour
 
     private void Start()
     {
+       
         StartCoroutine(ToEnableLoading());
     }
     IEnumerator ToEnableLoading()

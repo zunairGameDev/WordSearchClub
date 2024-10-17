@@ -27,7 +27,9 @@ namespace BBG.WordSearch
 		}
 		public void OnBackClick()
 		{
-			MainMenuText.Instance.UpdateLeveInfo();
+			Applovin_Manager.instance.HideBanner();
+
+            MainMenuText.Instance.UpdateLeveInfo();
 			ScrollViewController.Instance.LockingAndUnlockingLabels();
 			GameManager.Instance.wordList.OnClickBackButton();
             ScreenManager.Instance.Show("main");
