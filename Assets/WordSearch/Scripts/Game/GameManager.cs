@@ -98,7 +98,6 @@ namespace BBG.WordSearch
         public Image BackGroundImage;
         public int starterCount = 2;
         public float cooldownTime = 0.5f; // Cooldown duration in seconds
-
         private float lastClickTime;
 
         #endregion
@@ -564,14 +563,13 @@ namespace BBG.WordSearch
                     PlayerPrefs.SetInt("StarterCounts", PlayerPrefs.GetInt("StarterCounts", 2) - 1);
 
                 }
-                else
-            if (GlobalData.CoinCount >= 100 && hintLetters.Count >= 1)
+                else if (GlobalData.CoinCount >= 100 && hintLetters.Count >= 1)
                 {
                     ShowingHintLetter();
                     GlobalData.CoinCount = GlobalData.CoinCount - 100;
                     MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
                 }
-                else if(hintLetters.Count >= 1)
+                else if (hintLetters.Count >= 1)
                 {
                     //ShowingHintLetter();
                     PlayerPrefs.SetInt("DoubleReward", 0);

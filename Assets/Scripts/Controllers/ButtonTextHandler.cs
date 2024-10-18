@@ -15,6 +15,8 @@ public class ButtonTextHandler : MonoBehaviour
     public TextMeshProUGUI challengeShadowText;
     public List<CanvasGroup> mainPanelCanvas;
     public List<Animator> mainMenuButton;
+    public float cooldownTime = 0.5f; // Cooldown duration in seconds
+    private float lastClickTime;
 
     // Start mein ensure karen ke text hidden ho
     void Start()
@@ -30,10 +32,16 @@ public class ButtonTextHandler : MonoBehaviour
     }
     public void ShowPanel(int value)
     {
-        if (isSwitchingPanel)
-            return;  // Prevent switching if already switching
+        if (Time.time >= lastClickTime + cooldownTime)
+        {
+            // Perform your action here
+            Debug.Log("Action executed!");
 
-        StartCoroutine(SwitchPanel(value));
+            // Update the last click time
+            lastClickTime = Time.time;
+            SwitchPanel(value);
+            PanelAnimationShow(value);
+        }
         //for (int i = 0; i < mainPanelCanvas.Count; i++)
         //{
         //    mainPanelCanvas[i].alpha = 0;
@@ -44,9 +52,9 @@ public class ButtonTextHandler : MonoBehaviour
         //mainPanelCanvas[value].interactable = true;
         //mainPanelCanvas[value].blocksRaycasts = true;
     }
-    private IEnumerator SwitchPanel(int value)
+    private void SwitchPanel(int value)
     {
-        isSwitchingPanel = true;
+        
 
         // First, hide all panels
         for (int i = 0; i < mainPanelCanvas.Count; i++)
@@ -57,23 +65,42 @@ public class ButtonTextHandler : MonoBehaviour
         }
 
         // Wait a small amount of time if necessary to ensure there's no overlapping issues
-        
+
 
         // Now, show the selected panel
         mainPanelCanvas[value].alpha = 1;
         mainPanelCanvas[value].interactable = true;
         mainPanelCanvas[value].blocksRaycasts = true;
-        yield return new WaitForEndOfFrame();
-        isSwitchingPanel = false; // Done switching
+        
     }
 
     public void PanelAnimationShow(int value)
     {
+        if (value >= mainMenuButton.Count)
+            return;
         for (int i = 0; i < mainMenuButton.Count; i++)
         {
             mainMenuButton[i].SetTrigger("Normal");
         }
         mainMenuButton[value].SetTrigger("Selected");
+        SwitchPanelText(value);
+    }
+    public void SwitchPanelText(int value)
+    {
+        switch (value)
+        {
+            case 0:
+                OnHomeButtonClick();
+                break;
+            case 1:
+                OnChallengeButtonClick();
+                break;
+            case 2:
+                OnCollectionButtonClick();
+                break;
+            default:
+                break;
+        }
     }
     // Home button ka function
     public void OnHomeButtonClick()
