@@ -31,7 +31,7 @@ public class FGSingleton<T> : MonoBehaviour where T : MonoBehaviour
                 }
 
                 _instance = (T)instances[0];
-                DontDestroyOnLoad(_instance);
+                if (_instance.transform.parent == null)DontDestroyOnLoad(_instance);
                 return _instance;
             }
         }

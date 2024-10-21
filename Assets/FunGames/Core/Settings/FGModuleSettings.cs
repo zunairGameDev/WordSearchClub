@@ -7,17 +7,12 @@ namespace FunGames.Core.Settings
     public abstract class FGModuleSettings : ScriptableObject, IFGModuleSettings
     {
         [HideInInspector] public FGModuleInfo moduleInfo;
-        [HideInInspector] public bool logEnabled = true;
 
         public Color LogColor = Color.white;
-
-        public bool LogEnabled
-        {
-            get => logEnabled;
-            set => logEnabled = value;
-        }
-
         public Color Color => LogColor;
+        
+        public bool logEnabled = true;
+        public bool LogEnabled => logEnabled;
 
         public FGModuleInfo ModuleInfo
         {

@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7662557994295225148}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5975689625735821671
 MonoBehaviour:
@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0bad0677d654e9b87b6c1c68fa3ef0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugConsoleBuilder: {fileID: 1252818401067131064, guid: d01fb4b90509d1c47a1b8502886ff5d5, type: 3}
+  DebugConsoleBuilder: {fileID: 4736633505769042445, guid: 36413df17986eff4383b76e5b23104d6, type: 3}
   NoInternetPopup: {fileID: 8261801015666662127, guid: ee754395d6537254c982d64693548326, type: 3}
   UpdateVersionPopup: {fileID: 7842533357221227006, guid: 607bcaa9be5c97b4d9122f62d595717f, type: 3}

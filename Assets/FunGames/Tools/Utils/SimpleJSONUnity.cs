@@ -41,7 +41,7 @@
 
 using UnityEngine;
 
-namespace SimpleJSON
+namespace FunGames.Tools.Utils
 {
     public enum JSONContainerType { Array, Object }
 	public partial class JSONNode

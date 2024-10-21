@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using SimpleJSON;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
-namespace FunGames.Sdk.Tune.Helpers
+namespace FunGames.Tools.Utils
 {
     public static class SimpleJsonHelpers
     {

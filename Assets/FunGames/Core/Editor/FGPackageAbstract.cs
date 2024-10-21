@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using FunGames.Tools.Utils;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -16,12 +15,8 @@ namespace FunGames.Core.Editor
 {
     public abstract class FGPackageAbstract<T> : FGPackage where T : FGPackageAbstract<T>, new()
     {
-        // public override string ModuleName => _moduleName;
         public override FGModuleInfo ModuleInfo => _moduleInfo;
-
-        // public override string PackageName => _packageName;
-
-        // public override string PackageURL => _packageURL;
+        
         public override string[] AssetFolders => _assetFolders;
         public override string SettingsAsset => _settingsAsset;
 
@@ -33,17 +28,12 @@ namespace FunGames.Core.Editor
         protected string[] FUNGAMES_EXTERNALS_PATH = { "Assets/FunGames_Externals" };
 
         protected FGModuleInfo _moduleInfo;
-
-        // protected string _moduleName;
-        // protected string _packageName;
         protected string[] _assetFolders;
         protected string _settingsAsset;
         protected string[] _externalAssets;
         protected string _destinationPath;
         protected List<GameObject> _prefabs;
-
         protected string _jsonFile;
-        // protected string _packageURL;
 
         private static T instance = null;
 
@@ -64,14 +54,12 @@ namespace FunGames.Core.Editor
         {
             _jsonFile = Application.dataPath + "/FunGames/" + ModuleFolder + "/" + JsonName;
             _moduleInfo = parseModuleInfo();
-            // _moduleName = _moduleInfo.Name;
-            // _packageURL = _moduleInfo.PackageURL;
-            // _packageName = getPackageName();
             _assetFolders = assetFolders();
             _settingsAsset = settingsAsset();
             _externalAssets = externalAssets();
             _destinationPath = destinationFolder();
             _prefabs = prefabAssets();
+
         }
 
         protected virtual string[] externalAssets()
@@ -90,11 +78,6 @@ namespace FunGames.Core.Editor
             }
 
             return JsonUtility.FromJson<FGModuleInfo>(File.ReadAllText(_jsonFile));
-        }
-
-        protected string getPackageName()
-        {
-            return "FG" + _moduleInfo.Name;
         }
 
         protected virtual string[] assetFolders()
@@ -133,16 +116,6 @@ namespace FunGames.Core.Editor
             stringBuilder.Append("/");
             stringBuilder.Append(ModuleFolder);
             return stringBuilder.ToString();
-        }
-
-        public override void UpdateSettings()
-        {
-            string settingsFileName = Path.GetFileNameWithoutExtension(_settingsAsset);
-            if (File.Exists(_settingsAsset))
-            {
-                var settingAsset = AssetDatabase.LoadAssetAtPath<FGModuleSettings>(_settingsAsset);
-                settingAsset.ModuleInfo = parseModuleInfo();
-            }
         }
 
         public override void AddPrefabs()
@@ -190,6 +163,18 @@ namespace FunGames.Core.Editor
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         }
 
+        public override void UpdateSettings()
+        {
+            // string settingsFileName = Path.GetFileNameWithoutExtension(_settingsAsset);
+            if (File.Exists(_settingsAsset))
+            {
+                var settingAsset = AssetDatabase.LoadAssetAtPath<FGModuleSettings>(_settingsAsset);
+                FGModuleInfo moduleInfo = parseModuleInfo();
+                settingAsset.ModuleInfo = moduleInfo;
+                settingAsset.LogColor = ColorUtils.ToColor(moduleInfo.LogColor);
+            }
+        }
+        
         public override void CreateSettingsAsset()
         {
             string settingsFileName = Path.GetFileNameWithoutExtension(_settingsAsset);
@@ -203,9 +188,7 @@ namespace FunGames.Core.Editor
             try
             {
                 FGModuleSettings settings = (FGModuleSettings)ScriptableObject.CreateInstance(settingsFileName);
-                FGModuleInfo moduleInfo = parseModuleInfo();
-                settings.ModuleInfo = moduleInfo;
-                settings.LogColor = ColorUtils.ToColor(moduleInfo.LogColor);
+                settings.ModuleInfo = parseModuleInfo();
                 AssetDatabase.CreateAsset(settings, _settingsAsset);
                 UpdateSettings();
                 Debug.Log(settingsFileName + " created.");

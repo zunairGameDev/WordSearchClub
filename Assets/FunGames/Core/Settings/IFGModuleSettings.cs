@@ -7,6 +7,6 @@ namespace FunGames.Core.Settings
     {
         public FGModuleInfo ModuleInfo { get; set; }
         public Color Color { get;}
-        public bool LogEnabled { get; set; }
+        public bool LogEnabled { get;}
     }
 }

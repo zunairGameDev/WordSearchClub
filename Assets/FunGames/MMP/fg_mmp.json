@@ -1,11 +1,14 @@
 {
-  "Id": "fg_mmp",
-  "Name": "MMP",
-  "Version": "TestCPI",
-  "LogColor": "#8C665D",
-  "PackageUrl": "",
-  "HasIssue": false,
-  "IsDeprecated": false,
-  "Dependencies": [
-  ]
+    "Id": "fg_mmp",
+    "Name": "MMP",
+    "Version": "3.3.0.1",
+    "LogColor": "#8C665D",
+    "PackageUrl": "https://gitlab.com/fungames-sdk/mmp/fg_mmp/-/raw/3.3.0.1/fg_mmp-3.3.0.1.unitypackage",
+    "HasIssue": false,
+    "IsDeprecated": false,
+    "IsBeta": false,
+    "Dependencies": [
+        "fg_user_consent-3.3.0.0",
+        "fg_tools-3.3.0.0"
+    ]
 }

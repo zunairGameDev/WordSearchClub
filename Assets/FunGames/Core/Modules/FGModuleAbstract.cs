@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using FunGames.Analytics;
 using FunGames.Core.Settings;
 using FunGames.Core.Utils;
+using FunGames.RemoteConfig;
 using FunGames.Tools.Debugging;
 using UnityEngine;
 
@@ -22,7 +22,6 @@ namespace FunGames.Core.Modules
         where C : FGModuleCallbacks, new()
         where S : IFGModuleSettings
     {
-        public InitializationMode InitializationMode => _initializationMode;
         public InitializationStatus InitializationStatus => _initializationStatus;
         public FGModuleInfo ModuleInfo => Settings.ModuleInfo;
         public C Callbacks => _callbacks;
@@ -46,11 +45,13 @@ namespace FunGames.Core.Modules
         private IEnumerator _checkInitCoroutine;
         private bool _useCheckInit = true;
         private float _maxInitTime = 5;
-        private InitializationMode _initializationMode = InitializationMode.DEFAULT;
+        private bool _initLock = false;
+        private bool _initAlreadySucceeded = false;
+        private bool _initAlreadyFailed = false;
         private InitializationStatus _initializationStatus = InitializationStatus.NOT_INITIALIZED;
 
-        private readonly Dictionary<FGModule, InitializationStatus> _recursiveChildrenInitializationStatus =
-            new Dictionary<FGModule, InitializationStatus>();
+        private readonly List<FGModule> _recursiveChildrenInitializationStatus =
+            new List<FGModule>();
 
         public const string EVENT_INITIALISATION_START = "InitialisationStart";
         public const string EVENT_INITIALISATION_COMPLETE = "InitialisationComplete";
@@ -82,7 +83,7 @@ namespace FunGames.Core.Modules
                 int i = 0;
                 foreach (var subModule in _recursiveChildrenInitializationStatus)
                 {
-                    if (subModule.Value == InitializationStatus.COMPLETED) i++;
+                    if (subModule.InitializationStatus == InitializationStatus.COMPLETED) i++;
                 }
 
                 return i;
@@ -102,24 +103,22 @@ namespace FunGames.Core.Modules
             }
         }
 
-        private void Awake()
+        public void Awake()
         {
+            if (_initLock) return;
+            if (Settings == null)
+            {
+                LogError(EventName + "Settings is null !");
+                return;
+            }
+
             try
             {
-                var instances = FindObjectsOfType(typeof(M));
-                if (instances.Length > 1 && !instances[0].Equals(this))
-                {
-                    Log("Module has already been instantiated.");
-                    Destroy(gameObject);
-                    return;
-                }
-
-                DontDestroyOnLoad(this);
-
-                Log("Version : " + Settings.ModuleInfo.Version);
                 Parent?.AddChild(this);
                 InitializeCallbacks();
+                FGRemoteConfig.AddDefaultValue(RemoteConfigKey, 1);
                 OnAwake();
+                Log("Version : " + Settings.ModuleInfo.Version);
             }
             catch (Exception e)
             {
@@ -127,16 +126,11 @@ namespace FunGames.Core.Modules
             }
         }
 
-        private void Start()
+        public void Start()
         {
             try
             {
-                if (Settings == null)
-                {
-                    LogError(EventName + "Settings is null !");
-                    return;
-                }
-
+                if (_initLock) return;
                 MapRecursiveChildren(this);
                 OnStart();
             }
@@ -148,14 +142,9 @@ namespace FunGames.Core.Modules
 
         public void Initialize()
         {
+            if (_initLock) return;
             try
             {
-                if (!MustBeInitialized())
-                {
-                    Clear();
-                    return;
-                }
-
                 if (IsInitialized)
                 {
                     LogWarning("Module already initialized !");
@@ -163,6 +152,15 @@ namespace FunGames.Core.Modules
                 }
 
                 Log("[" + ModuleInfo.Version + "] Initialization started...");
+
+                if (!MustBeInitialized())
+                {
+                    LogWarning("Module disabled ! (Remote =" + FGRemoteConfig.GetBooleanValue(RemoteConfigKey) + ")");
+                    Clear();
+                    InitializationComplete(true);
+                    return;
+                }
+
                 _initializationStatus = InitializationStatus.IN_PROGRESS;
                 _timer = Time.time;
 
@@ -173,11 +171,6 @@ namespace FunGames.Core.Modules
                 }
 
                 InitializeModule();
-                FGAnalytics.NewDesignEvent(FGAnalytics.CreateEventId(EVENT_INITIALISATION_START, EventName),
-                    new Dictionary<string, object>()
-                    {
-                        { EVENT_PARAM_VERSION, Settings.ModuleInfo.Version }
-                    });
                 Callbacks._onInitialization?.Invoke();
             }
             catch (Exception e)
@@ -187,15 +180,26 @@ namespace FunGames.Core.Modules
             }
         }
 
+        public void SetManualInit()
+        {
+            Log("Manual initialization is enabled !");
+            Parent?.InitWithoutTimer();
+            foreach (var childModule in _children) childModule.SetManualInit();
+            _initLock = true;
+        }
+
+        public void UnlockManualInit()
+        {
+            Log("Manual initialization unlocked !");
+            _initLock = false;
+        }
+
         public virtual bool MustBeInitialized()
         {
             bool mustBeInitialized = true;
-            mustBeInitialized &= _initializationMode != InitializationMode.MANUAL;
+            mustBeInitialized &= FGRemoteConfig.GetBooleanValue(RemoteConfigKey);
             return mustBeInitialized;
         }
-
-        private bool _initAlreadySucceeded = false;
-        private bool _initAlreadyFailed = false;
 
         public void CheckModuleInitialization()
         {
@@ -214,20 +218,18 @@ namespace FunGames.Core.Modules
             else
             {
                 LogError("...initialization failed after " + _totalInitTime + " secs !");
+
+                foreach (var child in _children)
+                {
+                    LogError(child.ModuleInfo.Name + " is init : " + child.IsInitialized);
+                }
+
+                LogError("Is self init : " + _isSelfInitialized);
+
                 _initAlreadyFailed = true;
             }
 
             _initializationStatus = InitializationStatus.COMPLETED;
-            string uniqueId = FGAPIHelpers.CreateUniqueId(DateTime.Now.ToString(), EventName,
-                Settings.ModuleInfo.Version,
-                IsInitialized.ToString(), _totalInitTime.ToString());
-            string eventId = FGAnalytics.CreateEventId(EVENT_INITIALISATION_COMPLETE, EventName, uniqueId);
-            FGAnalytics.NewDesignEvent(eventId, new Dictionary<string, object>()
-            {
-                { EVENT_PARAM_VERSION, Settings.ModuleInfo.Version },
-                { EVENT_PARAM_SUCCESS, IsInitialized },
-                { EVENT_PARAM_INIT_TIME, _totalInitTime }
-            });
 
             Callbacks._onInitialized?.Invoke(IsInitialized);
             Parent?.CheckModuleInitialization();
@@ -245,11 +247,6 @@ namespace FunGames.Core.Modules
             CheckModuleInitialization();
         }
 
-        public void SetInitializationMode(InitializationMode mode)
-        {
-            _initializationMode = mode;
-        }
-
         public void AddChild(FGModule child)
         {
             _children.Add(child);
@@ -257,27 +254,35 @@ namespace FunGames.Core.Modules
 
         public void Log(params string[] message)
         {
-            if (!Settings.LogEnabled) return;
+            if (!MustShowLogs()) return;
             if (message.ToString().Contains(EVENT_INITIALISATION_START) ||
                 message.ToString().Contains(EVENT_INITIALISATION_COMPLETE)) return;
             FGDebug.Log(FormatLog(message), Settings.Color);
         }
 
+        public void Log(string message, LogLevel logLevel)
+        {
+            if (!MustShowLogs()) return;
+            // if (LogLevel.Debug.Equals(logLevel) && !LogLevel.Debug.Equals(FGCore.Instance.Settings.LogLevel)) return;
+            if (message.ToString().Contains(EVENT_INITIALISATION_START) ||
+                message.ToString().Contains(EVENT_INITIALISATION_COMPLETE)) return;
+            FGDebug.Log(FormatLog(new[] { message }), Settings.Color);
+        }
+
         public void LogError(params string[] message)
         {
-            if (!Settings.LogEnabled) return;
+            if (!MustShowLogs()) return;
             FGDebug.Log(FormatLog(message), Color.red);
         }
 
         public void LogWarning(params string[] message)
         {
-            if (!Settings.LogEnabled) return;
+            if (!MustShowLogs()) return;
             Debug.LogWarning(FormatLog(message));
         }
-        
+
         public void LogCritical(params string[] message)
         {
-            if (!Settings.LogEnabled) return;
             Debug.LogError(FormatLog(message));
         }
 
@@ -307,12 +312,12 @@ namespace FunGames.Core.Modules
             InitializationComplete(IsInitialized);
         }
 
-        protected void InitWithoutTimer()
+        public void InitWithoutTimer()
         {
             _useCheckInit = false;
         }
 
-        protected void SetMaxInitTime(float time)
+        public void SetMaxInitTime(float time)
         {
             _maxInitTime = time;
         }
@@ -321,13 +326,21 @@ namespace FunGames.Core.Modules
         {
             foreach (var child in module.SubModules)
             {
-                if (!_recursiveChildrenInitializationStatus.ContainsKey(child))
+                if (!_recursiveChildrenInitializationStatus.Contains(child))
                 {
-                    _recursiveChildrenInitializationStatus.Add(child, child.InitializationStatus);
+                    _recursiveChildrenInitializationStatus.Add(child);
                 }
 
                 MapRecursiveChildren(child);
             }
+        }
+
+        private bool MustShowLogs()
+        {
+            if (FGRemoteConfig.GetIntValue(FGCore.RC_LOG_LEVEL) != 0) return true;
+            if (!Settings.LogEnabled) return false;
+            if (LogLevel.None.Equals(FGCore.Instance.Settings.LogLevel)) return false;
+            return true;
         }
 
         public void Clear()

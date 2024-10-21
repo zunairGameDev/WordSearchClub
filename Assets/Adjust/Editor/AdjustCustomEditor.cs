@@ -40,6 +40,7 @@ namespace com.adjust.sdk
                 adjust.launchDeferredDeeplink = EditorGUILayout.Toggle("Launch Deferred Deep Link", adjust.launchDeferredDeeplink);
                 adjust.needsCost = EditorGUILayout.Toggle("Cost Data In Attribution Callback", adjust.needsCost);
                 adjust.coppaCompliant = EditorGUILayout.Toggle("COPPA Compliant", adjust.coppaCompliant);
+                adjust.linkMe = EditorGUILayout.Toggle("LinkMe", adjust.linkMe);
                 adjust.defaultTracker = EditorGUILayout.TextField("Default Tracker", adjust.defaultTracker);
                 adjust.startDelay = EditorGUILayout.DoubleField("Start Delay", adjust.startDelay);
                 EditorGUILayout.LabelField("App Secret:", EditorStyles.label);
@@ -60,7 +61,6 @@ namespace com.adjust.sdk
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("IOS SETTINGS:", darkerCyanTextFieldStyles);
                 EditorGUI.indentLevel += 1;
-                adjust.iadInfoReading = EditorGUILayout.Toggle("iAd Info Reading", adjust.iadInfoReading);
                 adjust.adServicesInfoReading = EditorGUILayout.Toggle("AdServices Info Reading", adjust.adServicesInfoReading);
                 adjust.idfaInfoReading = EditorGUILayout.Toggle("IDFA Info Reading", adjust.idfaInfoReading);
                 adjust.skAdNetworkHandling = EditorGUILayout.Toggle("SKAdNetwork Handling", adjust.skAdNetworkHandling);

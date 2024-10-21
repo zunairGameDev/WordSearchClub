@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using FunGames.Mediation;
 public class LoadingScreen : MonoBehaviour
 {
     public GameObject loadingPanel;
@@ -31,6 +32,8 @@ public class LoadingScreen : MonoBehaviour
         // After loading is complete, load the main menu scene
         loadingPanel.SetActive(false);
 
-         Applovin_Manager.instance.HideBanner();
+        //Applovin_Manager.instance.HideBanner();
+
+        
     }
 }

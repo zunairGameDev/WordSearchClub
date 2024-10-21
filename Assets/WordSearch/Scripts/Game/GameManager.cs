@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using FunGames.Mediation;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -120,6 +121,7 @@ namespace BBG.WordSearch
 #if BBG_MY_IAP
 			BBG.MobileTools.IAPManager.Instance.OnProductPurchased += IAPProductPurchased;
 #endif
+            Application.targetFrameRate = 60;
         }
 
         #endregion
@@ -538,8 +540,19 @@ namespace BBG.WordSearch
                 }
                 else if (hintLetters.Count >= 1)
                 {
-                    PlayerPrefs.SetInt("DoubleReward", 1);
-                    Applovin_Manager.instance.ShowRewardedAd();
+                    //Applovin_Manager.instance.ShowRewardedAd();
+                    FGMediation.ShowRewarded((success) => {
+                        if (success)
+                        {
+                            PlayerPrefs.SetInt("DoubleReward", 1);
+                            GlobalData.CoinCount += 200;
+                            MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    });
                 }
             }
         }
@@ -572,8 +585,15 @@ namespace BBG.WordSearch
                 else if (hintLetters.Count >= 1)
                 {
                     //ShowingHintLetter();
-                    PlayerPrefs.SetInt("DoubleReward", 0);
-                    Applovin_Manager.instance.ShowRewardedAd();
+                    FGMediation.ShowRewarded((success) =>
+                    {
+                        PlayerPrefs.SetInt("DoubleReward", 0);
+                        GlobalData.CoinCount += 100;
+                        MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+
+
+                    }
+                    );
                     // open Shop 
                 }
                 characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();

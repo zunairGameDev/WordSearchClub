@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using FunGames.Mediation;
 
 namespace BBG.WordSearch
 {
@@ -74,7 +75,9 @@ namespace BBG.WordSearch
             }
             else
             {
-                Applovin_Manager.instance.ShowBanner();
+                // Applovin_Manager.instance.ShowBanner();
+                //FGMediation.ShowBanner("DebugBanner");
+                FGMediation.ShowBanner();
 
             }
         }
@@ -85,7 +88,8 @@ namespace BBG.WordSearch
             {
                 yield return new WaitForSeconds(0.4f);
             }
-            Applovin_Manager.instance.ShowBanner();
+            //Applovin_Manager.instance.ShowBanner();
+            FGMediation.ShowBanner();
             firstTimeBannerToWait = true;
         }
 

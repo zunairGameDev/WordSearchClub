@@ -1,0 +1,14 @@
+{
+    "Id": "fg_remote_config",
+    "Name": "Remote Config",
+    "Version": "3.3.0.0",
+    "LogColor": "#815AFD",
+    "PackageUrl": "https://gitlab.com/fungames-sdk/remoteconfig/fg_remote_config/-/raw/3.3.0.0/fg_remote_config-3.3.0.0.unitypackage",
+    "HasIssue": false,
+    "IsDeprecated": false,
+    "IsBeta": false,
+    "Dependencies": [
+        "fg_core-3.3.0.0",
+        "fg_tools-3.3.0.0"
+    ]
+}

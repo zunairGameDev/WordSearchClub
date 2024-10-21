@@ -1,25 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using FunGames.Analytics;
 using FunGames.Core.Modules;
+using FunGames.RemoteConfig;
 using FunGames.Tools.Utils;
 using UnityEngine;
 
 namespace FunGames.Core
 {
+    [DefaultExecutionOrder(-43)]
     public class FGCore : FGModuleAbstract<FGCore, FGCoreCallbacks, FGMainSettings>
     {
         public override FGMainSettings Settings => FGMainSettings.settings;
         protected override FGModule Parent { get; }
         protected override string EventName => "SDK";
-        protected override string RemoteConfigKey => "FunGamesSDK";
+        protected override string RemoteConfigKey => "FGCore";
+
+        public FGDebugConsoleBuilder DebugConsoleBuilder;
+        public FGNoInternetPopup NoInternetPopup;
+        public FGUpdatePopup UpdateVersionPopup;
 
         private int _moduleCount = 0;
 
-        private const string PP_NO_ADS = "noAds";
+        public const string RC_LOG_LEVEL = "FGLogLevel";
+        public const string RC_NO_ADS = "FGNoAds";
+
+        private const string PP_NO_ADS = "no_ads";
         private const string PP_DATE_FIRST_CO = "dateFirstCo";
         private const string PP_DATE_LAST_CO = "dateLastCo";
         private const string PP_CURRENT_SESSION_NUMBER = "CurrentSessionNumber";
-        private bool _isNoAds = false;
+        private List<FGAdType> _noAds = new List<FGAdType>();
         private bool _isFirstConnection = false;
         private int _daysSinceFirstConnection = 0;
         private int _daysSinceLastConnection = 0;
@@ -28,12 +39,20 @@ namespace FunGames.Core
         protected override void InitializeCallbacks()
         {
             InitWithoutTimer();
+            InitializeConsole();
+            InitializeNoInternetPopup();
+            InitializeUpdatePopup();
+            Callbacks.OnInitialized += SendAnalytics;
+            FGRemoteConfig.Callbacks.OnInitialized += OnRemoteConfigInitialized;
         }
 
         protected override void OnAwake()
         {
-            _isNoAds = PlayerPrefs.HasKey(PP_NO_ADS);
-        
+            FGRemoteConfig.AddDefaultValue(RC_LOG_LEVEL, 0);
+            FGRemoteConfig.AddDefaultValue(RC_NO_ADS, 0);
+
+            CheckPlayerPref();
+
             if (!PlayerPrefs.HasKey(PP_CURRENT_SESSION_NUMBER))
             {
                 PlayerPrefs.SetInt(PP_CURRENT_SESSION_NUMBER, 1);
@@ -43,6 +62,7 @@ namespace FunGames.Core
                 int currentSession = PlayerPrefs.GetInt(PP_CURRENT_SESSION_NUMBER) + 1;
                 PlayerPrefs.SetInt(PP_CURRENT_SESSION_NUMBER, currentSession);
             }
+
             _currentSessionNumber = PlayerPrefs.GetInt(PP_CURRENT_SESSION_NUMBER);
         }
 
@@ -79,20 +99,80 @@ namespace FunGames.Core
             Log("Day since first connection : " + _daysSinceFirstConnection);
             Log("Day since last connection : " + _daysSinceLastConnection);
             Log("Session #: " + _currentSessionNumber);
+            TrackDeviceInfo();
             InitializationComplete(true);
         }
 
-        public void RemoveAds()
+        public void RemoveAds(params FGAdType[] ads)
         {
-            Log("Ads removed !");
-            PlayerPrefs.SetInt(PP_NO_ADS, 1);
-            _isNoAds = true;
+            if (ads.Length == 0)
+            {
+                RemoveAllAds();
+                return;
+            }
+
+            foreach (FGAdType ad in ads)
+            {
+                PlayerPrefs.SetInt(NoAdPlayerPref(ad), 1);
+                _noAds.Add(ad);
+                Log("Ad removed : " + ad);
+            }
+
+            Callbacks._onAdsRemoved?.Invoke();
         }
 
-        public bool IsNoAd()
+        public void RemoveAdsForSession(params FGAdType[] ads)
         {
-            return _isNoAds;
+            if (ads.Length == 0)
+            {
+                Log("All ads removed for this session !");
+                foreach (var adType in Enum.GetValues(typeof(FGAdType))) _noAds.Add((FGAdType)adType);
+            }
+
+            foreach (FGAdType ad in ads)
+            {
+                _noAds.Add(ad);
+                Log("Ad removed for this session: " + ad);
+            }
+
+            Callbacks._onAdsRemoved?.Invoke();
         }
+
+        private void RemoveAllAds()
+        {
+            List<FGAdType> adsToRemove = new List<FGAdType>();
+            foreach (FGAdType adType in Enum.GetValues(typeof(FGAdType)))
+            {
+                adsToRemove.Add(adType);
+            }
+
+            RemoveAds(adsToRemove.ToArray());
+        }
+
+
+        public bool IsNoAd(FGAdType ad)
+        {
+            CheckPlayerPref();
+            return _noAds.Contains(ad);
+        }
+
+        public void RestoreAds()
+        {
+            foreach (FGAdType adType in Enum.GetValues(typeof(FGAdType)))
+            {
+                PlayerPrefs.DeleteKey(NoAdPlayerPref(adType));
+            }
+        }
+
+        private void CheckPlayerPref()
+        {
+            foreach (FGAdType adType in Enum.GetValues(typeof(FGAdType)))
+            {
+                if (PlayerPrefs.HasKey(NoAdPlayerPref(adType))) _noAds.Add(adType);
+            }
+        }
+
+        private string NoAdPlayerPref(FGAdType adType) => PP_NO_ADS + adType;
 
 
         public bool IsFirstConnection()
@@ -109,15 +189,106 @@ namespace FunGames.Core
         {
             return _daysSinceLastConnection;
         }
-        
+
         public int GetCurrentSessionNumber()
         {
             return _currentSessionNumber;
         }
 
+        public bool HasInternetConnection()
+        {
+            return NoInternetPopup.HasInternetConnection;
+        }
+
+        private void OnRemoteConfigInitialized(bool obj)
+        {
+            if (FGRemoteConfig.GetBooleanValue(RC_NO_ADS)) RemoveAdsForSession();
+        }
+
         protected override void ClearInitialization()
         {
             // Nothing to do
+        }
+
+        private void InitializeConsole()
+        {
+            if (DebugConsoleBuilder == null)
+            {
+                LogWarning("No DebugConsoleBuilder found.");
+                return;
+            }
+
+            FGDebugConsoleBuilder consoleInstance = FindObjectOfType<FGDebugConsoleBuilder>();
+            if (!DebugConsoleBuilder.Equals(consoleInstance))
+            {
+                Instantiate(DebugConsoleBuilder, transform);
+            }
+        }
+
+        private void InitializeNoInternetPopup()
+        {
+            if (NoInternetPopup == null) return;
+
+            FGNoInternetPopup noInternetPopup = FindObjectOfType<FGNoInternetPopup>();
+            if (!NoInternetPopup.Equals(noInternetPopup))
+            {
+                NoInternetPopup = Instantiate(NoInternetPopup, transform);
+            }
+        }
+
+        private void InitializeUpdatePopup()
+        {
+            if (UpdateVersionPopup == null) return;
+
+            FGUpdatePopup updatePopup = FindObjectOfType<FGUpdatePopup>();
+            if (!UpdateVersionPopup.Equals(updatePopup))
+            {
+                Instantiate(UpdateVersionPopup, transform);
+            }
+        }
+
+        private void TrackDeviceInfo()
+        {
+            DeviceInfo deviceInfo = new DeviceInfo();
+            string eventId = FGAnalytics.CreateEventId("HardwareInfo", deviceInfo.DeviceType);
+            FGAnalytics.NewDesignEvent(eventId, new Dictionary<string, object>()
+            {
+                { "Model", deviceInfo.DeviceModel },
+                { "Name", deviceInfo.DeviceName },
+                { "SystemMemory", deviceInfo.SystemMemorySize },
+                { "GraphicsMemory", deviceInfo.GraphicsMemorySize },
+                { "ProcessorCount", deviceInfo.ProcessorCount },
+                { "ProcessorFrequency", deviceInfo.ProcessorFrequency },
+            });
+        }
+
+        private void SendAnalytics(bool success)
+        {
+            Dictionary<string, object> failedModules = new Dictionary<string, object>();
+            foreach (var failed in GetAllFailedModuleRecursively(this))
+            {
+                if (failedModules.ContainsKey(failed.ModuleInfo.Id)) continue;
+                failedModules.Add(failed.ModuleInfo.Id, failed.ModuleInfo.Version);
+                LogError("FailedModule : " + failed.ModuleInfo.Id + " - " + failed.ModuleInfo.Version);
+            }
+
+            FGAnalytics.NewDesignEvent("SDKLoadComplete", failedModules);
+        }
+
+        private List<FGModule> GetAllFailedModuleRecursively(FGModule module)
+        {
+            List<FGModule> children = new List<FGModule>();
+            if (!module.IsInitialized) children.Add(module);
+            foreach (FGModule childModule in module.SubModules)
+            {
+                if (childModule != null && !childModule.IsInitialized)
+                {
+                    children.Add(childModule);
+                    children.AddRange(GetAllFailedModuleRecursively(childModule));
+                }
+            }
+
+            return children;
         }
     }
 }

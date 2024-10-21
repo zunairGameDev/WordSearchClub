@@ -1,5 +1,10 @@
+using System;
+using FunGames.Analytics;
+using FunGames.UserConsent;
 using FunGames.Core;
 using FunGames.Core.Modules;
+using FunGames.Tools.Debugging;
+using UnityEngine;
 
 namespace FunGames.MMP
 {
@@ -10,17 +15,22 @@ namespace FunGames.MMP
         protected override string EventName => "MMP";
         protected override string RemoteConfigKey => "FGMMP";
 
+        private Action _initialization;
+
         protected override void InitializeCallbacks()
         {
-            FunGamesSDK.Callbacks.Initialization += Initialize;
+            _initialization = Initialize;
+            FGUserConsent.OnComplete += _initialization;
         }
 
         protected override void OnAwake()
         {
+            // throw new NotImplementedException();
         }
 
         protected override void OnStart()
         {
+            // throw new NotImplementedException();
         }
 
         protected override void InitializeModule()
@@ -30,6 +40,7 @@ namespace FunGames.MMP
 
         protected override void ClearInitialization()
         {
+            FGUserConsent.OnComplete -= _initialization;
         }
     }
 }

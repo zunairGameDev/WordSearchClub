@@ -1,7 +1,10 @@
 ﻿using GameAnalyticsSDK;
 using System;
 using System.Collections.Generic;
+using FunGames.UserConsent;
 using FunGames.Core.Modules;
+using FunGames.RemoteConfig;
+using FunGames.Tools.Utils;
 using UnityEngine;
 
 namespace FunGames.Analytics.GA
@@ -14,9 +17,11 @@ namespace FunGames.Analytics.GA
 
         protected override string RemoteConfigKey => "FGGameAnalytics";
 
+        private const string RC_HEALTH_EVENTS = "fg_health_events";
+
         protected override void OnAwake()
         {
-            // throw new NotImplementedException();
+            FGRemoteConfig.AddDefaultValue(RC_HEALTH_EVENTS, 1);
         }
 
         protected override void OnStart()
@@ -25,6 +30,8 @@ namespace FunGames.Analytics.GA
         }
 
         private bool isInit = false;
+        public const string HIGH_END = "HighEnd";
+        public const string LOW_END = "LowEnd";
 
         /// <summary>
         /// Private function that initializes all GA elements
@@ -55,13 +62,23 @@ namespace FunGames.Analytics.GA
             string gameSecretKey = FGGameAnalyticsSettings.settings.gameAnalyticsAndroidSecretKey.Trim();
             AddOrUpdatePlatform(RuntimePlatform.Android, gameKey, gameSecretKey);
 #endif
-            GameAnalytics.SettingsGA.InfoLogBuild = false;
-            GameAnalytics.SettingsGA.InfoLogEditor = false;
-            GameAnalytics.SettingsGA.SubmitFpsAverage = true;
-            GameAnalytics.SettingsGA.SubmitFpsCritical = true;
-            GameAnalyticsILRD.SubscribeMaxImpressions();
-            GameAnalytics.Initialize();
 
+            if (FGRemoteConfig.GetBooleanValue(RC_HEALTH_EVENTS))
+            {
+                GameAnalytics.SettingsGA.SubmitErrors = true;
+                GameAnalytics.SettingsGA.NativeErrorReporting = true;
+                //GameAnalytics.SettingsGA.EnableSDKInitEvent = true;
+                //GameAnalytics.SettingsGA.EnableFPSHistogram = true;
+                //GameAnalytics.SettingsGA.EnableMemoryHistogram = true;
+                //GameAnalytics.SettingsGA.EnableHealthEvent = true;
+                //GameAnalytics.SettingsGA.EnableHardwareTracking = true;
+                //GameAnalytics.SettingsGA.EnableMemoryTracking = true;
+            }
+
+            GameAnalyticsILRD.SubscribeMaxImpressions();
+            GameAnalytics.SetEnabledEventSubmission(FGUserConsent.GdprStatus.AnalyticsAccepted);
+            GameAnalytics.SetCustomDimension01(DeviceQuality);
+            GameAnalytics.Initialize();
             InitializationComplete(!String.IsNullOrEmpty(gameKey) &&
                                    !String.IsNullOrEmpty(gameSecretKey));
 
@@ -106,11 +123,11 @@ namespace FunGames.Analytics.GA
         {
             if (score == FGAnalytics.NO_SCORE)
             {
-                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), progression01);
+                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), ValidString(progression01));
             }
             else
             {
-                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), progression01, score);
+                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), ValidString(progression01), score);
             }
         }
 
@@ -119,11 +136,13 @@ namespace FunGames.Analytics.GA
         {
             if (score == FGAnalytics.NO_SCORE)
             {
-                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), progression01, progression02);
+                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), ValidString(progression01),
+                    ValidString(progression02));
             }
             else
             {
-                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), progression01, progression02, score);
+                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), ValidString(progression01),
+                    ValidString(progression02), score);
             }
         }
 
@@ -133,12 +152,13 @@ namespace FunGames.Analytics.GA
         {
             if (score == FGAnalytics.NO_SCORE)
             {
-                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), progression01, progression02,
-                    progression03);
+                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), ValidString(progression01),
+                    ValidString(progression02), ValidString(progression03));
             }
             else
             {
-                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), progression01, progression02, progression03,
+                GameAnalytics.NewProgressionEvent(GetGAStatus(levelStatus), ValidString(progression01),
+                    ValidString(progression02), ValidString(progression03),
                     score);
             }
         }
@@ -265,6 +285,18 @@ namespace FunGames.Analytics.GA
             }
 
             return status;
+        }
+
+        private string DeviceQuality
+        {
+            get
+            {
+                DeviceInfo deviceInfo = new DeviceInfo();
+                Log("[DeviceInfo] SystemMemorySize = " + deviceInfo.SystemMemorySize + " | ProcessorCount = " +
+                    deviceInfo.ProcessorCount);
+                if (deviceInfo.SystemMemorySize > 4000 && deviceInfo.ProcessorCount > 4) return HIGH_END;
+                return LOW_END;
+            }
         }
     }
 }

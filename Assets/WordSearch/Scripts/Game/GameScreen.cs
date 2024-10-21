@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using FunGames.Mediation;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +28,8 @@ namespace BBG.WordSearch
 		}
 		public void OnBackClick()
 		{
-			Applovin_Manager.instance.HideBanner();
+			//Applovin_Manager.instance.HideBanner();
+			FGMediation.HideBanner();
 
             MainMenuText.Instance.UpdateLeveInfo();
 			ScrollViewController.Instance.LockingAndUnlockingLabels();

@@ -403,6 +403,8 @@ namespace BBG.WordSearch
         public Image HighlightWord(Cell start, Cell end, bool useSelectedColour)
         {
             Image highlight = CreateNewHighlight(false);
+            int totalSiblings = highlight.transform.parent.childCount;
+            highlight.transform.SetSiblingIndex(totalSiblings - 3);
             //AssignHighlighColor(highlight);
             highlights.Add(highlight);
 

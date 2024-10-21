@@ -13,6 +13,7 @@ namespace FunGames.Core.Modules
         public string PackageUrl = String.Empty;
         public bool HasIssue = false;
         public bool IsDeprecated = false;
+        public bool IsBeta = false;
         public List<string> Dependencies = new List<string>();
         
         public void Set(FGModuleInfo moduleInfo)
@@ -24,6 +25,7 @@ namespace FunGames.Core.Modules
             PackageUrl = moduleInfo.PackageUrl;
             HasIssue = moduleInfo.HasIssue;
             IsDeprecated = moduleInfo.IsDeprecated;
+            IsBeta = moduleInfo.IsBeta;
             Dependencies = moduleInfo.Dependencies;
         }
     }

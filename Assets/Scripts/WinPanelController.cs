@@ -5,6 +5,7 @@ using DG.Tweening;
 using TMPro;
 using System.Collections.Generic;
 using BBG.WordSearch;
+using FunGames.Mediation;
 
 
 public class WinPanelController : MonoBehaviour
@@ -65,29 +66,36 @@ public class WinPanelController : MonoBehaviour
     }
     public void ToShowCountryComplete()
     {
-        if ((MainMenuText.Instance.currentValue + 1) == MainMenuText.Instance.countryInfo.maxValue)
+        if (!GameManager.Instance.toPlayDailyChallange)
         {
-            appreciationText.text = "Country Complete";
-            appreciationShadowText.text = appreciationText.text;
-            toShowCollectButton = true;
+            if ((MainMenuText.Instance.currentValue + 1) == MainMenuText.Instance.countryInfo.maxValue)
+            {
+                appreciationText.text = "Country Complete";
+                appreciationShadowText.text = appreciationText.text;
+                toShowCollectButton = true;
+
+            }
+            else
+            {
+                appreciationText.text = goodWord[Random.Range(0, goodWord.Count - 1) /*PlayerPrefs.GetInt("SelectJasonLevel")*/];
+                appreciationShadowText.text = appreciationText.text;
+                toShowCollectButton = false;
+
+            }
+            appreciationObject.SetActive(true);
 
         }
-        else
-        {
-            appreciationText.text = goodWord[Random.Range(0, goodWord.Count - 1) /*PlayerPrefs.GetInt("SelectJasonLevel")*/];
-            appreciationShadowText.text = appreciationText.text;
-            toShowCollectButton = false;
 
-        }
-        appreciationObject.SetActive(true);
     }
 
     public void OnLevelWin()
     {
-        //if (PlayerPrefs.GetInt("SelectJasonLevel") >= 2)
-        //{
-            Applovin_Manager.instance.ShowInterstitial();   
-        //}
+        if (PlayerPrefs.GetInt("SelectJasonLevel") >= 2)
+        {
+            //Applovin_Manager.instance.ShowInterstitial();
+            //FGMediation.ShowInterstitial("MyInterstitialAd");
+            FGMediation.ShowInterstitial();
+        }
         // Start particle effect
         //particleEffect.SetActive(true);
         backGround.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
@@ -96,7 +104,7 @@ public class WinPanelController : MonoBehaviour
         StartCoroutine(MoveParticle());
     }
 
-      
+
 
     IEnumerator MoveParticle()
     {
@@ -191,7 +199,8 @@ public class WinPanelController : MonoBehaviour
             PlayerPrefs.SetInt("CurrentValue", PlayerPrefs.GetInt("CurrentValue") + 1);
             MainMenuText.Instance.currentValue = PlayerPrefs.GetInt("CurrentValue");
             fillAmount = (float)MainMenuText.Instance.currentValue / MainMenuText.Instance.countryInfo.maxValue;
-            winSlider.DOValue(fillAmount, 0.5f).SetEase(Ease.Linear);
+            //winSlider.DOValue(fillAmount, 0.5f).SetEase(Ease.Linear);
+            winSlider.value = fillAmount;
             winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
             MainMenuText.Instance.FillAmount();
             if (toShowCollectButton)

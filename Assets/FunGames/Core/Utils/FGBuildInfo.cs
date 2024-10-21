@@ -47,21 +47,23 @@ public class FGBuildInfo : ScriptableObject
 
     public bool IsTestEnvironment()
     {
-#if UNITY_EDITOR
-        return true;
-#elif UNITY_ANDROID
-        if (CurrentPlatform.IsFireOS) return false;
-        return _testEnvironment;
-#elif UNITY_IOS
-        switch (Application.installMode)
+        if (CurrentPlatform.Is(Platform.Editor)) return true;
+        if (CurrentPlatform.Is(Platform.Android))
         {
-            case ApplicationInstallMode.DeveloperBuild:
-            case ApplicationInstallMode.Adhoc:
-            case ApplicationInstallMode.Editor:
-                return true;
+            if (CurrentPlatform.IsFireOS) return false;
+            return _testEnvironment;
+        }
+        if (CurrentPlatform.Is(Platform.IOS))
+        {
+            switch (Application.installMode)
+            {
+                case ApplicationInstallMode.DeveloperBuild:
+                case ApplicationInstallMode.Adhoc:
+                case ApplicationInstallMode.Editor:
+                    return true;
+            }
         }
 
         return false;
-#endif
     }
 }
