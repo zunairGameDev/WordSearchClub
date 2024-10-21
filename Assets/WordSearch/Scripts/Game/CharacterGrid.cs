@@ -143,9 +143,18 @@ namespace BBG.WordSearch
                     selectingPointerId = eventData.pointerId;
                     startCharacter = characterItem;
                     lastEndCharacter = characterItem;
+                    if (startCharacter.hintColorAsign)
+                    {
+                        permentLineChild.GetComponent<Image>().color = startCharacter.hintColor;
+                        selectingHighlight.color = startCharacter.hintColor;
+                    }
+                    else
+                    {
+                        AssignHighlighColor(permentLineChild.GetComponent<Image>());
+                        AssignHighlighColor(selectingHighlight);
+                    }
                     //AddLetterForDistance(lastEndCharacter);
-                    AssignHighlighColor(permentLineChild.GetComponent<Image>());
-                    AssignHighlighColor(selectingHighlight);
+                    
                     colorTransperancy = permentLineChild.GetComponent<Image>().color;
                     colorOpque = permentLineChild.GetComponent<Image>().color;
                     selectingHighlight.gameObject.SetActive(true);
@@ -513,9 +522,12 @@ namespace BBG.WordSearch
                             Vector2 position = (characterGridItem.transform as RectTransform).anchoredPosition;
 
                             RectTransform highlightLetter = highlightLetterPool.GetObject<RectTransform>();
-
+                            AssignHighlighColor(highlightLetter.GetComponent<Image>());
+                            GameManager.Instance.wordColorFromLetter = highlightLetter.GetComponent<Image>().color;
+                            characterGridItem.hintColor = highlightLetter.GetComponent<Image>().color;
+                            characterGridItem.hintColorAsign = true;
                             highlightLetter.sizeDelta = new Vector2(ScaledHightlightLetterSize, ScaledHightlightLetterSize);
-
+                            characterGridItem.highlightLetter = highlightLetter;
                             highlightLetter.anchoredPosition = position;
                             characterGridItem.isVisible = true;
                             return;
@@ -863,7 +875,29 @@ namespace BBG.WordSearch
             highlightRectT.localScale = new Vector3(scale, scale);
             highlightRectT.sizeDelta = new Vector2(highlightWidth / scale, highlight.sprite.rect.height);
 
-            // Set angle
+            //// Set angle
+            //float angle = Vector2.Angle(new Vector2(1f, 0f), endPosition - startPosition);
+
+            //if (startPosition.y > endPosition.y)
+            //{
+            //    angle = -angle;
+            //}
+            //currentAngle = angle;
+            //// If grid rotates, calculate the opposite angle
+            //if (gridRotates)
+            //{
+            //    // Add 180 degrees to flip the angle if the grid rotates
+            //    angle = (angle + 180f) % 360f;
+
+            //    // Ensure the angle stays within the range [-180, 180]
+            //    if (angle > 180f) angle -= 360f;
+            //}
+            currentAngle = GettingAngel(startPosition, endPosition);
+            highlightRectT.eulerAngles = new Vector3(0f, 0f, currentAngle);
+            //Debug.Log(highlightRectT.eulerAngles);
+        }
+        public float GettingAngel(Vector2 startPosition, Vector2 endPosition)
+        {
             float angle = Vector2.Angle(new Vector2(1f, 0f), endPosition - startPosition);
 
             if (startPosition.y > endPosition.y)
@@ -880,9 +914,7 @@ namespace BBG.WordSearch
                 // Ensure the angle stays within the range [-180, 180]
                 if (angle > 180f) angle -= 360f;
             }
-            currentAngle = angle;
-            highlightRectT.eulerAngles = new Vector3(0f, 0f, angle);
-            //Debug.Log(highlightRectT.eulerAngles);
+            return angle;
         }
         private void permentHighLight(Image highlight, CharacterGridItem start, float currentAngle, Vector2 mousePositionStart)
         {

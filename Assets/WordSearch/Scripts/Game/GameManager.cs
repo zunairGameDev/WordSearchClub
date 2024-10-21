@@ -40,6 +40,8 @@ namespace BBG.WordSearch
         public List<TextAsset> levelFiles;
         public List<TextAsset> dailyLevelfiles;
         public List<char> hintLetters = new List<char>();
+        public List<char> hintTempLetters = new List<char>();
+        public List<string> activeBoardWords = new List<string>();
 
 
         [Header("Values")]
@@ -98,8 +100,11 @@ namespace BBG.WordSearch
         public RectTransform wordFoundInWordGrid;
         public Image BackGroundImage;
         public int starterCount = 2;
+
+        public float coolMultidownTime = 0.6f; // Cooldown duration in seconds
         public float cooldownTime = 0.5f; // Cooldown duration in seconds
         private float lastClickTime;
+        public Color wordColorFromLetter;
 
         #endregion
 
@@ -525,36 +530,48 @@ namespace BBG.WordSearch
                 SoundManager.Instance.Play("hint-used");
             }
         }
+
+
         public void ShowHintMultipleTimes()
         {
-            if (Time.time >= lastClickTime + cooldownTime)
+            if (Time.time >= lastClickTime + coolMultidownTime)
             {
-                if (GlobalData.CoinCount >= 200 && hintLetters != null)
+                StartCoroutine(MultipleShow());
+            }
+
+        }
+
+        IEnumerator MultipleShow()
+        {
+
+            if (GlobalData.CoinCount >= 200 && hintLetters != null)
+            {
+                GlobalData.CoinCount = GlobalData.CoinCount - 200;
+                MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                for (int i = 0; i < 3; i++)
                 {
-                    GlobalData.CoinCount = GlobalData.CoinCount - 200;
-                    MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
-                    for (int i = 0; i < 3; i++)
-                    {
-                        ShowingHintLetter();
-                    }
-                }
-                else if (hintLetters.Count >= 1)
-                {
-                    //Applovin_Manager.instance.ShowRewardedAd();
-                    FGMediation.ShowRewarded((success) => {
-                        if (success)
-                        {
-                            PlayerPrefs.SetInt("DoubleReward", 1);
-                            GlobalData.CoinCount += 200;
-                            MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    });
+                    ShowingHintLetter();
+                    yield return new WaitForSeconds(0.2f);
                 }
             }
+            else if (hintLetters.Count >= 1)
+            {
+                //Applovin_Manager.instance.ShowRewardedAd();
+                FGMediation.ShowRewarded((success) =>
+                {
+                    if (success)
+                    {
+                        PlayerPrefs.SetInt("DoubleReward", 1);
+                        GlobalData.CoinCount += 200;
+                        MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                });
+            }
+
         }
 
         /// <summary>
@@ -602,6 +619,8 @@ namespace BBG.WordSearch
         public void ToShowHintLetter()
         {
             hintLetters.Clear();
+            hintTempLetters.Clear();
+            activeBoardWords.Clear();
             int maxLength = 0;
             // Loop through all words in ActiveBoard.words
             for (int i = 0; i < ActiveBoard.words.Count; i++)
@@ -614,8 +633,10 @@ namespace BBG.WordSearch
                     longestWord = currentWord.Replace(" ", "");  // Update the longest word
                 }
                 char firstLetter = currentWord[0];
+                //letterIntDictionary.Add(firstLetter, i);
+                activeBoardWords.Add(ActiveBoard.words[i].ToString());
                 hintLetters.Add(firstLetter);
-
+                hintTempLetters.Add(firstLetter);
                 //// Loop through each character in the current word
                 //foreach (char letter in currentWord)
                 //{
@@ -626,6 +647,7 @@ namespace BBG.WordSearch
                 //    }
                 //}
             }
+
         }
         public void ShowingHintLetter()
         {
@@ -638,12 +660,21 @@ namespace BBG.WordSearch
 
             // Get a random index within the range of available hintLetters
             int value = Random.Range(0, hintLetters.Count - 1);
-
             // Select the letter at the random index
             char letter = hintLetters[value];
-
+            //int wordInt  = letterIntDictionary.GetValueOrDefault(letter);
+            int wordIndex = 0;
+            for (int i = 0; hintTempLetters.Count > i; i++)
+            {
+                if (hintTempLetters[i] == letter)
+                {
+                    wordIndex = i;
+                    break;
+                }
+            }
             // Show the letter as a hint
             characterGrid.ShowLetterHint(letter);
+            wordList.HighLightingHintWord(activeBoardWords[wordIndex], wordColorFromLetter);
 
             // Play the sound for using a hint
             SoundManager.Instance.Play("hint-used");
@@ -872,6 +903,7 @@ namespace BBG.WordSearch
             {
                 characterGrid.SetWordFound(foundWord);
                 wordList.SetWordFound(foundWord);
+
             }
 
             // Show all the letter hints

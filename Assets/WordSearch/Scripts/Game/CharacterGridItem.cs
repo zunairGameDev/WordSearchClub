@@ -10,7 +10,11 @@ namespace BBG.WordSearch
 		#region Inspector Variables
 
 		public TextMeshProUGUI	characterText;
-		public bool isVisible = false;
+		public Color hintColor;
+		public bool hintColorAsign;
+		public RectTransform highlightLetter;
+
+        public bool isVisible = false;
 
 		#endregion
 

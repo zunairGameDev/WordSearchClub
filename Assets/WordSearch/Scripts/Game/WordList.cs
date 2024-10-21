@@ -74,6 +74,14 @@ namespace BBG.WordSearch
                 Debug.LogError("[WordList] Word does not exist in the word list: " + word);
             }
         }
+        public void HighLightingHintWord(string word, Color color)
+        {
+            if (wordListItems.ContainsKey(word))
+            {
+                Debug.Log("A");
+                wordListItems[word].OnHintChangeColor(color);
+            }
+        }
 
         public void Clear()
         {

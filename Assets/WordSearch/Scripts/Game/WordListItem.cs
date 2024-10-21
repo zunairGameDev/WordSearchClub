@@ -12,6 +12,7 @@ namespace BBG.WordSearch
         [SerializeField] private Text wordText = null;
         [SerializeField] private GameObject foundIndicator = null;
         [SerializeField] private Color color;
+        [SerializeField] private Color backgroundColor;
 
         #endregion
 
@@ -22,6 +23,7 @@ namespace BBG.WordSearch
             wordText.text = word;
             wordText.fontSize = GetFontSize(GameManager.Instance.ActiveBoard.words.Count);
             wordText.color = Color.black;
+            GetComponent<Image>().color = backgroundColor;
             foundIndicator.SetActive(false);
             AdjustRectTransformWidth();
         }
@@ -30,8 +32,17 @@ namespace BBG.WordSearch
         {
             GameManager.Instance.GetComponent<GameManager>().wordFoundInWordGrid = this.GetComponent<RectTransform>();
             wordText.color = color;
+            GetComponent<Image>().color = backgroundColor;
             //foundIndicator.SetActive(true);
         }
+        public void OnHintChangeColor(Color color)
+        {
+
+            Debug.Log(wordText.text);
+            Debug.Log("B"); wordText.color = Color.white;
+            GetComponent<Image>().color = color;
+        }
+
         private void AdjustRectTransformWidth()
         {
             // Force update the layout to get the correct preferredWidth after setting the text
