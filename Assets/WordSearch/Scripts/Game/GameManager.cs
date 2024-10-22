@@ -101,7 +101,7 @@ namespace BBG.WordSearch
         public Image BackGroundImage;
         public int starterCount = 2;
 
-        public float coolMultidownTime = 0.6f; // Cooldown duration in seconds
+        public float coolMultidownTime = 0.5f; // Cooldown duration in seconds
         public float cooldownTime = 0.5f; // Cooldown duration in seconds
         private float lastClickTime;
         public Color wordColorFromLetter;
@@ -551,7 +551,7 @@ namespace BBG.WordSearch
                 for (int i = 0; i < 3; i++)
                 {
                     ShowingHintLetter();
-                    yield return new WaitForSeconds(0.2f);
+                    yield return new WaitForSeconds(0.15f);
                 }
             }
             else if (hintLetters.Count >= 1)
@@ -668,8 +668,13 @@ namespace BBG.WordSearch
             {
                 if (hintTempLetters[i] == letter)
                 {
-                    wordIndex = i;
-                    break;
+                    if (!wordList.wordListItems[activeBoardWords[i]].hintWordHighlight)
+                    {
+                        wordIndex = i;
+                        wordList.wordListItems[activeBoardWords[wordIndex]].hintWordHighlight = true;
+                        break;
+                    }
+
                 }
             }
             // Show the letter as a hint

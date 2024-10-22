@@ -13,6 +13,7 @@ namespace BBG.WordSearch
         [SerializeField] private GameObject foundIndicator = null;
         [SerializeField] private Color color;
         [SerializeField] private Color backgroundColor;
+        public bool hintWordHighlight;
 
         #endregion
 
@@ -23,6 +24,7 @@ namespace BBG.WordSearch
             wordText.text = word;
             wordText.fontSize = GetFontSize(GameManager.Instance.ActiveBoard.words.Count);
             wordText.color = Color.black;
+            hintWordHighlight = false;
             GetComponent<Image>().color = backgroundColor;
             foundIndicator.SetActive(false);
             AdjustRectTransformWidth();

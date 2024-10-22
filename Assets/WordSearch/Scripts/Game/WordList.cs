@@ -19,7 +19,7 @@ namespace BBG.WordSearch
         #region Member Variables
 
         private ObjectPool wordListItemPool;
-        private Dictionary<string, WordListItem> wordListItems;
+        public Dictionary<string, WordListItem> wordListItems;
 
         #endregion
 

@@ -113,6 +113,7 @@ public class ScaleAndRotate : MonoBehaviour
                  .SetEase(Ease.InOutQuad); // Set the easing for rotation
             child.GetChild(0).gameObject.SetActive(true);
             child.GetComponent<CharacterGridItem>().isVisible = false;
+            child.GetComponent<CharacterGridItem>().hintColorAsign = false;
         }
         transform.DOLocalRotate(new Vector3(0, 0, 0), 0.1f, RotateMode.FastBeyond360)
                  .SetEase(Ease.InOutQuad); // Set the easing for rotation

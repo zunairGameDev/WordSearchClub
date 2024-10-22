@@ -154,7 +154,7 @@ namespace BBG.WordSearch
                         AssignHighlighColor(selectingHighlight);
                     }
                     //AddLetterForDistance(lastEndCharacter);
-                    
+
                     colorTransperancy = permentLineChild.GetComponent<Image>().color;
                     colorOpque = permentLineChild.GetComponent<Image>().color;
                     selectingHighlight.gameObject.SetActive(true);
@@ -345,12 +345,13 @@ namespace BBG.WordSearch
                 levelName.text = GameManager.Instance.GetComponent<GameManager>().levelFiles[PlayerPrefs.GetInt("SelectJasonLevel")].name;
             }
 
-            if (PlayerPrefs.GetInt("SelectJasonLevel") > 0)
+            if (PlayerPrefs.GetInt("SelectJasonLevel") > 0 && PlayerPrefs.GetInt("SelectJasonLevel") < playerStates.Count)
             {
                 playerStateShow.text = "Solved by " + playerStates[PlayerPrefs.GetInt("SelectJasonLevel")].ToString() + " % player";
                 playerStateShow.transform.parent.gameObject.SetActive(true);
 
             }
+            
             // We want to scale the CharacterItem so that the UI Text changes size
             currentCellSize = SetupGridContainer(board.rows, board.cols);
             currentScale = currentCellSize / maxCellSize;
@@ -571,7 +572,16 @@ namespace BBG.WordSearch
                 RemoveFirstLetterfromHintList(letterObject[letterObject.Count - 1], word);
             }
 
-
+            if (letterObject[0].highlightLetter != null)
+            {
+                letterObject[0].highlightLetter.gameObject.SetActive(false);
+                //Destroy(letterObject[0].highlightLetter.gameObject);
+            }
+            else if (letterObject[letterObject.Count - 1].highlightLetter != null)
+            {
+                letterObject[letterObject.Count - 1].highlightLetter.gameObject.SetActive(false);
+                //Destroy(letterObject[letterObject.Count - 1].highlightLetter.gameObject);
+            }
             GlobalData.CoinCount = GlobalData.CoinCount + (1 * CountLetters(word));
             MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
             CharacterGridItem startCharacter = characterItems[wordStartPosition.row][wordStartPosition.col];
