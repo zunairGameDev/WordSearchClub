@@ -119,6 +119,7 @@ namespace BBG.WordSearch
         public float currentAngle;
         public bool gridRotates;
         public bool reverseCheck;
+        public bool outOfBond;
 
 
         #region Unity Methods
@@ -191,10 +192,10 @@ namespace BBG.WordSearch
                     UpdateSelectingHighlight(eventData.position);
                     UpdateSelectedWord();
                     // Constrain the mouse position within the parent rect (background)
-                    pointCheck = true;
                     Vector2 mousePosition = GetMousePosition(eventData.position);
                     Vector2 constrainedPosition = ConstrainToRect(mousePosition, background, lastValidPosition);
                     currentMousePosition = constrainedPosition;
+                    pointCheck = true;
 
                     // Update last valid position if the constrained position has changed
                     //if (constrainedPosition != lastValidPosition)
@@ -230,7 +231,7 @@ namespace BBG.WordSearch
                 Cell wordEndPosition = new Cell(lastEndCharacter.Row, lastEndCharacter.Col);
 
                 string highlightedWord = GetWord(wordStartPosition, wordEndPosition);
-                Debug.Log(highlightedWord + "highlightedWord");
+                //Debug.Log(highlightedWord + "highlightedWord");
                 // Call OnWordSelected to notify the WordSearchController that a word has been selected
                 string foundWord = GameManager.Instance.OnWordSelected(highlightedWord);
                 pointCheck = false;
@@ -351,7 +352,7 @@ namespace BBG.WordSearch
                 playerStateShow.transform.parent.gameObject.SetActive(true);
 
             }
-            
+
             // We want to scale the CharacterItem so that the UI Text changes size
             currentCellSize = SetupGridContainer(board.rows, board.cols);
             currentScale = currentCellSize / maxCellSize;
@@ -968,12 +969,17 @@ namespace BBG.WordSearch
                     //permenetLineDistance = lastDistance;
                 }
             }
-            else
+            else if (!outOfBond)
             {
                 permentLineChild.GetComponent<Image>().color = colorOpque;
                 selectingHighlight.color = colorTransperancy;
                 permenetLineDistance = Vector2.Distance(GetMousePosition(startMousePosition), currentMousePosition);
                 lastDistance = permenetLineDistance;
+            }
+            else
+            {
+                selectingHighlight.color = colorOpque;
+                permentLineChild.GetComponent<Image>().color = colorTransperancy;
             }
             //if (increaseDistanceAllowed)
             //{
@@ -1002,14 +1008,42 @@ namespace BBG.WordSearch
         private Vector2 ConstrainToRect(Vector2 position, RectTransform rect, Vector2 lastValidPosition)
         {
             Rect rectBounds = rect.rect;
-            float offSet = 100f;  // You can adjust this offset as needed
-            Vector2 newPosition = position + new Vector2(100, 100);
+            float offSet = 25f;  // Offset for boundary
+            outOfBond = false;
+            // Current position of the object
+            float clampedX = position.x;
+            float clampedY = position.y;
 
-            float clampedX = Mathf.Clamp(position.x, rectBounds.xMin + offSet, rectBounds.xMax - offSet);
-            float clampedY = Mathf.Clamp(position.y, rectBounds.yMin + offSet, rectBounds.yMax - offSet);
+            bool isXOutOfBounds = position.x < rectBounds.xMin + offSet || position.x > rectBounds.xMax - offSet;
+            bool isYOutOfBounds = position.y < rectBounds.yMin + offSet || position.y > rectBounds.yMax - offSet;
 
+            // If X axis is out of bounds, freeze Y axis at last valid position
+            if (isXOutOfBounds)
+            {
+                clampedX = Mathf.Clamp(position.x, rectBounds.xMin + offSet, rectBounds.xMax - offSet);
+                clampedY = lastValidPosition.y;  // Freeze Y axis
+                outOfBond = true;
+            }
+
+            // If Y axis is out of bounds, freeze X axis at last valid position
+            if (isYOutOfBounds)
+            {
+                clampedY = Mathf.Clamp(position.y, rectBounds.yMin + offSet, rectBounds.yMax - offSet);
+                clampedX = lastValidPosition.x;  // Freeze X axis
+                outOfBond = true;
+            }
 
             return new Vector2(clampedX, clampedY);
+
+            //Rect rectBounds = rect.rect;
+            //float offSet = 100f;  // You can adjust this offset as needed
+            ////Vector2 newPosition = position + new Vector2(100, 100);
+
+            //float clampedX = Mathf.Clamp(position.x, rectBounds.xMin + offSet, rectBounds.xMax - offSet);
+            //float clampedY = Mathf.Clamp(position.y, rectBounds.yMin + offSet, rectBounds.yMax - offSet);
+
+
+            //return new Vector2(clampedX, clampedY);
         }
 
         /// <summary
