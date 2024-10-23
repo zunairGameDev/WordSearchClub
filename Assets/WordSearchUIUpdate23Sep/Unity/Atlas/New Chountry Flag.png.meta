@@ -1,0 +1,606 @@
+fileFormatVersion: 2
+guid: 0d76ebb084b9e8147b2e7f6de9a88271
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 51
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: New Chountry Flag_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 1621
+        width: 360
+        height: 403
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34d9740e3e25bde45b606d37bd2cd658
+      internalID: 1104422102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_1
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 1727
+        width: 266
+        height: 297
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d94f5cf2280f6664a979e2989e562345
+      internalID: 932105992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_2
+      rect:
+        serializedVersion: 2
+        x: 656
+        y: 1727
+        width: 272
+        height: 305
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8348518f1a557546a6a6428b9b71dad
+      internalID: -1031318375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_3
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 1216
+        width: 352
+        height: 400
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d91bb8c783562c74a807ccaf7b20ee74
+      internalID: -1396396628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_4
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 1116
+        width: 266
+        height: 299
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3392885298dcd0643a1ed728e24a5257
+      internalID: -795063601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_5
+      rect:
+        serializedVersion: 2
+        x: 656
+        y: 1104
+        width: 272
+        height: 312
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da7548c387219d14a913dbb9a9f0d872
+      internalID: -1761749215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_6
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 801
+        width: 352
+        height: 407
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0581583606b03134cb20e8e8044be73d
+      internalID: 1685534940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_7
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 808
+        width: 264
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5dd34e463848d6e4dbaebc330480c17c
+      internalID: 83561963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_8
+      rect:
+        serializedVersion: 2
+        x: 664
+        y: 808
+        width: 256
+        height: 288
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a9a6c29e84f93044a368b8aa5c8d1ae
+      internalID: -1739801500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
+        width: 360
+        height: 408
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41ab0d57a9e96f94c95bd7920bdc6fa7
+      internalID: 713841250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_17
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 587
+        width: 206
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d8dc802f59f6ad44914ef42e69250ce
+      internalID: 1918364190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_18
+      rect:
+        serializedVersion: 2
+        x: 652
+        y: 580
+        width: 208
+        height: 164
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 567cd54af3ea53f44ba19f5b00a35cde
+      internalID: 1448316426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_21
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 579
+        width: 210
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a768e5172aa7ee6488e60c014cd71557
+      internalID: 1866458428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_23
+      rect:
+        serializedVersion: 2
+        x: 1168
+        y: 580
+        width: 210
+        height: 164
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a59150de91511cf4295bf4ddd3dd6051
+      internalID: -466949948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_41
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 246
+        width: 119
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2da959214fc745843b11e92c8bbc57fb
+      internalID: 1363368393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_42
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 249
+        width: 122
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfced4d91fbf33946b850b059315439f
+      internalID: 670536223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_43
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 245
+        width: 130
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 757c2646eb4fc734bb914f7dbd8536a1
+      internalID: 441243065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_44
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 1429
+        width: 260
+        height: 296
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e30b4c3267f750f429a1db5240ed5a73
+      internalID: 661263518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_45
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 1427
+        width: 263
+        height: 297
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 045c599ba154896408a8cf7e005dd97e
+      internalID: -774246166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: New Chountry Flag_10
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 249
+        width: 122
+        height: 120
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f13e3734395df54489760b32bae167a
+      internalID: -743899594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      New Chountry Flag_0: 1104422102
+      New Chountry Flag_1: 932105992
+      New Chountry Flag_10: -743899594
+      New Chountry Flag_11: 2085642217
+      New Chountry Flag_12: 104642451
+      New Chountry Flag_13: -517870003
+      New Chountry Flag_14: 356782824
+      New Chountry Flag_15: 1591513067
+      New Chountry Flag_16: 1977595171
+      New Chountry Flag_17: 1918364190
+      New Chountry Flag_18: 1448316426
+      New Chountry Flag_19: -2095470281
+      New Chountry Flag_2: -1031318375
+      New Chountry Flag_20: 429319443
+      New Chountry Flag_21: 1866458428
+      New Chountry Flag_22: -144000336
+      New Chountry Flag_23: -466949948
+      New Chountry Flag_24: -600255986
+      New Chountry Flag_25: -1840170229
+      New Chountry Flag_26: -352030113
+      New Chountry Flag_27: -2075530364
+      New Chountry Flag_28: -1958303707
+      New Chountry Flag_29: -545173551
+      New Chountry Flag_3: -1396396628
+      New Chountry Flag_30: 1450742652
+      New Chountry Flag_31: 1147465254
+      New Chountry Flag_32: 751851192
+      New Chountry Flag_33: 1555540016
+      New Chountry Flag_34: -1382226579
+      New Chountry Flag_35: 919611105
+      New Chountry Flag_36: -1823855760
+      New Chountry Flag_37: 546905018
+      New Chountry Flag_38: 428888803
+      New Chountry Flag_39: -1520992876
+      New Chountry Flag_4: -795063601
+      New Chountry Flag_40: -676859981
+      New Chountry Flag_41: 1363368393
+      New Chountry Flag_42: 670536223
+      New Chountry Flag_43: 441243065
+      New Chountry Flag_44: 661263518
+      New Chountry Flag_45: -774246166
+      New Chountry Flag_5: -1761749215
+      New Chountry Flag_6: 1685534940
+      New Chountry Flag_7: 83561963
+      New Chountry Flag_8: -1739801500
+      New Chountry Flag_9: 713841250
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

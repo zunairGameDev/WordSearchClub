@@ -12,7 +12,7 @@ namespace BBG.WordSearch
         [SerializeField] private RectTransform wordListContainer = null;
         [SerializeField] private WordListItem wordListItemPrefab = null;
         [SerializeField] private CanvasGroup wordListCanvasGroup = null;
-
+        public bool hintWordHighlight;
         [Header("Quote UI Elements")]
         [SerializeField] private TextMeshProUGUI quoteText;  // Text for the quote with blanks
 
@@ -21,7 +21,7 @@ namespace BBG.WordSearch
         #region Member Variables
 
         private ObjectPool wordListItemPool;
-        private Dictionary<string, WordListItem> wordListItems;
+        public Dictionary<string, WordListItem> wordListItems;
         private string fullQuote;
         private List<string> missingWords;
         public List<string> words;
@@ -44,6 +44,7 @@ namespace BBG.WordSearch
             fullQuote = board.quoteText;          // Full quote with missing words
             missingWords = board.missingWords;    // The missing words
             words = board.words;
+            //hintWordHighlight = false;
             // Update the quote text with blanks
             string displayedQuote = GenerateQuoteWithBlanks(fullQuote, missingWords);
             quoteText.text = displayedQuote;

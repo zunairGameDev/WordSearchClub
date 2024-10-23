@@ -414,14 +414,14 @@ namespace BBG.WordSearch
                 if (GameManager.Instance.toPlayDailyChallange)
                 {
                     char character = char.ToLower(selectedWord[i]);
-                    Debug.Log(character);
+                    //Debug.Log(character);
                     uppercaseSelectedWord = uppercaseSelectedWord + character;
                     selectedWordReversed = character + selectedWordReversed;
                 }
                 else
                 {
                     char character = char.ToUpper(selectedWord[i]);
-                    Debug.Log(character);
+                    //Debug.Log(character);
                     uppercaseSelectedWord = uppercaseSelectedWord + character;
                     selectedWordReversed = character + selectedWordReversed;
                 }
@@ -664,23 +664,28 @@ namespace BBG.WordSearch
             char letter = hintLetters[value];
             //int wordInt  = letterIntDictionary.GetValueOrDefault(letter);
             int wordIndex = 0;
-            for (int i = 0; hintTempLetters.Count > i; i++)
+            if (!toPlayDailyChallange)
             {
-                if (hintTempLetters[i] == letter)
+                for (int i = 0; hintTempLetters.Count > i; i++)
                 {
-                    if (!wordList.wordListItems[activeBoardWords[i]].hintWordHighlight)
+                    if (hintTempLetters[i] == letter)
                     {
-                        wordIndex = i;
-                        wordList.wordListItems[activeBoardWords[wordIndex]].hintWordHighlight = true;
-                        break;
+                        if (!wordList.wordListItems[activeBoardWords[i]].hintWordHighlight)
+                        {
+                            wordIndex = i;
+                            wordList.wordListItems[activeBoardWords[wordIndex]].hintWordHighlight = true;
+                            break;
+                        }
                     }
 
                 }
             }
             // Show the letter as a hint
             characterGrid.ShowLetterHint(letter);
-            wordList.HighLightingHintWord(activeBoardWords[wordIndex], wordColorFromLetter);
-
+            if (!toPlayDailyChallange)
+            {
+                wordList.HighLightingHintWord(activeBoardWords[wordIndex], wordColorFromLetter);
+            }
             // Play the sound for using a hint
             SoundManager.Instance.Play("hint-used");
 

@@ -1008,7 +1008,7 @@ namespace BBG.WordSearch
         private Vector2 ConstrainToRect(Vector2 position, RectTransform rect, Vector2 lastValidPosition)
         {
             Rect rectBounds = rect.rect;
-            float offSet = 25f;  // Offset for boundary
+            float offSet = 0f;  // Offset for boundary
             outOfBond = false;
             // Current position of the object
             float clampedX = position.x;
