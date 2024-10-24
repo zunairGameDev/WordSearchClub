@@ -565,6 +565,7 @@ namespace BBG.WordSearch
                         GlobalData.CoinCount += 200;
                         MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
                         characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
+                        StartCoroutine(MultipleShow());
                     }
                     else
                     {
@@ -573,6 +574,11 @@ namespace BBG.WordSearch
                 });
             }
             characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
+        }
+        IEnumerator StartMultipleHint()
+        {
+            yield return new WaitForSeconds(1f);
+            StartCoroutine(MultipleShow());
         }
 
         /// <summary>
@@ -587,35 +593,46 @@ namespace BBG.WordSearch
 
                 // Update the last click time
                 lastClickTime = Time.time;
+                StartSingleHintFunction();
 
-                if (PlayerPrefs.GetInt("StarterCounts", 2) > 0 && hintLetters.Count >= 1)
-                {
-                    ShowingHintLetter();
-                    PlayerPrefs.SetInt("StarterCounts", PlayerPrefs.GetInt("StarterCounts", 2) - 1);
 
-                }
-                else if (GlobalData.CoinCount >= 100 && hintLetters.Count >= 1)
-                {
-                    ShowingHintLetter();
-                    GlobalData.CoinCount = GlobalData.CoinCount - 100;
-                    MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
-                }
-                else if (hintLetters.Count >= 1)
-                {
-                    //ShowingHintLetter();
-                    FGMediation.ShowRewarded((success) =>
-                    {
-                        PlayerPrefs.SetInt("DoubleReward", 0);
-                        GlobalData.CoinCount += 100;
-                        MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
-
-                        characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
-                    }
-                    );
-                    // open Shop 
-                }
-                characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
             }
+        }
+        public void StartSingleHintFunction()
+        {
+            if (PlayerPrefs.GetInt("StarterCounts", 2) > 0 && hintLetters.Count >= 1)
+            {
+                ShowingHintLetter();
+                PlayerPrefs.SetInt("StarterCounts", PlayerPrefs.GetInt("StarterCounts", 2) - 1);
+
+            }
+            else if (GlobalData.CoinCount >= 100 && hintLetters.Count >= 1)
+            {
+                ShowingHintLetter();
+                GlobalData.CoinCount = GlobalData.CoinCount - 100;
+                MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+            }
+            else if (hintLetters.Count >= 1)
+            {
+                //ShowingHintLetter();
+                FGMediation.ShowRewarded((success) =>
+                {
+                    PlayerPrefs.SetInt("DoubleReward", 0);
+                    GlobalData.CoinCount += 100;
+                    MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+
+                    characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
+                    StartCoroutine(StartSingleHint());
+                }
+                );
+                // open Shop 
+            }
+            characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
+        }
+        IEnumerator StartSingleHint()
+        {
+            yield return new WaitForSeconds(1f);
+            StartSingleHintFunction();
         }
         public void ToShowHintLetter()
         {
