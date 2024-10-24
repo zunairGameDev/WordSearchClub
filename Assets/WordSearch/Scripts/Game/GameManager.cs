@@ -565,7 +565,7 @@ namespace BBG.WordSearch
                         GlobalData.CoinCount += 200;
                         MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
                         characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
-                        StartCoroutine(MultipleShow());
+                        StartCoroutine(StartMultipleHint());
                     }
                     else
                     {
