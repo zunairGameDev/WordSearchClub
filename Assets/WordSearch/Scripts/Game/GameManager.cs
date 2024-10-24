@@ -118,8 +118,7 @@ namespace BBG.WordSearch
             LastCompletedLevels = new Dictionary<string, int>();
             SavedBoards = new Dictionary<string, JSONNode>();
             UnlockedCategories = new HashSet<string>();
-            characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
-            characterGrid.GetComponent<GamePlayHelperButton>().MultipleHintButtonUpdate();
+            characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
             characterGrid.Initialize();
             wordList.Initialize();
             InitSave();
@@ -565,7 +564,7 @@ namespace BBG.WordSearch
                         PlayerPrefs.SetInt("DoubleReward", 1);
                         GlobalData.CoinCount += 200;
                         MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
-                        characterGrid.GetComponent<GamePlayHelperButton>().MultipleHintButtonUpdate();
+                        characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
                     }
                     else
                     {
@@ -573,7 +572,7 @@ namespace BBG.WordSearch
                     }
                 });
             }
-            characterGrid.GetComponent<GamePlayHelperButton>().MultipleHintButtonUpdate();
+            characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
         }
 
         /// <summary>
@@ -610,12 +609,12 @@ namespace BBG.WordSearch
                         GlobalData.CoinCount += 100;
                         MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
 
-                        characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
+                        characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
                     }
                     );
                     // open Shop 
                 }
-                characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
+                characterGrid.GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
             }
         }
         public void ToShowHintLetter()

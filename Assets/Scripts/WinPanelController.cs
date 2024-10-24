@@ -66,9 +66,9 @@ public class WinPanelController : MonoBehaviour
     }
     public void ToShowCountryComplete()
     {
-        if (!GameManager.Instance.toPlayDailyChallange)
-        {
-            if ((MainMenuText.Instance.currentValue + 1) == MainMenuText.Instance.countryInfo.maxValue)
+        //if ()
+        //{
+            if ((MainMenuText.Instance.currentValue + 1) == MainMenuText.Instance.countryInfo.maxValue && !GameManager.Instance.toPlayDailyChallange)
             {
                 appreciationText.text = "Country Complete";
                 appreciationShadowText.text = appreciationText.text;
@@ -84,18 +84,13 @@ public class WinPanelController : MonoBehaviour
             }
             appreciationObject.SetActive(true);
 
-        }
+        //}
 
     }
 
     public void OnLevelWin()
     {
-        if (PlayerPrefs.GetInt("SelectJasonLevel") >= 2)
-        {
-            //Applovin_Manager.instance.ShowInterstitial();
-            //FGMediation.ShowInterstitial("MyInterstitialAd");
-            FGMediation.ShowInterstitial();
-        }
+        
         // Start particle effect
         //particleEffect.SetActive(true);
         backGround.sprite = MainMenuText.Instance.countryInfo.BackGroundImage;
@@ -203,10 +198,26 @@ public class WinPanelController : MonoBehaviour
             winSlider.value = fillAmount;
             winSlideText.text = MainMenuText.Instance.currentValue.ToString() + " / " + MainMenuText.Instance.countryInfo.maxValue.ToString();
             MainMenuText.Instance.FillAmount();
+            StartCoroutine(StartAdPanel());
             if (toShowCollectButton)
             {
                 StartCoroutine(ScalingDownTree());
             }
+        }
+        else
+        {
+            StartCoroutine(StartAdPanel());
+        }
+
+    }
+    IEnumerator StartAdPanel()
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (PlayerPrefs.GetInt("SelectJasonLevel") >= 2)
+        {
+            //Applovin_Manager.instance.ShowInterstitial();
+            //FGMediation.ShowInterstitial("MyInterstitialAd");
+            FGMediation.ShowInterstitial();
         }
 
     }

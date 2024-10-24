@@ -28,6 +28,7 @@ public class CountryCompletePanel : MonoBehaviour
     {
         GlobalData.CoinCount = GlobalData.CoinCount + 25;
         MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+        
         WinPanelController.Instance.NewDestinationPanel.GetComponent<NewDestinationPanel>().ApplyNextCountryData();
         WinPanelController.Instance.NewDestinationPanel.SetActive(true);
         PlayerPrefs.SetInt("CountryStamp", PlayerPrefs.GetInt("CountryStamp") + 1);        

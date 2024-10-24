@@ -355,7 +355,7 @@ namespace BBG.WordSearch
                 playerStateShow.transform.parent.gameObject.SetActive(true);
 
             }
-
+            GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
             // We want to scale the CharacterItem so that the UI Text changes size
             currentCellSize = SetupGridContainer(board.rows, board.cols);
             currentScale = currentCellSize / maxCellSize;
@@ -588,6 +588,7 @@ namespace BBG.WordSearch
             }
             GlobalData.CoinCount = GlobalData.CoinCount + (1 * CountLetters(word));
             MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+            GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
             CharacterGridItem startCharacter = characterItems[wordStartPosition.row][wordStartPosition.col];
             CharacterGridItem endCharacter = characterItems[wordEndPosition.row][wordEndPosition.col];
 

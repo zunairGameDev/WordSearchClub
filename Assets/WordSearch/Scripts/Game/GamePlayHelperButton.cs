@@ -45,4 +45,9 @@ public class GamePlayHelperButton : MonoBehaviour
 
         }
     }
+    public void HeplerButtonUIUpdated()
+    {
+        HintButtonUpdate();
+        MultipleHintButtonUpdate();
+    }
 }
