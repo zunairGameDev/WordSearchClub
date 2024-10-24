@@ -18,6 +18,7 @@ namespace BBG.WordSearch
         public Vector2 offset;
         public Vector2 startMousePosition;
         public Vector2 currentMousePosition;
+        public Vector2 endMousePosition;
         public bool increaseDistanceAllowed = true;
         public float permenetLineDistance = 0;
         public float lastDistance = 0;
@@ -92,8 +93,8 @@ namespace BBG.WordSearch
         private List<List<CharacterGridItem>> characterItems;
         private List<Image> highlights;
 
-        private float currentScale;
-        private float currentCellSize;
+        [SerializeField] private float currentScale;
+        [SerializeField] private float currentCellSize;
 
         // Used when the player is selecting a word
         private Image selectingHighlight;
@@ -117,6 +118,8 @@ namespace BBG.WordSearch
         #endregion
 
         public float currentAngle;
+        public float currentSecondAngle;
+        public float lastAngle;
         public bool gridRotates;
         public bool reverseCheck;
         public bool outOfBond;
@@ -189,12 +192,12 @@ namespace BBG.WordSearch
 
                     // Get mouse position in world space
 
-                    UpdateSelectingHighlight(eventData.position);
-                    UpdateSelectedWord();
-                    // Constrain the mouse position within the parent rect (background)
                     Vector2 mousePosition = GetMousePosition(eventData.position);
                     Vector2 constrainedPosition = ConstrainToRect(mousePosition, background, lastValidPosition);
                     currentMousePosition = constrainedPosition;
+                    UpdateSelectingHighlight(eventData.position);
+                    UpdateSelectedWord();
+                    // Constrain the mouse position within the parent rect (background)
                     pointCheck = true;
 
                     // Update last valid position if the constrained position has changed
@@ -235,7 +238,7 @@ namespace BBG.WordSearch
                 // Call OnWordSelected to notify the WordSearchController that a word has been selected
                 string foundWord = GameManager.Instance.OnWordSelected(highlightedWord);
                 pointCheck = false;
-                Debug.Log(foundWord + "a");
+                //Debug.Log(foundWord + "a");
                 // If the word was a word that was suppose to be found then highligh the word and create the floating text
                 if (!string.IsNullOrEmpty(foundWord))
                 {
@@ -777,7 +780,19 @@ namespace BBG.WordSearch
         {
             if (isSelecting)
             {
+                Vector2 startPoint = GetMousePosition(startMousePosition);
+                currentSecondAngle = GettingSecondAngel(startMousePosition, screenPosition);
+                Vector2 endPoint = GetEndPoint(startMousePosition, currentMousePosition, currentSecondAngle);
+                endMousePosition = endPoint;
+                Vector2 endPosition = ScreenToWorldPosition(endPoint);
+                //Debug.Log(end_point + " EndPoint");
+                //Debug.Log(screenPosition + " ScreenPosition");
+                //Debug.Log(GetCharacterItemAtPosition(end_point) + " EndPoint");
+                Debug.Log(GetCharacterItemAtPosition(screenPosition) + " ScreenPoint");
+
                 CharacterGridItem endCharacter = GetCharacterItemAtPosition(screenPosition);
+
+                //endCharacter.transform.GetComponent<EdgeDeductor>().CheckingDistance();
                 // If endCharacter is null then the mouse position must be off the grid container
                 if (endCharacter != null)
                 {
@@ -829,15 +844,17 @@ namespace BBG.WordSearch
                         }
 
                         endCharacter = characterItems[startRow + rowDiff][startCol + colDiff];
+                        //endCharacter.transform.GetComponent<EdgeDeductor>().CheckingDistance();
                     }
                 }
                 else
                 {
                     // Use the last selected end character
                     endCharacter = lastEndCharacter;
+                    //endCharacter.transform.GetComponent<EdgeDeductor>().CheckingDistance();
                     //Debug.Log("A");
                 }
-
+                Debug.Log(endCharacter.characterText.text);
                 if (lastEndCharacter != null)
                 {
                     SetTextColor(startCharacter, lastEndCharacter, letterColor, false);
@@ -845,6 +862,8 @@ namespace BBG.WordSearch
 
                 // Position the select highlight in the proper position
                 PositionHighlight(selectingHighlight, startCharacter, endCharacter);
+                //Debug.Log(endCharacter.characterText.text);
+                endCharacter.transform.GetComponent<EdgeDeductor>().CheckingDistance();
                 if (pointCheck)
                 {
                     permentHighLight(parmentSelectingHighLight, startCharacter, currentAngle, GetMousePosition(screenPosition));
@@ -864,6 +883,32 @@ namespace BBG.WordSearch
                 lastEndCharacter = endCharacter;
                 AddLetterForDistance(lastEndCharacter);
             }
+        }
+        public Vector2 ScreenToWorldPosition(Vector2 screenPosition)
+        {
+            // Convert the screen position to world position
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, Camera.main.nearClipPlane));
+
+            // Return the 2D world position (x, y)
+            return new Vector2(worldPosition.x, worldPosition.y);
+        }
+        public Vector2 GetEndPoint(Vector2 startPoint, Vector2 currentPoint, float angle)
+        {
+            // Calculate the direction vector from startPoint to currentPoint
+            Vector2 direction = currentPoint - startPoint;
+
+            // Get the distance between the two points
+            float distance = Vector2.Distance(startPoint, currentPoint);
+
+            // Convert angle to radians for trigonometric functions
+            float radianAngle = angle * Mathf.Deg2Rad;
+
+            // Calculate the new x and y coordinates using cosine and sine of the angle
+            float newX = startPoint.x + distance * Mathf.Cos(radianAngle);
+            float newY = startPoint.y + distance * Mathf.Sin(radianAngle);
+
+            // Return the calculated endpoint
+            return new Vector2(newX, newY);
         }
 
         private void PositionHighlight(Image highlight, CharacterGridItem start, CharacterGridItem end)
@@ -906,6 +951,42 @@ namespace BBG.WordSearch
             currentAngle = GettingAngel(startPosition, endPosition);
             highlightRectT.eulerAngles = new Vector3(0f, 0f, currentAngle);
             //Debug.Log(highlightRectT.eulerAngles);
+        }
+        public float GettingSecondAngel(Vector2 startPosition, Vector2 endPosition)
+        {
+            float angle = Vector2.Angle(new Vector2(1f, 0f), endPosition - startPosition);
+
+            if (startPosition.y > endPosition.y)
+            {
+                angle = -angle;
+            }
+            float epsilon = 10f;
+            float[] allowedAngles = { 0, 45, 90, 135, 180, -180, -135, -90, -45, 0 };
+            foreach (float allowed in allowedAngles)
+            {
+                //Debug.Log(angle + " angle");
+                //Debug.Log(Mathf.Abs(angle - allowed) + "Mathf.Abs(angle - allowed)");
+                if (Mathf.Abs(angle - allowed) < epsilon)
+                {
+                    angle = allowed;
+                    Debug.Log(angle + "  allowed");
+                    // If grid rotates, calculate the opposite angle
+                    if (gridRotates)
+                    {
+                        // Add 180 degrees to flip the angle if the grid rotates
+                        angle = (angle + 180f) % 360f;
+
+                        // Ensure the angle stays within the range [-180, 180]
+                        if (angle > 180f) angle -= 360f;
+                    }
+                    currentSecondAngle = angle;
+                    lastAngle = angle;
+                    return currentSecondAngle;
+                }
+            }
+
+            return lastAngle;
+
         }
         public float GettingAngel(Vector2 startPosition, Vector2 endPosition)
         {
@@ -955,6 +1036,7 @@ namespace BBG.WordSearch
             {
                 if (increaseDistanceAllowed)
                 {
+                    //Debug.Log("Inbond A");
                     permentLineChild.GetComponent<Image>().color = colorOpque;
                     selectingHighlight.color = colorTransperancy;
                     permenetLineDistance = Vector2.Distance(GetMousePosition(startMousePosition), currentMousePosition);
@@ -963,24 +1045,43 @@ namespace BBG.WordSearch
                 }
                 else
                 {
+                    //Debug.Log("Inbond B");
                     //selectingHighlight.color = permentLineChild.GetComponent<Image>().color;
                     selectingHighlight.color = colorOpque;
                     permentLineChild.GetComponent<Image>().color = colorTransperancy;
                     //permenetLineDistance = lastDistance;
                 }
             }
-            else if (!outOfBond)
-            {
-                permentLineChild.GetComponent<Image>().color = colorOpque;
-                selectingHighlight.color = colorTransperancy;
-                permenetLineDistance = Vector2.Distance(GetMousePosition(startMousePosition), currentMousePosition);
-                lastDistance = permenetLineDistance;
-            }
             else
             {
-                selectingHighlight.color = colorOpque;
-                permentLineChild.GetComponent<Image>().color = colorTransperancy;
+                if (increaseDistanceAllowed && !outOfBond)
+                {
+
+                    //Debug.Log("Inbond C");
+                    //Debug.Log(increaseDistanceAllowed + "increaseDistanceAllowed");
+                    //Debug.Log(!outOfBond + "outOfBond");
+                    permentLineChild.GetComponent<Image>().color = colorOpque;
+                    selectingHighlight.color = colorTransperancy;
+                    permenetLineDistance = Vector2.Distance(GetMousePosition(startMousePosition), currentMousePosition);
+                    lastDistance = permenetLineDistance;
+                }
+                else
+                {
+                    //Debug.LogWarning("Outbond");
+                    selectingHighlight.color = colorOpque;
+                    permentLineChild.GetComponent<Image>().color = colorTransperancy;
+                    permenetLineDistance = Vector2.Distance(GetMousePosition(startMousePosition), currentMousePosition);
+                    lastDistance = permenetLineDistance;
+                }
             }
+            //else
+            //{
+            //    Debug.LogWarning("Outbond");
+            //    selectingHighlight.color = colorOpque;
+            //    permentLineChild.GetComponent<Image>().color = colorTransperancy;
+            //    permenetLineDistance = Vector2.Distance(GetMousePosition(startMousePosition), currentMousePosition);
+            //    lastDistance = permenetLineDistance;
+            //}
             //if (increaseDistanceAllowed)
             //{
 
@@ -1013,13 +1114,15 @@ namespace BBG.WordSearch
             // Current position of the object
             float clampedX = position.x;
             float clampedY = position.y;
-
+            clampedX = Mathf.Clamp(position.x, rectBounds.xMin + offSet, rectBounds.xMax - offSet);
+            clampedY = Mathf.Clamp(position.y, rectBounds.yMin + offSet, rectBounds.yMax - offSet);
             bool isXOutOfBounds = position.x < rectBounds.xMin + offSet || position.x > rectBounds.xMax - offSet;
             bool isYOutOfBounds = position.y < rectBounds.yMin + offSet || position.y > rectBounds.yMax - offSet;
 
             // If X axis is out of bounds, freeze Y axis at last valid position
             if (isXOutOfBounds)
             {
+                Debug.Log("BoundX");
                 clampedX = Mathf.Clamp(position.x, rectBounds.xMin + offSet, rectBounds.xMax - offSet);
                 clampedY = lastValidPosition.y;  // Freeze Y axis
                 outOfBond = true;
@@ -1028,6 +1131,7 @@ namespace BBG.WordSearch
             // If Y axis is out of bounds, freeze X axis at last valid position
             if (isYOutOfBounds)
             {
+                Debug.Log("BoundY");
                 clampedY = Mathf.Clamp(position.y, rectBounds.yMin + offSet, rectBounds.yMax - offSet);
                 clampedX = lastValidPosition.x;  // Freeze X axis
                 outOfBond = true;
@@ -1104,10 +1208,17 @@ namespace BBG.WordSearch
                     RectTransformUtility.ScreenPointToLocalPointInRectangle(characterItems[i][j].transform as RectTransform, screenPoint, null, out localPoint);
 
                     // Check if the localPoint is inside the cell in the grid
-                    localPoint.x += CellFullWidth / 2f;
-                    localPoint.y += CellFullHeight / 2f;
 
-                    if (localPoint.x >= 0 && localPoint.y >= 0 && localPoint.x < CellFullWidth && localPoint.y < CellFullHeight)
+                    float tempFullWidth = 180;
+                    float tempFullHeight = 180f;
+
+                    //localPoint.x += tempFullHeight / 2f;           
+                    localPoint.x += (CellFullWidth + 15) / 2f;
+                    //localPoint.y += tempFullHeight / 2f;
+                    localPoint.y += (CellFullHeight + 15) / 2f;
+
+                    if (localPoint.x >= 0 && localPoint.y >= 0 && localPoint.x < (CellFullWidth + 15) && localPoint.y < (CellFullHeight + 15))
+                    //if (localPoint.x >= 0 && localPoint.y >= 0 && localPoint.x < tempFullWidth && localPoint.y < tempFullHeight)
                     {
                         return characterItems[i][j];
                     }
