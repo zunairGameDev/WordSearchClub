@@ -119,6 +119,7 @@ namespace BBG.WordSearch
             SavedBoards = new Dictionary<string, JSONNode>();
             UnlockedCategories = new HashSet<string>();
             characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
+            characterGrid.GetComponent<GamePlayHelperButton>().MultipleHintButtonUpdate();
             characterGrid.Initialize();
             wordList.Initialize();
             InitSave();
@@ -564,6 +565,7 @@ namespace BBG.WordSearch
                         PlayerPrefs.SetInt("DoubleReward", 1);
                         GlobalData.CoinCount += 200;
                         MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                        characterGrid.GetComponent<GamePlayHelperButton>().MultipleHintButtonUpdate();
                     }
                     else
                     {
@@ -571,7 +573,7 @@ namespace BBG.WordSearch
                     }
                 });
             }
-
+            characterGrid.GetComponent<GamePlayHelperButton>().MultipleHintButtonUpdate();
         }
 
         /// <summary>
@@ -582,7 +584,7 @@ namespace BBG.WordSearch
             if (Time.time >= lastClickTime + cooldownTime)
             {
                 // Perform your action here
-                Debug.Log("Action executed!");
+                //Debug.Log("Action executed!");
 
                 // Update the last click time
                 lastClickTime = Time.time;
@@ -608,7 +610,7 @@ namespace BBG.WordSearch
                         GlobalData.CoinCount += 100;
                         MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
 
-
+                        characterGrid.GetComponent<GamePlayHelperButton>().HintButtonUpdate();
                     }
                     );
                     // open Shop 
