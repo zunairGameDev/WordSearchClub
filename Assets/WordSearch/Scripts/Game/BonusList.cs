@@ -17,6 +17,13 @@ namespace BBG.WordSearch
         public Dictionary<string, WordListItem> wordListItems;
         public GameObject claimButton;
         public Button closeButton;
+        public Image uperHead;
+        public GameObject textToShowNoWord;
+        public Sprite noTextUperBar;
+        public Sprite noTextFillerBar;
+        public Sprite textUperBar;
+        public Sprite textFillerBar;
+
 
         #endregion
         public void Setup(BonusBoard board)
@@ -79,11 +86,11 @@ namespace BBG.WordSearch
             }
             sliderImage.fillAmount = endAmount;
             panelSliderImage.fillAmount = endAmount;
-            PlayerPrefs.SetFloat("TotalHiddenWordFound",endAmount);
+            PlayerPrefs.SetFloat("TotalHiddenWordFound", endAmount);
         }
         public void OnClickBonusButton()
         {
-            Debug.Log(PlayerPrefs.GetFloat("TotalHiddenWordFound")/25);
+            Debug.Log(PlayerPrefs.GetFloat("TotalHiddenWordFound") / 25);
             panelSliderImage.fillAmount = PlayerPrefs.GetFloat("TotalHiddenWordFound") / 25f;
             if (PlayerPrefs.GetFloat("TotalHiddenWordFound") >= 25)
             {
@@ -93,6 +100,18 @@ namespace BBG.WordSearch
             else
             {
                 claimButton.SetActive(false);
+            }
+            if (content.childCount > 0)
+            {
+                panelSliderImage.sprite = textFillerBar;
+                uperHead.sprite = textUperBar;
+                textToShowNoWord.SetActive(false);
+            }
+            else
+            {
+                panelSliderImage.sprite = noTextFillerBar;
+                uperHead.sprite = noTextUperBar;
+                textToShowNoWord.SetActive(true);
             }
             PopupManager.Instance.Show("BonusWord");
         }
