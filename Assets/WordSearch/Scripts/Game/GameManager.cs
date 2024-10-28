@@ -112,6 +112,7 @@ namespace BBG.WordSearch
         private float lastClickTime;
         public Color wordColorFromLetter;
         private FoundedWords foundedWords;
+        public ShowAlreadyFound alreadyFoundTab;
         #endregion
 
         #region Unity Methods
@@ -515,9 +516,9 @@ namespace BBG.WordSearch
 
             selectedWord = uppercaseSelectedWord;
             Debug.Log("B " + selectedWord);
-            if (ActiveBonusBoard.foundedWords.Contains(selectedWord) || ActiveBonusBoard.foundedWords.Contains(selectedWordReversed))
+            if (ActiveBonusBoard.foundedWords.Contains(selectedWord) /*|| ActiveBonusBoard.foundedWords.Contains(selectedWordReversed)*/)
             {
-                Debug.Log("Word already found");
+                alreadyFoundTab.ShowPanel();
             }
             else
             {
@@ -545,6 +546,7 @@ namespace BBG.WordSearch
                     // Add the word to the hash set of found words for this board
                     ActiveBonusBoard.foundedWords.Add(selectedWord);
                     foundedWords.words = ActiveBonusBoard.foundedWords;
+                    bonusWords.CreateBonuListItem(selectedWord);
                     PlayerPrefs.SetString("FoundedWord", JsonUtility.ToJson(foundedWords));
                     //Debug.Log(JsonUtility.ToJson(foundedWords));
                     //if (toPlayDailyChallange)

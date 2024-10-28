@@ -264,6 +264,7 @@ namespace BBG.WordSearch
                         string BonusWordFounded = GameManager.Instance.OnWordBonusSelected(highlightedWord);
                         if (!string.IsNullOrEmpty(BonusWordFounded))
                         {
+                            Debug.Log("A1");
                             showBonusWordFloat(BonusWordFounded);
 
                         }
@@ -486,6 +487,10 @@ namespace BBG.WordSearch
             {
                 Destroy(highlights[i].gameObject);
             }
+            for (int i = 0; i < GameManager.Instance.bonusWords.content.childCount; i++)
+            {
+                Destroy(GameManager.Instance.bonusWords.content.GetChild(i).gameObject);
+            }
 
             highlights.Clear();
 
@@ -622,10 +627,20 @@ namespace BBG.WordSearch
 
                 // Step 4: Animate floating text movement and scaling simultaneously
                 floatingText.rectTransform.DOScale(new Vector3(0.36f, 0.35f, 1), 1f).SetEase(Ease.Linear); // Scale down the text
-                floatingText.rectTransform.DOLocalMove(localTargetPosition, 0.7f).SetEase(Ease.InOutSine).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
+                floatingText.rectTransform.DOLocalMove(localTargetPosition, 0.7f).SetEase(Ease.InOutSine).OnComplete(() =>
+                {
+
+                    Destroy(floatingText.gameObject);
+
+                }); // Move to the target
 
             }
-
+            StartCoroutine(ToFillBar());
+        }
+        IEnumerator ToFillBar()
+        {
+            yield return new WaitForSeconds(0.7f);
+            GameManager.Instance.bonusWords.IncreasingSliderValue();
         }
         private void ShowWord(Cell wordStartPosition, Cell wordEndPosition, string word, bool useSelectedColor)
         {

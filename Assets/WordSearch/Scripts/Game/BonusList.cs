@@ -1,17 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 namespace BBG.WordSearch
 {
     public class BonusList : MonoBehaviour
     {
         #region Member Variables
-        [SerializeField] private Transform content;
+        public Transform content;
         [SerializeField] private GameObject wordPrefab;
+        public Image sliderImage;
+        public Image panelSliderImage;
         public List<string> words = new List<string>();
         public List<string> foundedWords = new List<string>();
         private ObjectPool wordListItemPool;
         public Dictionary<string, WordListItem> wordListItems;
+        public GameObject claimButton;
+        public Button closeButton;
 
         #endregion
         public void Setup(BonusBoard board)
@@ -19,19 +24,8 @@ namespace BBG.WordSearch
             Clear();
             words = board.words;
             foundedWords = board.foundedWords;
-            // Set the title and full quote (assuming this is passed via the Board object)
+            sliderImage.fillAmount = PlayerPrefs.GetFloat("TotalHiddenWordFound") / 25f;
 
-
-            //// Add all the words to the word list container
-            //for (int i = 0; i < board.words.Count; i++)
-            //{
-            //    CreateWordListItem(board.words[i], wordListItemPool);
-            //}
-
-            //// Animate showing the word list
-            //UIAnimation anim = UIAnimation.Alpha(wordListCanvasGroup, 0f, 1f, 0.5f);
-            //anim.style = UIAnimation.Style.EaseOut;
-            //anim.Play();
         }
         public void Clear()
         {
@@ -42,16 +36,73 @@ namespace BBG.WordSearch
             //wordListContainer.sizeDelta = new Vector2(wordListContainer.sizeDelta.x, 0f);
             //wordListCanvasGroup.alpha = 0f;
         }
+        public void IncreasingSliderValue()
+        {
+
+            PlayerPrefs.SetFloat("TotalHiddenWordFound", PlayerPrefs.GetFloat("TotalHiddenWordFound") + 1);
+            sliderImage.fillAmount = PlayerPrefs.GetFloat("TotalHiddenWordFound") / 25f;
+            if (PlayerPrefs.GetFloat("TotalHiddenWordFound") >= 25)
+            {
+                OnClickBonusButton();
+                claimButton.SetActive(true);
+            }
+            else
+            {
+                claimButton.SetActive(true);
+            }
+
+        }
+        public void OnClickClaimButton()
+        {
+            GlobalData.CoinCount += 25;
+            MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+            StartCoroutine(WaitToAnimationComplete());
+        }
+
+        public IEnumerator WaitToAnimationComplete()
+        {
+            yield return new WaitForSeconds(0.5f);
+            closeButton.onClick.Invoke();
+            StartCoroutine(Unfill(1f));
+        }
+        IEnumerator Unfill(float duration)
+        {
+            float startAmount = sliderImage.fillAmount;
+            float endAmount = 0;
+            float elapsed = 0;
+            while (elapsed < duration)
+            {
+                sliderImage.fillAmount = Mathf.Lerp(startAmount, endAmount, elapsed / duration);
+
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            sliderImage.fillAmount = endAmount;
+            panelSliderImage.fillAmount = endAmount;
+            PlayerPrefs.SetFloat("TotalHiddenWordFound",endAmount);
+        }
+        public void OnClickBonusButton()
+        {
+            Debug.Log(PlayerPrefs.GetFloat("TotalHiddenWordFound")/25);
+            panelSliderImage.fillAmount = PlayerPrefs.GetFloat("TotalHiddenWordFound") / 25f;
+            if (PlayerPrefs.GetFloat("TotalHiddenWordFound") >= 25)
+            {
+                //OnClickBonusButton();
+                claimButton.SetActive(true);
+            }
+            else
+            {
+                claimButton.SetActive(false);
+            }
+            PopupManager.Instance.Show("BonusWord");
+        }
         #region Private Methods
 
-        private void CreateBonuListItem(string word, ObjectPool itemPool)
+        public void CreateBonuListItem(string word)
         {
-            WordListItem wordListItem = null;
-
-            if (!wordListItems.ContainsKey(word))
-            {
-
-            }
+            GameObject hiddenWord = Instantiate(wordPrefab, content);
+            hiddenWord.GetComponent<HiddenWordText>().wordName.text = word;
+            hiddenWord.name = word;
 
         }
 
