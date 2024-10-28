@@ -1,6 +1,7 @@
 ﻿using FunGames.Mediation;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,6 +40,7 @@ namespace BBG.WordSearch
         [SerializeField] private List<GridInfo> levelDetails = null;
         public List<TextAsset> levelFiles;
         public List<TextAsset> dailyLevelfiles;
+        public TextAsset bonusFile;
         public List<char> hintLetters = new List<char>();
         public List<char> hintTempLetters = new List<char>();
         public List<string> activeBoardWords = new List<string>();
@@ -58,6 +60,7 @@ namespace BBG.WordSearch
         [Header("Components")]
         [SerializeField] private CharacterGrid characterGrid = null;
         public WordList wordList = null;
+        public BonusList bonusWords = null;
         [SerializeField] private DailyWordList dailyWordList = null;
         [SerializeField] private GameObject loadingIndicator = null;
 
@@ -65,6 +68,7 @@ namespace BBG.WordSearch
         [SerializeField] private bool disableLevelLocking = false;
         [SerializeField] private bool awardKeyEveryLevel = false;
         [SerializeField] private bool awardCoinsEveryLevel = false;
+
 
         #endregion
 
@@ -82,6 +86,7 @@ namespace BBG.WordSearch
         public GameMode ActiveGameMode { get; private set; }
         public GameState ActiveGameState { get; private set; }
         public Board ActiveBoard { get; private set; }
+        public BonusBoard ActiveBonusBoard { get; private set; }
 
         public Dictionary<string, Board> BoardsInProgress { get; private set; }
         public Dictionary<string, int> LastCompletedLevels { get; private set; }
@@ -98,6 +103,7 @@ namespace BBG.WordSearch
         public bool toPlayDailyChallange;
         public GameObject dailyChallangeObject;
         public RectTransform wordFoundInWordGrid;
+        public RectTransform bonusButton;
         public Image BackGroundImage;
         public int starterCount = 2;
 
@@ -105,7 +111,7 @@ namespace BBG.WordSearch
         public float cooldownTime = 0.5f; // Cooldown duration in seconds
         private float lastClickTime;
         public Color wordColorFromLetter;
-
+        private FoundedWords foundedWords;
         #endregion
 
         #region Unity Methods
@@ -256,12 +262,13 @@ namespace BBG.WordSearch
                         }
 
                         Board board = LoadLevelFile(levelFiles[PlayerPrefs.GetInt("SelectJasonLevel")]);
-
+                        BonusBoard bonusBoard = LoadBonusFile(bonusFile, levelFiles[PlayerPrefs.GetInt("SelectJasonLevel")]);
 
                         SetupGame(board);
-
+                        BonusSetUp(bonusBoard);
                         //SetBoardInProgress(board, categoryInfo, levelIndex);
-
+                        foundedWords = new FoundedWords();
+                        foundedWords.words = new List<string>();
                         ShowGameScreen();
                         return;
                     }
@@ -479,6 +486,91 @@ namespace BBG.WordSearch
             }
 
             return null;
+        }
+
+        public string OnWordBonusSelected(string selectedWord)
+        {
+            string selectedWordReversed = "";
+            string uppercaseSelectedWord = "";
+            Debug.Log("A");
+            // Get the reverse version of the word
+            for (int i = 0; i < selectedWord.Length; i++)
+            {
+                if (GameManager.Instance.toPlayDailyChallange)
+                {
+                    char character = char.ToLower(selectedWord[i]);
+                    //Debug.Log(character);
+                    uppercaseSelectedWord = uppercaseSelectedWord + character;
+                    selectedWordReversed = character + selectedWordReversed;
+                }
+                else
+                {
+                    char character = char.ToLower(selectedWord[i]);
+                    //Debug.Log(character);
+                    uppercaseSelectedWord = uppercaseSelectedWord + character;
+                    selectedWordReversed = character + selectedWordReversed;
+                }
+
+            }
+
+            selectedWord = uppercaseSelectedWord;
+            Debug.Log("B " + selectedWord);
+            if (ActiveBonusBoard.foundedWords.Contains(selectedWord) || ActiveBonusBoard.foundedWords.Contains(selectedWordReversed))
+            {
+                Debug.Log("Word already found");
+            }
+            else
+            {
+
+                //// Check if the selected word equals any of the hidden words
+                //for (int i = 0; i < ActiveBonusBoard.words.Count; i++)
+                //{
+                //    // Get the word and the word with no spaces without spaces
+                //    string word = ActiveBonusBoard.words[i];
+
+                //    // Check if the word we has already been found
+                //    //if (ActiveBonusBoard.foundedWords.Contains(word))
+                //    //{
+                //    //    Debug.Log("Word already found");
+                //    //    continue;
+                //    //}
+                //    Debug.Log("C " + word);
+                //    // Spaces are removed from the word before being places on the board so we need to compare the word without any spaces in it
+                //    string wordNoSpaces = word.Replace(" ", "");
+
+                // Check if the word matches the selected word or the selected word reversed
+                if (ActiveBonusBoard.words.Contains(selectedWord)/* == wordNoSpaces || selectedWordReversed == wordNoSpaces*/)
+                {
+
+                    // Add the word to the hash set of found words for this board
+                    ActiveBonusBoard.foundedWords.Add(selectedWord);
+                    foundedWords.words = ActiveBonusBoard.foundedWords;
+                    PlayerPrefs.SetString("FoundedWord", JsonUtility.ToJson(foundedWords));
+                    //Debug.Log(JsonUtility.ToJson(foundedWords));
+                    //if (toPlayDailyChallange)
+                    //{
+                    //    dailyWordList.SetWordFound(word);
+                    //}
+                    //else
+                    //{
+                    //    // Notify the word list a word has been found
+                    //    wordList.SetWordFound(word);
+                    //}
+
+
+
+                    //if (ActiveBoard.foundWords.Count == ActiveBoard.words.Count)
+                    //{
+                    //    BoardCompleted();
+                    //}
+
+                    // Return the word with the spaces
+                    return selectedWord;
+                }
+                //}
+            }
+            return null;
+
         }
 
         public void HintHighlightWord()
@@ -901,7 +993,7 @@ namespace BBG.WordSearch
         {
             board.difficultyIndex = ActiveDifficultyIndex;
 
-            SetupGame(board);
+            //SetupGame(board);
 
             if (!toPlayDailyChallange)
             {
@@ -943,7 +1035,14 @@ namespace BBG.WordSearch
             ActiveGameState = GameState.BoardActive;
             ToShowHintLetter();
         }
-
+        private void BonusSetUp(BonusBoard board)
+        {
+            ActiveBonusBoard = board;
+            if (!toPlayDailyChallange)
+            {
+                bonusWords.Setup(board);
+            }
+        }
         /// <summary>
         /// Loads the list of words from the word file for the given category
         /// </summary>
@@ -1076,6 +1175,16 @@ namespace BBG.WordSearch
 
             board.FromJson(json);
 
+            return board;
+        }
+        private BonusBoard LoadBonusFile(TextAsset levelFile, TextAsset _levelFile)
+        {
+            string contents = levelFile.text;
+            JSONNode json = JSON.Parse(contents);
+            string _contents = _levelFile.text;
+            JSONNode _json = JSON.Parse(_contents);
+            BonusBoard board = new BonusBoard();
+            board.FromJson(json, _json);
             return board;
         }
 

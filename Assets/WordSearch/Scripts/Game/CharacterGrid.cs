@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using System.Xml;
 using TMPro;
+using UnityEditor;
 //using System.Drawing;
 
 namespace BBG.WordSearch
@@ -242,7 +243,7 @@ namespace BBG.WordSearch
                 // If the word was a word that was suppose to be found then highligh the word and create the floating text
                 if (!string.IsNullOrEmpty(foundWord))
                 {
-                    Debug.Log("b");
+                    //Debug.Log("b");
                     if (GameManager.Instance.toPlayAnimation)
                     {
                         awesomeBackGround.sprite = awesomeSprite[Random.Range(0, awesomeSprite.Count - 1)];
@@ -255,6 +256,18 @@ namespace BBG.WordSearch
                     ShowWord(wordStartPosition, wordEndPosition, foundWord, true);
 
                     SoundManager.Instance.Play("word-found");
+                }
+                else
+                {
+                    if (highlightedWord.Length > 2)
+                    {
+                        string BonusWordFounded = GameManager.Instance.OnWordBonusSelected(highlightedWord);
+                        if (!string.IsNullOrEmpty(BonusWordFounded))
+                        {
+                            showBonusWordFloat(BonusWordFounded);
+
+                        }
+                    }
                 }
             }
 
@@ -562,6 +575,58 @@ namespace BBG.WordSearch
             return container;
         }
 
+        private void showBonusWordFloat(string word)
+        {
+            List<CharacterGridItem> floatingLetter = letterObject;
+            Vector3 targetWorldPosition = GameManager.Instance.bonusButton.transform.GetChild(0).position/* (GameManager.Instance.bonusButton.transform as RectTransform).anchoredPosition*/;
+            for (int i = 0; i < floatingLetter.Count; i++)
+            {
+                Vector2 position = (floatingLetter[i].transform as RectTransform).anchoredPosition;
+                Text floatingText = CreateFloatingText(floatingLetter[i].characterText.text.ToUpper(), Color.black, position);
+
+                // Step 1: Get the world position of the target word in the grid
+                //if (reverseCheck)
+                //{
+                //    targetWorldPosition = GetCharacterPositionInText(targetWordText, floatingLetter.Count - (1 + i));
+                //}
+                //else
+                //{
+                //    targetWorldPosition = GetCharacterPositionInText(targetWordText, i);
+                //}
+                RectTransform floatingTextParent = floatingText.rectTransform.parent as RectTransform;
+
+                // Step 2: Convert the world position to the local position relative to floatingText's parent
+                Vector3 localTargetPosition = floatingTextParent.InverseTransformPoint(targetWorldPosition);
+
+                // Step 3: Get the size of the target word to match floating text scale
+                RectTransform targetWordRect = GameManager.Instance.bonusButton;
+                Vector2 targetSize = targetWordRect.sizeDelta;
+
+                // Scale down the floating text to match the target word size
+                Vector2 floatingTextSize = floatingText.rectTransform.sizeDelta;
+                float scaleX = targetSize.x / floatingTextSize.x;
+                float scaleY = targetSize.y / floatingTextSize.y;
+                Vector3 targetScale = new Vector3(scaleX, scaleY, 1f);
+
+                if (gridRotates)
+                {
+
+                    // If isRotated is true, rotate by 180 degrees on the Z axis (locally for UI elements)
+                    floatingText.rectTransform.DOLocalRotate(new Vector3(0, 0, 180), 0.1f).SetEase(Ease.InOutSine);
+                }
+                else
+                {
+                    // If isRotated is false, no rotation (rotate to 0 degrees)
+                    floatingText.rectTransform.DOLocalRotate(Vector3.zero, 0.1f).SetEase(Ease.InOutSine);
+                }
+
+                // Step 4: Animate floating text movement and scaling simultaneously
+                floatingText.rectTransform.DOScale(new Vector3(0.36f, 0.35f, 1), 1f).SetEase(Ease.Linear); // Scale down the text
+                floatingText.rectTransform.DOLocalMove(localTargetPosition, 0.7f).SetEase(Ease.InOutSine).OnComplete(() => { Destroy(floatingText.gameObject); }); // Move to the target
+
+            }
+
+        }
         private void ShowWord(Cell wordStartPosition, Cell wordEndPosition, string word, bool useSelectedColor)
         {
             List<CharacterGridItem> floatingLetter = letterObject;
@@ -789,7 +854,7 @@ namespace BBG.WordSearch
                 //Debug.Log(end_point + " EndPoint");
                 //Debug.Log(screenPosition + " ScreenPosition");
                 //Debug.Log(GetCharacterItemAtPosition(end_point) + " EndPoint");
-                Debug.Log(GetCharacterItemAtPosition(screenPosition) + " ScreenPoint");
+                //Debug.Log(GetCharacterItemAtPosition(screenPosition) + " ScreenPoint");
 
                 CharacterGridItem endCharacter = GetCharacterItemAtPosition(screenPosition);
 
@@ -855,7 +920,7 @@ namespace BBG.WordSearch
                     //endCharacter.transform.GetComponent<EdgeDeductor>().CheckingDistance();
                     //Debug.Log("A");
                 }
-                Debug.Log(endCharacter.characterText.text);
+                //Debug.Log(endCharacter.characterText.text);
                 if (lastEndCharacter != null)
                 {
                     SetTextColor(startCharacter, lastEndCharacter, letterColor, false);
@@ -970,7 +1035,7 @@ namespace BBG.WordSearch
                 if (Mathf.Abs(angle - allowed) < epsilon)
                 {
                     angle = allowed;
-                    Debug.Log(angle + "  allowed");
+                    //Debug.Log(angle + "  allowed");
                     // If grid rotates, calculate the opposite angle
                     if (gridRotates)
                     {
