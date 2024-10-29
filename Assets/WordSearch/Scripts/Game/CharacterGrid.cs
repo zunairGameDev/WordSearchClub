@@ -125,6 +125,8 @@ namespace BBG.WordSearch
         public bool reverseCheck;
         public bool outOfBond;
 
+        public bool toShakeSelectingWord;
+
 
         #region Unity Methods
 
@@ -248,13 +250,13 @@ namespace BBG.WordSearch
                     {
                         awesomeBackGround.sprite = awesomeSprite[Random.Range(0, awesomeSprite.Count - 1)];
                         awesomeText.text = goodWord[Random.Range(0, goodWord.Count - 1)];
-                        awesomeAnim.SetActive(true);
+                        awesomeAnim.SetActive(false);
                         GameManager.Instance.toPlayAnimation = false;
                         GameManager.Instance.longestWord = null;
                     }
                     Debug.Log(foundWord);
                     ShowWord(wordStartPosition, wordEndPosition, foundWord, true);
-
+                    toShakeSelectingWord = false;
                     SoundManager.Instance.Play("word-found");
                 }
                 else
@@ -269,6 +271,7 @@ namespace BBG.WordSearch
 
                         }
                     }
+                    toShakeSelectingWord = true;
                 }
             }
 
@@ -279,7 +282,7 @@ namespace BBG.WordSearch
             lastEndCharacter = null;
             selectingHighlight.gameObject.SetActive(false);
             parmentSelectingHighLight.gameObject.SetActive(false);
-            selectedWord.Clear();
+            selectedWord.Clear(toShakeSelectingWord);
             letterObject.Clear();
         }
 
@@ -454,6 +457,7 @@ namespace BBG.WordSearch
             return highlight;
         }
 
+
         public void SetWordFound(string word)
         {
             if (currentBoard == null)
@@ -482,6 +486,8 @@ namespace BBG.WordSearch
             characterPool.ReturnAllObjectsToPool();
             highlightLetterPool.ReturnAllObjectsToPool();
             characterItems.Clear();
+            PlayerPrefs.DeleteKey("FoundedWord");
+            PlayerPrefs.Save();
 
             for (int i = 0; i < highlights.Count; i++)
             {
@@ -757,8 +763,16 @@ namespace BBG.WordSearch
         {
             yield return new WaitForSeconds(0.7f);
             foundParticles.gameObject.SetActive(true);
+            ScalingFoundedWordText();
             yield return new WaitForSeconds(1.06f);
             foundParticles.gameObject.SetActive(false);
+        }
+        public void ScalingFoundedWordText()
+        {
+            GameManager.Instance.wordFoundInWordGrid.GetComponentInChildren<Text>().transform.DOScale(new Vector3(1.3f, 1.3f, 1.3f), 0.3f).SetEase(Ease.InOutSine).OnComplete(() =>
+            {
+                GameManager.Instance.wordFoundInWordGrid.GetComponentInChildren<Text>().transform.DOScale(new Vector3(1, 1, 1), 0.3f);
+            });
         }
         private void RemoveFirstLetterfromHintList(CharacterGridItem letterObject, string word)
         {
@@ -852,7 +866,7 @@ namespace BBG.WordSearch
             }
             else
             {
-                selectedWord.Clear();
+                selectedWord.Clear(toShakeSelectingWord);
 
             }
         }

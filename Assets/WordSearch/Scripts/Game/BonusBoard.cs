@@ -35,6 +35,8 @@ namespace BBG.WordSearch
 
         public void FoundedListUpDate()
         {
+            PlayerPrefs.DeleteKey("FoundedWord");
+            PlayerPrefs.Save();
             string contents = (PlayerPrefs.GetString("FoundedWord", JsonUtility.ToJson(foundedWords)));
             JSONNode json = JSON.Parse(contents);
             //Debug.Log(contents);

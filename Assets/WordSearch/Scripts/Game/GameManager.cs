@@ -298,7 +298,9 @@ namespace BBG.WordSearch
         public void DailyChallange()
         {
             DailyBoard board = LoadDailyFile(dailyLevelfiles[0/*PlayerPrefs.GetInt("SelectJasonLevel")*/]);
+            BonusBoard bonusBoard = LoadBonusFile(bonusFile, dailyLevelfiles[0/*PlayerPrefs.GetInt("SelectJasonLevel")*/]);
             dailyWordList.Setup(board);
+            BonusSetUp(bonusBoard);
             GenerateDailyBoard(board);
             wordList.wordListCanvasGroup1.GetComponent<WordGenerating>().wordGridImage.sizeDelta = new Vector2(wordList.wordListCanvasGroup1.GetComponent<WordGenerating>().wordGridImage.sizeDelta.x, 308f);
             ShowGameScreen();
@@ -994,8 +996,11 @@ namespace BBG.WordSearch
         private void OnCasualBoardCreated(Board board)
         {
             board.difficultyIndex = ActiveDifficultyIndex;
+            if (toPlayDailyChallange)
+            {
+                SetupGame(board);
+            }
 
-            //SetupGame(board);
 
             if (!toPlayDailyChallange)
             {
