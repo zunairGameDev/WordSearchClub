@@ -34,7 +34,7 @@ public class MainMenu : MonoBehaviour
     public Sprite dailyChallengeBackground; // Sprite for the Daily Challenge background
     public Sprite defaultBackground;
 
-    private void OnEnable()
+    private void Start()
     {
         sourceImageInputField.text = " " + PlayerPrefs.GetString("PlayerName", "Guest_16dan1!");
         selectedImageDisplay.sprite = playerProfilePanel.GetComponent<ProfileManager>().availableSprites[PlayerPrefs.GetInt("SpriteIndex")];
@@ -96,7 +96,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Background image or Daily Challenge background sprite is not assigned.");
+            //Debug.LogWarning("Background image or Daily Challenge background sprite is not assigned.");
         }
     }
 
@@ -145,27 +145,29 @@ public class MainMenu : MonoBehaviour
 
         string playerName = playerNameInputField.text;
 
-        Debug.Log("Player Name Submitted: " + playerName);
+        //Debug.Log("Player Name Submitted: " + playerName);
+        if (playerName.Length > 2 && playerName.Length < 15)
+        {            // Check if the name is not empty
+            if (!string.IsNullOrEmpty(playerName))
+            {
+                // Update the player name display text
+                playerNameDisplayText.text = playerName;
+                PlayerPrefs.SetString("PlayerName", playerNameInputField.text);
+                // Update the source image input field with the player's name
+                sourceImageInputField.text = PlayerPrefs.GetString("PlayerName");
 
-        // Check if the name is not empty
-        if (!string.IsNullOrEmpty(playerName))
-        {
-            // Update the player name display text
-            playerNameDisplayText.text = playerName;
-            PlayerPrefs.SetString("PlayerName", playerNameInputField.text);
-            // Update the source image input field with the player's name
-            sourceImageInputField.text = PlayerPrefs.GetString("PlayerName");
+                //// Close the player profile panel after saving the name
+                //playerProfilePanel.SetActive(false);
 
-            //// Close the player profile panel after saving the name
-            //playerProfilePanel.SetActive(false);
-
-            //// Optionally, you can re-enable the source image panel if needed
-            //sourceImagePanel.SetActive(true); // Enable if needed or keep it off
+                //// Optionally, you can re-enable the source image panel if needed
+                //sourceImagePanel.SetActive(true); // Enable if needed or keep it off
+            }
         }
         else
         {
+
             // Log if no name is entered
-            Debug.Log("No name entered!");
+            //Debug.Log("No name entered!");
         }
     }
 
@@ -181,22 +183,22 @@ public class MainMenu : MonoBehaviour
             // Save the player name (Display it or store it in player preferences)
             playerNameDisplayText.text = playerName;
             selectedImageDisplay.sprite = ProfileManager.profile_Instance.availableSprites[PlayerPrefs.GetInt("SpriteIndex")];
-            Debug.Log("Image change");
+            //Debug.Log("Image change");
 
             // Hide the player profile panel
             playerProfilePanel.SetActive(false);
-            Debug.Log("Player profile panel hidden.");
+            //Debug.Log("Player profile panel hidden.");
 
             // Show the home screen panel
             homeScreenPanel.SetActive(true);
-            Debug.Log("Home screen panel should now be visible.");
+            //Debug.Log("Home screen panel should now be visible.");
 
             // Check if the panel is actually active
-            Debug.Log("Is homeScreenPanel active? " + homeScreenPanel.activeSelf);
+            //Debug.Log("Is homeScreenPanel active? " + homeScreenPanel.activeSelf);
         }
         else
         {
-            Debug.LogWarning("Player name is empty, please enter a name!");
+            //Debug.LogWarning("Player name is empty, please enter a name!");
         }
     }
 

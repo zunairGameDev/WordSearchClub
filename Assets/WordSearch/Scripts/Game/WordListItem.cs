@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
+using DG.Tweening;
 
 namespace BBG.WordSearch
 {
@@ -40,9 +41,9 @@ namespace BBG.WordSearch
         public void OnHintChangeColor(Color color)
         {
 
-            Debug.Log(wordText.text);
-            Debug.Log("B"); wordText.color = Color.white;
+            wordText.color = Color.white;
             GetComponent<Image>().color = color;
+            wordText.transform.DOScale(new Vector3(1.3f, 1.3f, 1.3f), 0.3f).OnComplete(() => { wordText.transform.DOScale(new Vector3(1, 1, 1), 0.3f); });
         }
 
         private void AdjustRectTransformWidth()

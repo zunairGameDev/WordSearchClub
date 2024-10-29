@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,6 +45,9 @@ namespace BBG.WordSearch
         public List<char> hintLetters = new List<char>();
         public List<char> hintTempLetters = new List<char>();
         public List<string> activeBoardWords = new List<string>();
+        public List<char> tempHintLetters;
+        public List<string> tempActiveBoardWords;
+        public List<Color> tempHintColor;
 
 
         [Header("Values")]
@@ -113,6 +117,7 @@ namespace BBG.WordSearch
         public Color wordColorFromLetter;
         private FoundedWords foundedWords;
         public ShowAlreadyFound alreadyFoundTab;
+        public bool toPlayHintAnimation;
         #endregion
 
         #region Unity Methods
@@ -644,10 +649,17 @@ namespace BBG.WordSearch
             {
                 GlobalData.CoinCount = GlobalData.CoinCount - 200;
                 MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
+                tempHintLetters = new List<char>();
+                tempActiveBoardWords = new List<string>();
+                tempHintColor = new List<Color>();
                 for (int i = 0; i < 3; i++)
                 {
+                    if (i == 2)
+                    {
+                        toPlayHintAnimation = true;
+                    }
                     ShowingHintLetter();
-                    yield return new WaitForSeconds(0.15f);
+                    yield return new WaitForSeconds(0f);
                 }
             }
             else if (hintLetters.Count >= 1)
@@ -673,7 +685,7 @@ namespace BBG.WordSearch
         }
         IEnumerator StartMultipleHint()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0f);
             StartCoroutine(MultipleShow());
         }
 
@@ -698,12 +710,20 @@ namespace BBG.WordSearch
         {
             if (PlayerPrefs.GetInt("StarterCounts", 2) > 0 && hintLetters.Count >= 1)
             {
+                toPlayHintAnimation = true;
+                tempHintLetters = new List<char>();
+                tempActiveBoardWords = new List<string>();
+                tempHintColor = new List<Color>();
                 ShowingHintLetter();
                 PlayerPrefs.SetInt("StarterCounts", PlayerPrefs.GetInt("StarterCounts", 2) - 1);
 
             }
             else if (GlobalData.CoinCount >= 100 && hintLetters.Count >= 1)
             {
+                toPlayHintAnimation = true;
+                tempHintLetters = new List<char>();
+                tempActiveBoardWords = new List<string>();
+                tempHintColor = new List<Color>();
                 ShowingHintLetter();
                 GlobalData.CoinCount = GlobalData.CoinCount - 100;
                 MainMenuText.Instance.coinsText.text = GlobalData.CoinCount.ToString();
@@ -768,6 +788,10 @@ namespace BBG.WordSearch
             // Ensure there are letters in the hintLetters list
             if (hintLetters.Count == 0)
             {
+                if (toPlayHintAnimation)
+                {
+                    StartCoroutine(ShowingWordswithHint());
+                }
                 Debug.LogWarning("No more hint letters available!");
                 return;
             }
@@ -776,6 +800,7 @@ namespace BBG.WordSearch
             int value = Random.Range(0, hintLetters.Count - 1);
             // Select the letter at the random index
             char letter = hintLetters[value];
+            tempHintLetters.Add(letter);
             //int wordInt  = letterIntDictionary.GetValueOrDefault(letter);
             int wordIndex = 0;
             if (!toPlayDailyChallange)
@@ -788,23 +813,48 @@ namespace BBG.WordSearch
                         {
                             wordIndex = i;
                             wordList.wordListItems[activeBoardWords[wordIndex]].hintWordHighlight = true;
+                            tempActiveBoardWords.Add(activeBoardWords[wordIndex]);
                             break;
                         }
                     }
 
                 }
             }
+
+            characterGrid.AssignHighlightColor(wordColorFromLetter);
+            tempHintColor.Add(characterGrid.highlightColors[Random.Range(0, characterGrid.highlightColors.Count)]);
             // Show the letter as a hint
-            characterGrid.ShowLetterHint(letter);
-            if (!toPlayDailyChallange)
+            //characterGrid.ShowLetterHint(letter);
+            if (toPlayHintAnimation)
             {
-                wordList.HighLightingHintWord(activeBoardWords[wordIndex], wordColorFromLetter);
+                StartCoroutine(ShowingWordswithHint());
             }
+            //if (!toPlayDailyChallange)
+            //{
+            //    wordList.HighLightingHintWord(activeBoardWords[wordIndex], wordColorFromLetter);
+            //}
             // Play the sound for using a hint
             SoundManager.Instance.Play("hint-used");
 
             // Remove the letter from the hintLetters to avoid repetition
             hintLetters.RemoveAt(value);
+        }
+        IEnumerator ShowingWordswithHint()
+        {
+            if (!toPlayDailyChallange)
+            {
+                for (int i = 0; i < tempActiveBoardWords.Count; i++)
+                {
+                    wordList.HighLightingHintWord(tempActiveBoardWords[i], tempHintColor[i]);
+                    yield return new WaitForSeconds(0.3f);
+                }
+            }
+            for (int i = 0; i < tempHintLetters.Count; i++)
+            {
+                characterGrid.ShowLetterHint(tempHintLetters[i], tempHintColor[i]);
+                yield return new WaitForSeconds(0.3f);
+            }
+            toPlayHintAnimation = false;
         }
 
         /// <summary>
@@ -935,7 +985,7 @@ namespace BBG.WordSearch
                 ActiveBoard.letterHintsUsed.Add(letter);
 
                 // Highlight it on the board
-                characterGrid.ShowLetterHint(letter);
+                //characterGrid.ShowLetterHint(letter);
 
                 // Deduct the cost
                 Coins -= coinCostLetterHint;
@@ -1036,7 +1086,7 @@ namespace BBG.WordSearch
             // Show all the letter hints
             foreach (char letter in board.letterHintsUsed)
             {
-                characterGrid.ShowLetterHint(letter);
+                //characterGrid.ShowLetterHint(letter);
             }
 
             ActiveGameState = GameState.BoardActive;

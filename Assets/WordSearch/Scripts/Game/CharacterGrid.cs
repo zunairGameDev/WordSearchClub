@@ -66,7 +66,7 @@ namespace BBG.WordSearch
         [SerializeField] private HighlighPosition highlightPosition = HighlighPosition.AboveLetters;
         [SerializeField] private Sprite highlightSprite = null;
         [SerializeField] private float highlightExtraSize = 0f;
-        [SerializeField] private List<Color> highlightColors = null;
+        public List<Color> highlightColors = null;
 
         [Header("Highlight Letter Settings")]
         [SerializeField] private Sprite highlightLetterSprite = null;
@@ -268,10 +268,14 @@ namespace BBG.WordSearch
                         {
                             Debug.Log("A1");
                             showBonusWordFloat(BonusWordFounded);
-
+                            toShakeSelectingWord = false;
+                        }
+                        else
+                        {
+                            toShakeSelectingWord = true;
                         }
                     }
-                    toShakeSelectingWord = true;
+                    
                 }
             }
 
@@ -534,7 +538,7 @@ namespace BBG.WordSearch
             }
         }
 
-        public void ShowLetterHint(char letterToShow)
+        public void ShowLetterHint(char letterToShow, Color toShowColor)
         {
             for (int row = 0; row < currentBoard.rows; row++)
             {
@@ -551,8 +555,8 @@ namespace BBG.WordSearch
                             Vector2 position = (characterGridItem.transform as RectTransform).anchoredPosition;
 
                             RectTransform highlightLetter = highlightLetterPool.GetObject<RectTransform>();
-                            AssignHighlighColor(highlightLetter.GetComponent<Image>());
-                            GameManager.Instance.wordColorFromLetter = highlightLetter.GetComponent<Image>().color;
+                            highlightLetter.GetComponent<Image>().color = toShowColor;
+                            //GameManager.Instance.wordColorFromLetter = highlightLetter.GetComponent<Image>().color;
                             characterGridItem.hintColor = highlightLetter.GetComponent<Image>().color;
                             characterGridItem.hintColorAsign = true;
                             highlightLetter.sizeDelta = new Vector2(ScaledHightlightLetterSize, ScaledHightlightLetterSize);
@@ -1519,6 +1523,21 @@ namespace BBG.WordSearch
             }
 
             highlight.color = color;
+        }
+        public void AssignHighlightColor(Color highlight)
+        {
+            Color color = Color.white;
+
+            if (highlightColors.Count > 0)
+            {
+                color = highlightColors[Random.Range(0, highlightColors.Count)];
+            }
+            else
+            {
+                Debug.LogError("[CharacterGrid] Highlight Colors is empty.");
+            }
+
+            highlight = color;
         }
 
         private Text CreateFloatingText(string text, Color color, Vector2 position)
