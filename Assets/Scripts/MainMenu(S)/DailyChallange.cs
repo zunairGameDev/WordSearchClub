@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,15 +22,8 @@ public class DailyChallange : MonoBehaviour
     public GameObject secondTimerWithText;
     public GameObject secondTimerReplacerText;
     public TextMeshProUGUI timer1;
-
-    public float countdownTime = 84600f; // 24 hours in seconds
-
     private DateTime endTime;
-
     public bool isPlayedToday;
-
-
-
 
     void Start()
     {
@@ -82,7 +76,25 @@ public class DailyChallange : MonoBehaviour
         QouteText.text = PlayerPrefs.GetString("QouteUpdatedText", missingWordsQoutes[PlayerPrefs.GetInt("DailyChallange")]);
         AuthorName.text = GameManager.Instance.dailyLevelfiles[PlayerPrefs.GetInt("DailyChallange")].name;
         streakText.text = PlayerPrefs.GetInt("DayStreak", 0).ToString();
-        bestStreakText.text = PlayerPrefs.GetInt("BestStreak", 0).ToString();
+        bestStreakText.text = "Best: " + PlayerPrefs.GetInt("BestStreak", 0).ToString() + " Days";
+        if (PlayerPrefs.GetInt("DayStreak", 0) == 0)
+        {
+            motivationalText.text = "Start your streak by solving today's puzzle!";
+        }
+        else
+        {
+            motivationalText.text = "Wonderful! Play everyday and grow your streak";
+        }
+        if (PlayerPrefs.GetInt("IsTodayPlay") == 0)
+        {
+            secondTimerReplacerText.SetActive(false);
+            secondTimerWithText.SetActive(true);
+        }
+        else
+        {
+            secondTimerWithText.SetActive(false);
+            secondTimerReplacerText.SetActive(true);
+        }
     }
 
     private void ResetTimer()
