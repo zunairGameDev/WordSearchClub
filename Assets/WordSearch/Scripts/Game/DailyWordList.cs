@@ -21,6 +21,7 @@ namespace BBG.WordSearch
         #region Member Variables
 
         private ObjectPool wordListItemPool;
+        public List<List<char>> boardCharacters;
         public Dictionary<string, WordListItem> wordListItems;
         private string fullQuote;
         private List<string> missingWords;
@@ -44,6 +45,7 @@ namespace BBG.WordSearch
             fullQuote = board.quoteText;          // Full quote with missing words
             missingWords = board.missingWords;    // The missing words
             words = board.words;
+            boardCharacters = board.boardCharacters;
             //hintWordHighlight = false;
             // Update the quote text with blanks
             string displayedQuote = GenerateQuoteWithBlanks(fullQuote, missingWords);
@@ -76,6 +78,7 @@ namespace BBG.WordSearch
 
             // Update the displayed quote text with the generated quote
             quoteText.text = displayedQuote;
+            PlayerPrefs.SetString("QouteUpdatedText", "\"" + quoteText.text + "\"");
         }
 
         public void Clear()

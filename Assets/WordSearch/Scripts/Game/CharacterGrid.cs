@@ -426,6 +426,80 @@ namespace BBG.WordSearch
             anim.style = UIAnimation.Style.EaseOut;
             anim.Play();
         }
+        public void SetupDaily(DailyBoard board)
+        {
+            Clear();
+            if (GameManager.Instance.GetComponent<GameManager>().toPlayDailyChallange)
+            {
+                levelStatus.gameObject.SetActive(false);
+                levelName.text = GameManager.Instance.GetComponent<GameManager>().dailyLevelfiles[0].name;
+            }
+            else
+            {
+                levelStatus.text = "Level " + (PlayerPrefs.GetInt("SelectJasonLevel") + 1).ToString();
+                levelStatus.gameObject.SetActive(true);
+                levelName.text = GameManager.Instance.GetComponent<GameManager>().levelFiles[PlayerPrefs.GetInt("SelectJasonLevel")].name;
+            }
+
+            if (PlayerPrefs.GetInt("SelectJasonLevel") > 0 && PlayerPrefs.GetInt("SelectJasonLevel") < playerStates.Count)
+            {
+                playerStateShow.text = "Solved by " + playerStates[PlayerPrefs.GetInt("SelectJasonLevel")].ToString() + " % player";
+                playerStateShow.transform.parent.gameObject.SetActive(true);
+
+            }
+            GetComponent<GamePlayHelperButton>().HeplerButtonUIUpdated();
+            // We want to scale the CharacterItem so that the UI Text changes size
+            currentCellSize = SetupGridContainer(board.rows, board.cols);
+            currentScale = currentCellSize / maxCellSize;
+
+            for (int i = 0; i < board.boardCharacters.Count; i++)
+            {
+                characterItems.Add(new List<CharacterGridItem>());
+
+                for (int j = 0; j < board.boardCharacters[i].Count; j++)
+                {
+                    // Get a new character from the object pool
+                    CharacterGridItem characterItem = characterPool.GetObject().GetComponent<CharacterGridItem>();
+
+                    characterItem.Row = i;
+                    characterItem.Col = j;
+                    characterItem.IsHighlighted = false;
+
+                    characterItem.gameObject.SetActive(true);
+                    characterItem.transform.SetParent(gridContainer, false);
+
+                    characterItem.characterText.text = board.boardCharacters[i][j].ToString();
+                    characterItem.characterText.color = letterColor;
+                    characterItem.characterText.transform.localScale = new Vector3(currentScale, currentScale, 1f);
+                    if (characterItem.gameObject.GetComponent<EdgeDeductor>() == null)
+                    {
+                        characterItem.gameObject.AddComponent<EdgeDeductor>();
+                    }
+                    else
+                    {
+                        DestroyImmediate(characterItem.gameObject.GetComponent<EdgeDeductor>());
+                        characterItem.gameObject.AddComponent<EdgeDeductor>();
+                    }
+                    if (characterItem.Row == 0 || characterItem.Row == board.rows - 1 || characterItem.Col == 0 || characterItem.Col == board.cols - 1)
+                    {
+                        characterItem.gameObject.GetComponent<EdgeDeductor>().isEdge = true;
+                    }
+                    characterItem.gameObject.GetComponent<EdgeDeductor>().characterGrid = this;
+                    (characterItem.characterText.transform as RectTransform).anchoredPosition = ScaledLetterOffsetInCell;
+
+                    characterItems[i].Add(characterItem);
+                }
+            }
+            currentBoard.rows = board.rows;
+            currentBoard.cols = board.cols;
+            currentBoard.words = board.words;
+            currentBoard.boardCharacters = board.boardCharacters;
+
+            GetComponent<ScaleAndRotate>().ResetPanel();
+            UIAnimation anim = UIAnimation.Alpha(gridContainer.GetComponent<CanvasGroup>(), 0f, 1f, .5f);
+            anim.style = UIAnimation.Style.EaseOut;
+            anim.Play();
+        }
         public void GridBackGroundSizeSetting(float newValue)
         {
             // Adjust both offsetMin and offsetMax using the same newValue

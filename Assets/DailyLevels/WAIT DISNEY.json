@@ -1,0 +1,47 @@
+{
+    "rows": 6,
+    "cols": 7,
+    "quoteText": "All our DREAMS can come TRUE, if we have the COURAGE to PURSUE them.",
+    "toFindWords": [ "DREAMS", "TRUE", "COURAGE", "PURSUE" ],
+    "boardCharacters": [
+        [ "D", "r", "e", "a", "m", "s", "P" ],
+        [ "s", "h", "f", "d", "k", "l", "u" ],
+        [ "g", "T", "r", "u", "e", "e", "r" ],
+        [ "h", "s", "w", "t", "e", "p", "s" ],
+        [ "r", "e", "t", "u", "w", "v", "u" ],
+        [ "C", "o", "u", "r", "a", "g", "e" ]
+
+    ],
+    "wordPlacements": [
+        {
+            "word": "DREAMS",
+            "row": 0,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "TRUE",
+            "row": 2,
+            "col": 1,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "COURAGE",
+            "row": 5,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "PURSUE",
+            "row": 0,
+            "col": 6,
+            "h": 0,
+            "v": -1
+        }
+    ],
+    "foundWords": [ "want" ],
+    "letterHintsUsed": []
+}

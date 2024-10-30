@@ -1,0 +1,47 @@
+{
+    "rows": 6,
+    "cols": 8,
+    "quoteText": "Education is the most POWERFUL WEAPON which you can use to CHANGE the WORLD.",
+    "toFindWords": [ "POWERFUL", "WEAPON", "CHANGE", "WORLD" ],
+    "boardCharacters": [
+        [ "s", "W", "e", "a", "p", "o", "n", "n" ],
+        [ "e", "o", "p", "y", "t", "l", "e", "c" ],
+        [ "t", "r", "C", "h", "a", "n", "g", "e" ],
+        [ "h", "l", "m", "b", "f", "c", "e", "k" ],
+        [ "j", "d", "w", "f", "r", "g", "d", "j" ],
+        [ "P", "o", "w", "e", "r", "f", "u", "l" ]
+
+    ],
+    "wordPlacements": [
+        {
+            "word": "POWERFUL",
+            "row": 5,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "WEAPON",
+            "row": 0,
+            "col": 1,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "CHANGE",
+            "row": 2,
+            "col": 2,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "WORLD",
+            "row": 0,
+            "col": 1,
+            "h": 0,
+            "v": -1
+        }
+    ],
+    "foundWords": [ "want" ],
+    "letterHintsUsed": []
+}

@@ -1,0 +1,45 @@
+{
+    "rows": 5,
+    "cols": 6,
+    "quoteText": "You are NEVER too OLD to set a new GOAL or to DREAM a new dream.",
+    "toFindWords": [ "NEVER", "OLD", "GOAL", "DREAM" ],
+    "boardCharacters": [
+        [ "N", "e", "v", "e", "r", "G" ],
+        [ "u", "e", "k", "d", "s", "O" ],
+        [ "t", "t", "e", "f", "l", "a" ],
+        [ "s", "y", "t", "d", "j", "l" ],
+        [ "D", "r", "e", "a", "m", "k" ]
+    ],
+    "wordPlacements": [
+        {
+            "word": "NEVER",
+            "row": 0,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "OLD",
+            "row": 1,
+            "col": 5,
+            "h": -1,
+            "v": -1
+        },
+        {
+            "word": "GOAL",
+            "row": 5,
+            "col": 5,
+            "h": 0,
+            "v": -1
+        },
+        {
+            "word": "DREAM",
+            "row": 4,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        }
+    ],
+    "foundWords": [ "want" ],
+    "letterHintsUsed": []
+}

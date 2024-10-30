@@ -1,0 +1,47 @@
+{
+    "rows": 7,
+    "cols": 7,
+    "quoteText": "In the end, we will remember not the WORDS of our ENEMIES, but the SILENCE of our FRIENDS.",
+    "toFindWords": [ "FRIENDS", "ENEMIES", "WORDS", "SILENCE" ],
+    "boardCharacters": [
+        [ "F", "r", "i", "e", "n", "d", "S" ],
+        [ "c", "j", "c", "k", "l", "e", "i" ],
+        [ "n", "s", "v", "j", "i", "j", "l" ],
+        [ "i", "h", "v", "m", "w", "d", "e" ],
+        [ "k", "e", "e", "w", "s", "f", "n" ],
+        [ "f", "n", "m", "e", "c", "k", "c" ],
+        [ "E", "W", "o", "r", "d", "s", "e" ]
+    ],
+    "wordPlacements": [
+        {
+            "word": "FRIENDS",
+            "row": 0,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "ENEMIES",
+            "row": 6,
+            "col": 0,
+            "h": 1,
+            "v": 1
+        },
+        {
+            "word": "WORDS",
+            "row": 6,
+            "col": 1,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "SILENCE",
+            "row": 0,
+            "col": 6,
+            "h": 0,
+            "v": -1
+        }
+    ],
+    "foundWords": [ "want" ],
+    "letterHintsUsed": []
+}

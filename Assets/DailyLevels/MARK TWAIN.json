@@ -1,8 +1,60 @@
 {
-    "rows": 6,
-    "cols": 6,
-    "quoteText": "The best way to keep your health is to eat what you don't want, drink what you don't like, and do what you'd rather not.",
-    "toFindWords": ["health", "want", "like"],
-    "foundWords": ["want"],
-    "letterHintsUsed": []
+  "rows": 6,
+  "cols": 6,
+  "quoteText": "The ONLY way to keep your HEALTH is to eat what you don't WANT, DRINK what you don't LIKE, and do WHAT you'd rather not.",
+  "toFindWords": [ "ONLY", "HEALTH", "WANT", "DRINK", "LIKE", "WHAT" ],
+  "boardCharacters": [
+    [ "i", "L", "i", "k", "e", "i" ],
+    [ "D", "r", "i", "n", "k", "k" ],
+    [ "n", "y", "l", "n", "O", "n" ],
+    [ "H", "e", "a", "l", "t", "h" ],
+    [ "W", "h", "a", "t", "d", "l" ],
+    [ "W", "a", "n", "t", "k", "r" ]
+  ],
+  "wordPlacements": [
+    {
+      "word": "ONLY",
+      "row": 2,
+      "col": 4,
+      "h": -1,
+      "v": 0
+    },
+    {
+      "word": "HEALTH",
+      "row": 3,
+      "col": 0,
+      "h": 1,
+      "v": 0
+    },
+    {
+      "word": "WANT",
+      "row": 5,
+      "col": 0,
+      "h": 1,
+      "v": 0
+    },
+    {
+      "word": "DRINK",
+      "row": 1,
+      "col": 0,
+      "h": 1,
+      "v": 0
+    },
+    {
+      "word": "LIKE",
+      "row": 0,
+      "col": 1,
+      "h": 1,
+      "v": 0
+    },
+    {
+      "word": "WHAT",
+      "row": 5,
+      "col": 0,
+      "h": 1,
+      "v": 0
+    }
+  ],
+  "foundWords": [ "want" ],
+  "letterHintsUsed": []
 }

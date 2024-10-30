@@ -1,0 +1,47 @@
+{
+    "rows": 7,
+    "cols": 7,
+    "quoteText": "Your time is LIMITED, so don't WASTE it LIVING someone else's LIFE.",
+    "toFindWords": [ "LIMITED", "WASTE", "LIVING", "LIFE" ],
+    "boardCharacters": [
+        [ "L", "i", "m", "i", "t", "e", "d" ],
+        [ "k", "d", "s", "e", "r", "t", "g" ],
+        [ "W", "a", "s", "t", "e", "w", "n" ],
+        [ "L", "u", "r", "z", "y", "o", "i" ],
+        [ "i", "y", "s", "u", "l", "l", "v" ],
+        [ "f", "t", "g", "e", "l", "s", "i" ],
+        [ "e", "h", "r", "t", "y", "r", "L" ]
+    ],
+    "wordPlacements": [
+        {
+            "word": "LIMITED",
+            "row": 0,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "WASTE",
+            "row": 2,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "LIVING",
+            "row": 6,
+            "col": 6,
+            "h": 0,
+            "v": 1
+        },
+        {
+            "word": "LIFE",
+            "row": 3,
+            "col": 0,
+            "h": 0,
+            "v": -1
+        }
+    ],
+    "foundWords": [ "want" ],
+    "letterHintsUsed": []
+}

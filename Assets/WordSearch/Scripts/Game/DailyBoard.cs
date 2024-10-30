@@ -11,6 +11,7 @@ namespace BBG.WordSearch
         //public List<string> foundWords;      // Words that have been found
         public List<char> letterHintsUsed;   // Letter hints
         public string quoteText;             // Full quote
+        public List<List<char>> boardCharacters;
         public List<string> missingWords = new List<string>();    // Words missing from the quote
 
         public int rows;                     // Number of rows in the grid
@@ -24,7 +25,7 @@ namespace BBG.WordSearch
             // Parse rows and cols
             rows = json["rows"].AsInt;
             cols = json["cols"].AsInt;
-
+            boardCharacters = new List<List<char>>();
 
             // Initialize lists and sets
             words = new List<string>();
@@ -34,6 +35,18 @@ namespace BBG.WordSearch
             {
                 string missingWord = json["toFindWords"].AsArray[i].Value.Trim(' ', '"');
                 words.Add(missingWord);
+            }
+
+            for (int i = 0; i < json["boardCharacters"].AsArray.Count; i++)
+            {
+                boardCharacters.Add(new List<char>());
+
+                for (int j = 0; j < json["boardCharacters"][i].AsArray.Count; j++)
+                {
+                    char character = json["boardCharacters"][i][j].Value[0];
+
+                    boardCharacters[i].Add(character);
+                }
             }
             //foundWords = new HashSet<string>();
 

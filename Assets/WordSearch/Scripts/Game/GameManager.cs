@@ -302,11 +302,13 @@ namespace BBG.WordSearch
         }
         public void DailyChallange()
         {
-            DailyBoard board = LoadDailyFile(dailyLevelfiles[0/*PlayerPrefs.GetInt("SelectJasonLevel")*/]);
+            DailyBoard board = LoadDailyFile(dailyLevelfiles[PlayerPrefs.GetInt("DailyChallange")]);
             BonusBoard bonusBoard = LoadBonusFile(bonusFile, dailyLevelfiles[0/*PlayerPrefs.GetInt("SelectJasonLevel")*/]);
             dailyWordList.Setup(board);
             BonusSetUp(bonusBoard);
-            GenerateDailyBoard(board);
+            characterGrid.SetupDaily(board);
+            ToShowHintLetter();
+            //GenerateDailyBoard(board);
             wordList.wordListCanvasGroup1.GetComponent<WordGenerating>().wordGridImage.sizeDelta = new Vector2(wordList.wordListCanvasGroup1.GetComponent<WordGenerating>().wordGridImage.sizeDelta.x, 308f);
             ShowGameScreen();
         }
@@ -426,20 +428,20 @@ namespace BBG.WordSearch
             // Get the reverse version of the word
             for (int i = 0; i < selectedWord.Length; i++)
             {
-                if (GameManager.Instance.toPlayDailyChallange)
-                {
-                    char character = char.ToLower(selectedWord[i]);
-                    //Debug.Log(character);
-                    uppercaseSelectedWord = uppercaseSelectedWord + character;
-                    selectedWordReversed = character + selectedWordReversed;
-                }
-                else
-                {
+                //if (GameManager.Instance.toPlayDailyChallange)
+                //{
+                //    char character = char.ToLower(selectedWord[i]);
+                //    //Debug.Log(character);
+                //    uppercaseSelectedWord = uppercaseSelectedWord + character;
+                //    selectedWordReversed = character + selectedWordReversed;
+                //}
+                //else
+                //{
                     char character = char.ToUpper(selectedWord[i]);
                     //Debug.Log(character);
                     uppercaseSelectedWord = uppercaseSelectedWord + character;
                     selectedWordReversed = character + selectedWordReversed;
-                }
+                //}
 
             }
             selectedWord = uppercaseSelectedWord;
@@ -1092,6 +1094,7 @@ namespace BBG.WordSearch
             ActiveGameState = GameState.BoardActive;
             ToShowHintLetter();
         }
+
         private void BonusSetUp(BonusBoard board)
         {
             ActiveBonusBoard = board;

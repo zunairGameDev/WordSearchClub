@@ -1,0 +1,46 @@
+{
+    "rows": 6,
+    "cols": 7,
+    "quoteText": "The FUTURE belongs to those who BELIEVE in the BEAUTY of their DREAM.",
+    "toFindWords": [ "FUTURE", "BELIEVE", "BEAUTY", "DREAM" ],
+    "boardCharacters": [
+        [ "F", "D", "k", "t", "k", "e", "y" ],
+        [ "u", "o", "r", "e", "a", "w", "t" ],
+        [ "t", "n", "t", "e", "i", "l", "u" ],
+        [ "u", "s", "e", "d", "a", "a", "a" ],
+        [ "r", "o", "p", "g", "h", "m", "e" ],
+        [ "e", "v", "e", "i", "l", "e", "B" ]
+    ],
+    "wordPlacements": [
+        {
+            "word": "FUTURE",
+            "row": 5,
+            "col": 6,
+            "h": 0,
+            "v": -1
+        },
+        {
+            "word": "BELIEVE",
+            "row": 6,
+            "col": 0,
+            "h": 1,
+            "v": 1
+        },
+        {
+            "word": "BEAUTY",
+            "row": 5,
+            "col": 6,
+            "h": 0,
+            "v": 1
+        },
+        {
+            "word": "DREAM",
+            "row": 0,
+            "col": 1,
+            "h": 1,
+            "v": -1
+        }
+    ],
+    "foundWords": [ "want" ],
+    "letterHintsUsed": []
+}

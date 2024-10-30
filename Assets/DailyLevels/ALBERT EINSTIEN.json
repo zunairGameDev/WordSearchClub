@@ -1,0 +1,47 @@
+{
+    "rows": 7,
+    "cols": 7,
+    "quoteText": "Life is like RIDING a BICYCLE. To keep your BALANCE, you must keep MOVING",
+    "toFindWords": [ "RIDING", "BICYCLE", "BALANCE", "MOVING" ],
+    "boardCharacters": [
+        [ "k", "g", "j", "M", "k", "t", "B" ],
+        [ "s", "a", "h", "o", "g", "k", "i" ],
+        [ "t", "w", "e", "v", "m", "s", "c" ],
+        [ "R", "i", "d", "i", "n", "g", "y" ],
+        [ "e", "n", "s", "n", "l", "d", "c" ],
+        [ "r", "o", "w", "g", "r", "t", "l" ],
+        [ "B", "a", "l", "a", "n", "c", "e" ]
+    ],
+    "wordPlacements": [
+        {
+            "word": "RIDING",
+            "row": 3,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "BICYCLE",
+            "row": 0,
+            "col": 6,
+            "h": 0,
+            "v": -1
+        },
+        {
+            "word": "BALANCE",
+            "row": 6,
+            "col": 0,
+            "h": 1,
+            "v": 0
+        },
+        {
+            "word": "MOVING",
+            "row": 0,
+            "col": 3,
+            "h": 0,
+            "v": -1
+        }
+    ],
+    "foundWords": [ "want" ],
+    "letterHintsUsed": []
+}
