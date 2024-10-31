@@ -437,10 +437,10 @@ namespace BBG.WordSearch
                 //}
                 //else
                 //{
-                    char character = char.ToUpper(selectedWord[i]);
-                    //Debug.Log(character);
-                    uppercaseSelectedWord = uppercaseSelectedWord + character;
-                    selectedWordReversed = character + selectedWordReversed;
+                char character = char.ToUpper(selectedWord[i]);
+                //Debug.Log(character);
+                uppercaseSelectedWord = uppercaseSelectedWord + character;
+                selectedWordReversed = character + selectedWordReversed;
                 //}
 
             }
@@ -1172,7 +1172,15 @@ namespace BBG.WordSearch
         {
             characterGrid.GetComponent<ScaleAndRotate>().StartOnLevelComplete();
             yield return new WaitForSeconds(3f);
-            PopupManager.Instance.Show("level_completed1", levelCompletedPopupData);
+            if (toPlayDailyChallange)
+            {
+                PopupManager.Instance.Show("DailyChallenge");
+            }
+            else
+            {
+                PopupManager.Instance.Show("level_completed1", levelCompletedPopupData);
+
+            }
         }
         private bool CheckingActiveLevelIndex()
         {
